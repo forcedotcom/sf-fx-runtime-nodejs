@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "rootDir": "./",
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "removeComments": true
+  }
+}

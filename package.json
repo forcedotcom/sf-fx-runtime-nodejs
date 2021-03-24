@@ -1,0 +1,27 @@
+{
+  "name": "sf-fx-runtime-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "npm run runtime:build && npm run middleware:build",
+    "lint": "eslint . --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "runtime:build": "cd packages/runtime && npm run build",
+    "middleware:build": "cd packages/middleware && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.22.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.3"
+  },
+  "workspaces": [
+    "packages/runtime",
+    "packages/middleware"
+  ]
+}
