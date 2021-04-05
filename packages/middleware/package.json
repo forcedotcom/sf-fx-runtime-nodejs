@@ -23,8 +23,6 @@
     "type": "git"
   },
   "dependencies": {
-    "@salesforce/core": "^2.12.3",
-    "cloudevents": "^3.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

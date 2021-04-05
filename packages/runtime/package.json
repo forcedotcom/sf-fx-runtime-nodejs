@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@salesforce/core": "^2.20.5",
+    "cloudevents": "^4.0.1",
     "express": "^4.17.1"
   },
   "bin": {

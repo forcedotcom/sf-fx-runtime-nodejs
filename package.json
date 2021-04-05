@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npm run runtime:build && npm run middleware:build",
+    "build": "npm run runtime:build",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format:check": "prettier --check .",
@@ -13,11 +13,21 @@
   },
   "author": "",
   "license": "ISC",
+  "pre-commit": [
+    "build",
+    "lint",
+    "test"
+  ],
   "devDependencies": {
+    "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
+    "chai": "^4.3.4",
     "eslint": "^7.22.0",
+    "mocha": "^5.2.0",
     "prettier": "^2.2.1",
+    "sinon": "^7.5.0",
+    "ts-node": "^8.10.2",
     "typescript": "^4.2.3"
   },
   "workspaces": [
