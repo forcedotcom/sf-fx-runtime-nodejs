@@ -1,3 +1,4 @@
+import { Logger, LoggerFormat, LoggerLevel } from '@salesforce/core/lib/logger';
 
 const FUNCTION_ERROR_CODE = 500;
 const INTERNAL_SERVER_ERROR_CODE = 503;
@@ -15,18 +16,37 @@ class MiddlewareError extends Error {
     return this.err.toString();
   }
 }
+
 class FunctionError extends MiddlewareError {
   constructor(err: Error) {
     super(err, FUNCTION_ERROR_CODE);
   }
 }
 
-export default async function invokeUserFn(userFn: any, message: any): Promise<any> {
+class UserFn {
+  private readonly fn: Function;
+
+  constructor(private readonly userDefinedFn: Function) {
+    this.fn = userDefinedFn;
+  }
+
+  public async invoke(event: any): Promise<any> {
+    await this.fn(event);
+  }
+}
+
+export default async function invokeUserFn(userDefinedFn: any, event: any): Promise<any> {
   let result: any;
+  let userFn: UserFn = new UserFn(userDefinedFn);
 
   try {
-    result = await userFn(message);
+    console.log("before result")
+    result = await userFn.invoke(event);
+    console.log("after result")
   } catch(error) {
+    console.log("error", error)
     throw new FunctionError(error);
   }
+
+  return result;
 }
