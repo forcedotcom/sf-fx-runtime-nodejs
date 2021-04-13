@@ -10,6 +10,11 @@ $ npm install && npm run build && npm link
 $ sf-fx-runtime-nodejs ~/project/nodejs-function
 ```
 
+## Invoke
+```
+$ ./invoke.sh "localhost:8080" "{}"
+```
+
 ## Example Function
 ### package.json
 ```json

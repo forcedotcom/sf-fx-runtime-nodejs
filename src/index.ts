@@ -58,7 +58,8 @@ server.post("/", async (request, response) => {
     cloudEvent.sffncontext
   );
 
-  // Create parameters for the function
+  // Create parameters for the function, if there are multiple SDK versions around, we would first need to somehow
+  // detect which SDK version is used by the user's function.
   const context = createContext(
     cloudEvent,
     contextExtension,
