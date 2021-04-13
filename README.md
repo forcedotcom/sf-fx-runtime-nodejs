@@ -7,7 +7,7 @@ $ npm install && npm run build && npm link
 
 ## Using
 ```
-$ sf-fx-runtime-node ~/project/nodejs-function
+$ sf-fx-runtime-nodejs ~/project/nodejs-function
 ```
 
 ## Example Function
