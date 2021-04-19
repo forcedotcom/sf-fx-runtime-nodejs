@@ -78,9 +78,13 @@ interface RecordModificationResult {
 }
 
 export class DataApi {
+  private baseUrl: string;
+  private apiVersion: string;
   readonly accessToken: string;
 
-  constructor(accessToken: string) {
+  constructor(baseUrl: string, apiVersion: string, accessToken: string) {
+    this.baseUrl = baseUrl;
+    this.apiVersion = apiVersion;
     this.accessToken = accessToken;
   }
 
