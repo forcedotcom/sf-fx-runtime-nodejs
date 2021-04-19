@@ -10,10 +10,6 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write ."
   },
-  "directories": {
-    "src": "./src",
-    "test": "./test"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -30,6 +26,7 @@
     "chai": "^4.3.4",
     "eslint": "^7.22.0",
     "mocha": "^8.3.2",
+    "nock": "^13.0.11",
     "prettier": "^2.2.1",
     "sinon": "^7.5.0",
     "ts-node": "^8.10.2",

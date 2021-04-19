@@ -1,0 +1,42 @@
+{
+  "id": "fcc870b2-acd9-4b45-b101-f125b26091b3",
+  "name": "services_data_v510_composite",
+  "request": {
+    "url": "/services/data/v51.0/composite",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\n    \"allOrNone\": true,\n    \"compositeRequest\": [{\n        \"url\": \"services/data/v51.0/sobjects/Movie__c\",\n        \"method\": \"POST\",\n        \"referenceId\": \"insert-anh\",\n        \"body\": {\n            \"Name\": \"Star Wars Episode IV - A New Hope\",\n            \"Rating__c\": \"Excellent\"\n        }\n    }]\n}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ],
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer 00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"compositeResponse\":[{\"body\":{\"id\":\"a00B000000FSkgxIAD\",\"success\":true,\"errors\":[]},\"httpHeaders\":{\"Location\":\"/services/data/v51.0/sobjects/Movie__c/a00B000000FSkgxIAD\"},\"httpStatusCode\":201,\"referenceId\":\"insert-anh\"}]}",
+    "headers": {
+      "Date": "Wed, 14 Apr 2021 15:18:53 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Robots-Tag": "none",
+      "Cache-Control": "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Set-Cookie": [
+        "BrowserId=uRmtjp00Eeu_d6Wc93GdsA; domain=.salesforce.com; path=/; expires=Thu, 14-Apr-2022 15:18:53 GMT; Max-Age=31536000",
+        "BrowserId_sec=uRmtjp00Eeu_d6Wc93GdsA; domain=.salesforce.com; path=/; expires=Thu, 14-Apr-2022 15:18:53 GMT; Max-Age=31536000; secure; SameSite=None"
+      ],
+      "Sforce-Limit-Info": "api-usage=77/100000",
+      "Content-Type": "application/json;charset=UTF-8",
+      "Vary": "Accept-Encoding"
+    }
+  },
+  "uuid": "fcc870b2-acd9-4b45-b101-f125b26091b3",
+  "persistent": true,
+  "insertionIndex": 35
+}

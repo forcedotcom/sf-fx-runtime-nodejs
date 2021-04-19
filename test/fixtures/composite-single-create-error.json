@@ -1,0 +1,42 @@
+{
+  "id": "f1aa5280-2f57-4918-a4d1-6a01b554a77d",
+  "name": "services_data_v510_composite",
+  "request": {
+    "url": "/services/data/v51.0/composite",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\n    \"allOrNone\": true,\n    \"compositeRequest\": [{\n        \"url\": \"services/data/v51.0/sobjects/Movie__c\",\n        \"method\": \"POST\",\n        \"referenceId\": \"insert-anh\",\n        \"body\": {\n            \"Name\": \"Star Wars Episode IV - A New Hope\",\n            \"Rating__c\": \"Amazing\"\n        }\n    }]\n}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ],
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer 00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"compositeResponse\":[{\"body\":[{\"message\":\"Rating: bad value for restricted picklist field: Amazing\",\"errorCode\":\"INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST\",\"fields\":[\"Rating__c\"]}],\"httpHeaders\":{},\"httpStatusCode\":400,\"referenceId\":\"insert-anh\"}]}",
+    "headers": {
+      "Date": "Thu, 15 Apr 2021 08:38:40 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Robots-Tag": "none",
+      "Cache-Control": "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Set-Cookie": [
+        "BrowserId=-nSqXZ3FEeuU4h0mKdEQ6w; domain=.salesforce.com; path=/; expires=Fri, 15-Apr-2022 08:38:40 GMT; Max-Age=31536000",
+        "BrowserId_sec=-nSqXZ3FEeuU4h0mKdEQ6w; domain=.salesforce.com; path=/; expires=Fri, 15-Apr-2022 08:38:40 GMT; Max-Age=31536000; secure; SameSite=None"
+      ],
+      "Sforce-Limit-Info": "api-usage=69/100000",
+      "Content-Type": "application/json;charset=UTF-8",
+      "Vary": "Accept-Encoding"
+    }
+  },
+  "uuid": "f1aa5280-2f57-4918-a4d1-6a01b554a77d",
+  "persistent": true,
+  "insertionIndex": 2
+}
