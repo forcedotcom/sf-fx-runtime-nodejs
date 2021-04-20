@@ -3,6 +3,7 @@ import {
   SalesforceContextCloudEventExtension,
   SalesforceFunctionContextCloudEventExtension,
 } from "./extensions";
+import { Connection, AuthInfo } from '@salesforce/core';
 
 export function createContext(
   cloudEvent: CloudEvent,
@@ -18,8 +19,15 @@ export function createInvocationEvent<T>(
   contextExt: SalesforceContextCloudEventExtension,
   functionContextExt: SalesforceFunctionContextCloudEventExtension
 ): InvocationEvent<T> {
-  // TODO: Implement me!
-  return null;
+  invEvent = new InvocationEvent();
+  invEvent.id = cloudEvent.id;
+  invEvent.type = cloudEvent.type;
+  invEvent.source = cloudEvent.source;
+  invEvent.data = cloudEvent.data;
+  invEvent.dataContentType = cloudEvent.datacontenttype;
+  invEvent.dataSchema = cloudEvent.schemaurl;
+  invEvent.time = cloudEvent.time;
+  return invEvent;
 }
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
@@ -81,6 +89,7 @@ export class DataApi {
   private baseUrl: string;
   private apiVersion: string;
   readonly accessToken: string;
+  private conn: Connection;
 
   constructor(baseUrl: string, apiVersion: string, accessToken: string) {
     this.baseUrl = baseUrl;
@@ -88,12 +97,21 @@ export class DataApi {
     this.accessToken = accessToken;
   }
 
+  private connect(): Connection {
+    if (!this.conn) {
+      this.conn = Connection.create({
+        authInfo: AuthInfo.create({ username: this.accessToken })
+      });
+    }
+    return this.conn;
+  }
+
   /**
    * Queries for records with a given SOQL string.
    * @param soql The SOQL string.
    */
   query(soql: string): Promise<RecordQueryResult> {
-    return Promise.reject("Not yet implemented!");
+    return this.connect().query(soql);
   }
 
   /**
@@ -101,7 +119,7 @@ export class DataApi {
    * @param queryResult
    */
   queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
-    return Promise.reject("Not yet implemented!");
+    return this.connect().query(queryResult);
   }
 
   /**
@@ -109,7 +127,7 @@ export class DataApi {
    * @param recordInsert The record insert description.
    */
   insert(recordInsert: RecordInsert): Promise<RecordModificationResult> {
-    return Promise.reject("Not yet implemented!");
+    return this.connect().insert(recordInsert);
   }
 
   /**
@@ -117,7 +135,7 @@ export class DataApi {
    * @param recordUpdate The record update description.
    */
   update(recordUpdate: RecordUpdate): Promise<RecordModificationResult> {
-    return Promise.reject("Not yet implemented!");
+    return this.connect().update(recordUpdate);
   }
 
   /**
