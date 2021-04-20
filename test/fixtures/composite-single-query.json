@@ -1,0 +1,42 @@
+{
+  "id": "0223dfaf-3947-43ec-9afa-52247d959ede",
+  "name": "services_data_v510_composite",
+  "request": {
+    "url": "/services/data/v51.0/composite",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\n    \"allOrNone\": true,\n    \"compositeRequest\": [{\n        \"url\": \"services/data/v51.0/query?q=SELECT+Name+FROM+Franchise__c\",\n        \"method\": \"GET\",\n        \"referenceId\": \"query\"\n    }]\n}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ],
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer 00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\n    \"compositeResponse\": [\n        {\n            \"body\": {\n                \"totalSize\": 1,\n                \"done\": true,\n                \"records\": [\n                    {\n                        \"attributes\": {\n                            \"type\": \"Franchise__c\",\n                            \"url\": \"/services/data/v51.0/sobjects/Franchise__c/a03B0000007BhQVIA0\"\n                        },\n                        \"Name\": \"Star Wars\"\n                    }\n                ]\n            },\n            \"httpHeaders\": {},\n            \"httpStatusCode\": 200,\n            \"referenceId\": \"query\"\n        }\n    ]\n}",
+    "headers": {
+      "Date": "Thu, 15 Apr 2021 11:43:03 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Robots-Tag": "none",
+      "Cache-Control": "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Set-Cookie": [
+        "BrowserId=vIvTtJ3fEeuq1W3pYQ9osQ; domain=.salesforce.com; path=/; expires=Fri, 15-Apr-2022 11:43:03 GMT; Max-Age=31536000",
+        "BrowserId_sec=vIvTtJ3fEeuq1W3pYQ9osQ; domain=.salesforce.com; path=/; expires=Fri, 15-Apr-2022 11:43:03 GMT; Max-Age=31536000; secure; SameSite=None"
+      ],
+      "Sforce-Limit-Info": "api-usage=17/100000",
+      "Content-Type": "application/json;charset=UTF-8",
+      "Vary": "Accept-Encoding"
+    }
+  },
+  "uuid": "0223dfaf-3947-43ec-9afa-52247d959ede",
+  "persistent": true,
+  "insertionIndex": 9
+}
