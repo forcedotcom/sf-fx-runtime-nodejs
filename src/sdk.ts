@@ -4,15 +4,11 @@ import {
   SalesforceFunctionContextCloudEventExtension,
 } from "./extensions";
 import { Connection, AuthInfo } from '@salesforce/core';
+import { createContext } from "./sdk/context";
 
-export function createContext(
-  cloudEvent: CloudEvent,
-  contextExt: SalesforceContextCloudEventExtension,
-  functionContextExt: SalesforceFunctionContextCloudEventExtension
-): Context {
-  // TODO: Implement me!
-  return null;
-}
+export {
+  createContext
+};
 
 export function createInvocationEvent<T>(
   cloudEvent: CloudEvent,
@@ -163,20 +159,6 @@ export class User {
   id: string;
   username: string;
   onBehalfOfUserId?: string;
-}
-
-export class Org {
-  id: string;
-  baseUrl: string;
-  domainUrl: string;
-  apiVersion: string;
-  dataApi: DataApi;
-  user: User;
-}
-
-export class Context {
-  id: string;
-  org?: Org;
 }
 
 export class InvocationEvent<T> {

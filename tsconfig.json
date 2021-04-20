@@ -17,5 +17,9 @@
     "noImplicitReturns": true,
     "pretty": true,
     "removeComments": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "test"
+  ]
 }
