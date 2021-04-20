@@ -1,30 +1,14 @@
-import { CloudEvent } from "cloudevents";
 import {
-  SalesforceContextCloudEventExtension,
-  SalesforceFunctionContextCloudEventExtension,
-} from "./extensions";
-import { Connection, AuthInfo } from '@salesforce/core';
+  Connection,
+  AuthInfo
+} from '@salesforce/core';
+import { createInvocationEvent } from "./sdk/event";
 import { createContext } from "./sdk/context";
 
 export {
+  createInvocationEvent,
   createContext
 };
-
-export function createInvocationEvent<T>(
-  cloudEvent: CloudEvent,
-  contextExt: SalesforceContextCloudEventExtension,
-  functionContextExt: SalesforceFunctionContextCloudEventExtension
-): InvocationEvent<T> {
-  invEvent = new InvocationEvent();
-  invEvent.id = cloudEvent.id;
-  invEvent.type = cloudEvent.type;
-  invEvent.source = cloudEvent.source;
-  invEvent.data = cloudEvent.data;
-  invEvent.dataContentType = cloudEvent.datacontenttype;
-  invEvent.dataSchema = cloudEvent.schemaurl;
-  invEvent.time = cloudEvent.time;
-  return invEvent;
-}
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
 // user function could depend on to get type completion and stuff. This is not necessary for the function to work
@@ -159,14 +143,4 @@ export class User {
   id: string;
   username: string;
   onBehalfOfUserId?: string;
-}
-
-export class InvocationEvent<T> {
-  id: string;
-  type: string;
-  source: string;
-  data: T;
-  dataContentType?: string;
-  dataSchema?: string;
-  time?: Date;
 }
