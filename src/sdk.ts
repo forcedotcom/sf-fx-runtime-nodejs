@@ -4,10 +4,12 @@ import {
 } from '@salesforce/core';
 import { createInvocationEvent } from "./sdk/event";
 import { createContext } from "./sdk/context";
+import { createOrg } from "./sdk/org";
 
 export {
   createInvocationEvent,
-  createContext
+  createContext,
+  createOrg
 };
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
