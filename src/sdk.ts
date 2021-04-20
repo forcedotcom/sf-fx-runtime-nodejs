@@ -140,9 +140,3 @@ export class DataApi {
     return Promise.reject("Not yet implemented!");
   }
 }
-
-export class User {
-  id: string;
-  username: string;
-  onBehalfOfUserId?: string;
-}
