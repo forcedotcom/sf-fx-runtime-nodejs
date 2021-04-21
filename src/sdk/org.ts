@@ -3,15 +3,6 @@ import {
   SalesforceFunctionContextCloudEventExtension,
 } from "../extensions";
 
-export function createOrg(
-  contextExt: SalesforceContextCloudEventExtension,
-  functionContextExt: SalesforceFunctionContextCloudEventExtension
-): Org {
-  let org = new Org(contextExt, functionContextExt);
-
-  return org;
-}
-
 export class Org {
   id: string;
   baseUrl: string;
