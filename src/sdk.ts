@@ -49,8 +49,11 @@ interface RecordUpdate extends RecordInsert {
   id: string;
 }
 
-interface RecordDelete extends RecordInsert {
+interface RecordDelete {
+  type: string;
   id: string;
+
+  [key: string]: string | number | boolean | Date | ReferenceId;
 }
 
 class RecordQueryResult {
