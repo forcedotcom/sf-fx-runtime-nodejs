@@ -4,12 +4,12 @@ import {
 } from "../extensions";
 
 export class Org {
-  id: string;
-  baseUrl: string;
-  domainUrl: string;
-  apiVersion: string;
-  dataApi: DataApi;
-  user: User;
+  readonly id: string;
+  readonly baseUrl: string;
+  readonly domainUrl: string;
+  readonly apiVersion: string;
+  readonly dataApi: DataApi;
+  readonly user: User;
 
   constructor(contextExt: SalesforceContextCloudEventExtension, functionContextExt: SalesforceFunctionContextCloudEventExtension) {
     this.id = contextExt.userContext.orgId;
