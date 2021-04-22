@@ -4,12 +4,12 @@ import {
 } from '@salesforce/core';
 import { createInvocationEvent } from "./sdk/event";
 import { createContext } from "./sdk/context";
-import { createOrg } from "./sdk/org";
+import { Org } from "./sdk/org";
 
 export {
   createInvocationEvent,
   createContext,
-  createOrg
+  Org
 };
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
@@ -101,7 +101,7 @@ export class DataApi {
    * @param queryResult
    */
   queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
-    return this.connect().query(queryResult);
+    return this.connect().queryMore(queryResult);
   }
 
   /**

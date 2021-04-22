@@ -2,6 +2,8 @@ import {
   SalesforceContextCloudEventExtension,
   SalesforceFunctionContextCloudEventExtension,
 } from "../extensions";
+import { DataApi } from "../sdk";
+import { User } from "./user";
 
 export class Org {
   readonly id: string;
@@ -12,11 +14,12 @@ export class Org {
   readonly user: User;
 
   constructor(contextExt: SalesforceContextCloudEventExtension, functionContextExt: SalesforceFunctionContextCloudEventExtension) {
-    this.id = contextExt.userContext.orgId;
-    this.baseUrl = contextExt.userContext.salesforceBaseUrl;
-    this.domainUrl = contextExt.userContext.orgDomainUrl;
+    let userContext = contextExt.userContext;
+    this.id = userContext.orgId;
+    this.baseUrl = userContext.salesforceBaseUrl;
+    this.domainUrl = userContext.orgDomainUrl;
     this.apiVersion = contextExt.apiVersion;
-    this.dataApi = new DataApi(this.baseUrl, this.apiVersion, this.accessToken);
-    this.user = new User(contextExt.userContext.userId, contextExt.userContext.username, contextExt.userContext.onBehalfOfUserId);
+    this.dataApi = new DataApi(this.baseUrl, this.apiVersion, functionContextExt.accessToken);
+    this.user = new User(userContext.userId, userContext.username, userContext.onBehalfOfUserId);
   }
 }
