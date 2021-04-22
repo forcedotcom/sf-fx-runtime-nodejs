@@ -28,7 +28,7 @@ interface UnitOfWork {
    * Registers a record insert with this UnitOfWork.
    * @param recordInsert
    */
-  insert(recordInsert: RecordInsert): ReferenceId;
+  insert(recordInsert: RecordCreate): ReferenceId;
 
   /**
    * Registers a record update with this UnitOfWork.
@@ -37,19 +37,25 @@ interface UnitOfWork {
   update(recordUpdate: RecordUpdate): ReferenceId;
 }
 
+<<<<<<< HEAD
 interface RecordCreate {
   type: string;
+=======
+// interface SalesforceRecord {
+//   type: string;
+>>>>>>> a9fdacc... wrap requests with promises
 
-  [key: string]: string | number | boolean | Date;
-}
+//   [key: string]: string | number | boolean | Date;
+// }
 
-interface RecordInsert {
+interface RecordCreate {
   type: string;
+  records?: string[];
 
-  [key: string]: string | number | boolean | Date | ReferenceId;
+  [key: string]: string | string[] | number | boolean | Date | ReferenceId;
 }
 
-interface RecordUpdate extends RecordInsert {
+interface RecordUpdate extends RecordCreate {
   id: string;
 }
 
@@ -63,18 +69,27 @@ interface RecordDelete {
 class RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
+  readonly nextRecordsUrl?: string;
   readonly records: [RecordCreate];
 
-  constructor(done: boolean, totalSize: number, records: [RecordCreate]) {
+  constructor(done: boolean, totalSize: number, nextRecordsUrl: string, records: [RecordCreate]) {
     this.done = done;
     this.totalSize = totalSize;
+    this.nextRecordsUrl = nextRecordsUrl;
     this.records = records;
   }
 }
 
-interface RecordModificationResult {
-  readonly id: string;
+class RecordResult {
+  readonly id: ReferenceId;
+
+  constructor(id: string) {
+    this.id = id;
+  }
 }
+
+class RecordCreateResult extends RecordResult {}
+class RecordModificationResult extends RecordResult {}
 
 export class DataApi {
   private baseUrl: string;
@@ -88,21 +103,39 @@ export class DataApi {
     this.accessToken = accessToken;
   }
 
-  private connect(): Connection {
+  private async connect(): Promise<Connection> {
     if (!this.conn) {
-      this.conn = Connection.create({
-        authInfo: AuthInfo.create({ username: this.accessToken })
-      });
+      const authInfo = await AuthInfo.create({ username: this.accessToken });
+      this.conn = await Connection.create({ authInfo });
     }
+
     return this.conn;
+  }
+
+  private async promisifyRequests(callback: Function): Promise<any> {
+    let conn, result;
+
+    try {
+      conn = await this.connect();
+      result = callback(conn);
+    } catch(e) {
+      Promise.reject(e);
+    }
+
+    return Promise.resolve(result);
   }
 
   /**
    * Queries for records with a given SOQL string.
    * @param soql The SOQL string.
    */
-  query(soql: string): Promise<RecordQueryResult> {
-    return this.connect().query(soql);
+  async query(soql: string): Promise<RecordQueryResult> {
+    return this.promisifyRequests(async (conn: Connection) => {
+      const response = await conn.autoFetchQuery(soql);
+      const recordQueryResult = new RecordQueryResult(response.done, response.totalSize, response.nextRecordsUrl, response.records);
+
+      return recordQueryResult;
+    });
   }
 
   /**
@@ -125,16 +158,27 @@ export class DataApi {
    * Queries for more records, based on the given {@link RecordQueryResult}.
    * @param queryResult
    */
-  queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
-    return this.connect().queryMore(queryResult);
+  async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
+    return this.promisifyRequests(async (conn: Connection) => {
+      const response = await conn.autoFetchQuery(queryResult.nextRecordsUrl);
+      const recordQueryResult = new RecordQueryResult(response.done, response.totalSize, response.nextRecordsUrl, response.records);
+
+      return recordQueryResult;
+    });
   }
 
   /**
-   * Inserts a new record described by the given {@link RecordInsert}.
+   * Inserts a new record described by the given {@link RecordCreate}.
    * @param recordInsert The record insert description.
    */
-  insert(recordInsert: RecordInsert): Promise<RecordModificationResult> {
-    return this.connect().insert(recordInsert);
+  async create(recordInsert: RecordCreate): Promise<RecordModificationResult> {
+    return this.promisifyRequests(async (conn: Connection) => {
+      // TODO: shape response to return id
+      const response: any = await conn.insert(recordInsert.type, recordInsert);
+      const result = new RecordCreateResult(response.id);
+
+      return result;
+    });
   }
 
   /**
@@ -142,7 +186,12 @@ export class DataApi {
    * @param recordUpdate The record update description.
    */
   update(recordUpdate: RecordUpdate): Promise<RecordModificationResult> {
-    return this.connect().update(recordUpdate);
+    return this.promisifyRequests(async (conn: Connection) => {
+      const response: any = await conn.update(recordUpdate.type, recordUpdate);
+      const result = new RecordModificationResult(response.id);
+
+      return result;
+    });
   }
 
   /**
