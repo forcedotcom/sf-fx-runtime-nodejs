@@ -4,10 +4,14 @@ import {
 } from '@salesforce/core';
 import { createInvocationEvent } from "./sdk/event";
 import { createContext } from "./sdk/context";
+import { Org } from "./sdk/org";
+import { User } from "./sdk/user";
 
 export {
   createInvocationEvent,
-  createContext
+  createContext,
+  Org,
+  User
 };
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
@@ -114,7 +118,7 @@ export class DataApi {
   * @param recordDelete
   */
   delete(recordDelete: RecordDelete): Promise<RecordModificationResult> {
-    return this.connect().delete(recordDelete);
+    return this.connect().delete(recordDelete.type, recordDelete.id);
   }
 
   /**
@@ -122,7 +126,7 @@ export class DataApi {
    * @param queryResult
    */
   queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
-    return this.connect().query(queryResult);
+    return this.connect().queryMore(queryResult);
   }
 
   /**
@@ -160,10 +164,4 @@ export class DataApi {
   ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return Promise.reject("Not yet implemented!");
   }
-}
-
-export class User {
-  id: string;
-  username: string;
-  onBehalfOfUserId?: string;
 }
