@@ -24,7 +24,7 @@ const functionPackageJson = require(path.join(
   "package.json"
 ));
 
-const userFunction = require(path.join(
+const userFunction: Function = require(path.join(
   functionDirectory,
   functionPackageJson.main
 ));
@@ -63,21 +63,17 @@ server.post("/", async (request, response) => {
 
   const invocationEvent = new InvocationEvent(cloudEvent);
   const context = new Context(cloudEvent, contextExtension, functionContextExtension);
+  const logger = createLogger(cloudEvent);
 
-  const loggerInstance = createLogger(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
+  let functionResult: any;
 
-  // Invoke the function and send the result via HTTP
-  // TODO: Errorhandling
-  const functionResult = userFunction(invocationEvent, context, loggerInstance);
-  if (typeof functionResult?.then === "function") {
-    return functionResult;
-  } else {
-    return new Promise(functionResult);
+  try {
+    functionResult = await userFunction(invocationEvent, context, logger);
+  } catch(e) {
+    return "some error";
   }
+
+  return functionResult;
 });
 
 server.listen(8080, function (err, address) {
