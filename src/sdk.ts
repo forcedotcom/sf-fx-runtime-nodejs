@@ -37,7 +37,7 @@ interface UnitOfWork {
   update(recordUpdate: RecordUpdate): ReferenceId;
 }
 
-interface SalesforceRecord {
+interface RecordCreate {
   type: string;
 
   [key: string]: string | number | boolean | Date;
@@ -53,12 +53,19 @@ interface RecordUpdate extends RecordInsert {
   id: string;
 }
 
+interface RecordDelete {
+  type: string;
+  id: string;
+
+  [key: string]: string | number | boolean | Date | ReferenceId;
+}
+
 class RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
-  readonly records: [SalesforceRecord];
+  readonly records: [RecordCreate];
 
-  constructor(done: boolean, totalSize: number, records: [SalesforceRecord]) {
+  constructor(done: boolean, totalSize: number, records: [RecordCreate]) {
     this.done = done;
     this.totalSize = totalSize;
     this.records = records;
@@ -96,6 +103,22 @@ export class DataApi {
    */
   query(soql: string): Promise<RecordQueryResult> {
     return this.connect().query(soql);
+  }
+
+  /**
+   * Creates a record, based on the given {@link RecordCreate}.
+   * @param recordCreate.
+   */
+  create(recordCreate: RecordCreate): Promise<RecordModificationResult> {
+    return this.connect().create(recordCreate);
+  }
+
+  /**
+  * Deletes a record, based on the given {@link RecordDelete}.
+  * @param recordDelete
+  */
+  delete(recordDelete: RecordDelete): Promise<RecordModificationResult> {
+    return this.connect().delete(recordDelete.type, recordDelete.id);
   }
 
   /**
