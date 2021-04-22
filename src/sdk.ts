@@ -5,11 +5,13 @@ import {
 import { createInvocationEvent } from "./sdk/event";
 import { createContext } from "./sdk/context";
 import { Org } from "./sdk/org";
+import { User } from "./sdk/user";
 
 export {
   createInvocationEvent,
   createContext,
-  Org
+  Org,
+  User
 };
 
 // These types (some of them should be converted to interfaces instead of classes) could come from a node module that
