@@ -1,5 +1,8 @@
 import * as fastify from "fastify";
-import { createContext, createInvocationEvent } from "./sdk";
+import {
+  InvocationEvent,
+  Context
+} from "./sdk";
 import { createLogger } from "./logger";
 import * as path from "path";
 import * as CloudEvents from "cloudevents";
@@ -58,19 +61,8 @@ server.post("/", async (request, response) => {
     cloudEvent.sffncontext
   );
 
-  // Create parameters for the function, if there are multiple SDK versions around, we would first need to somehow
-  // detect which SDK version is used by the user's function.
-  const context = createContext(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
-
-  const invocationEvent = createInvocationEvent(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
+  const invocationEvent = new InvocationEvent(cloudEvent);
+  const context = new Context(cloudEvent, contextExtension, functionContextExtension);
 
   const loggerInstance = createLogger(
     cloudEvent,
