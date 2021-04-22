@@ -1,13 +1,7 @@
 import { CloudEvent } from "cloudevents";
-import {
-  SalesforceContextCloudEventExtension,
-  SalesforceFunctionContextCloudEventExtension,
-} from "./extensions";
 
 export function createLogger(
-  cloudEvent: CloudEvent,
-  contextExt: SalesforceContextCloudEventExtension,
-  functionContextExt: SalesforceFunctionContextCloudEventExtension
+  cloudEvent: CloudEvent
 ): Logger {
   return new Logger(cloudEvent.id);
 }

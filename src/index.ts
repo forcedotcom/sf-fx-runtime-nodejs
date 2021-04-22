@@ -1,5 +1,8 @@
 import * as fastify from "fastify";
-import { createContext, createInvocationEvent } from "./sdk";
+import {
+  InvocationEvent,
+  Context
+} from "./sdk";
 import { createLogger } from "./logger";
 import * as path from "path";
 import * as CloudEvents from "cloudevents";
@@ -21,7 +24,7 @@ const functionPackageJson = require(path.join(
   "package.json"
 ));
 
-const userFunction = require(path.join(
+const userFunction: Function = require(path.join(
   functionDirectory,
   functionPackageJson.main
 ));
@@ -58,34 +61,19 @@ server.post("/", async (request, response) => {
     cloudEvent.sffncontext
   );
 
-  // Create parameters for the function, if there are multiple SDK versions around, we would first need to somehow
-  // detect which SDK version is used by the user's function.
-  const context = createContext(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
+  const invocationEvent = new InvocationEvent(cloudEvent);
+  const context = new Context(cloudEvent, contextExtension, functionContextExtension);
+  const logger = createLogger(cloudEvent);
 
-  const invocationEvent = createInvocationEvent(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
+  let functionResult: any;
 
-  const loggerInstance = createLogger(
-    cloudEvent,
-    contextExtension,
-    functionContextExtension
-  );
-
-  // Invoke the function and send the result via HTTP
-  // TODO: Errorhandling
-  const functionResult = userFunction(invocationEvent, context, loggerInstance);
-  if (typeof functionResult?.then === "function") {
-    return functionResult;
-  } else {
-    return new Promise(functionResult);
+  try {
+    functionResult = await userFunction(invocationEvent, context, logger);
+  } catch(e) {
+    return "some error";
   }
+
+  return functionResult;
 });
 
 server.listen(8080, function (err, address) {

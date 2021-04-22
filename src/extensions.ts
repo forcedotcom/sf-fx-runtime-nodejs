@@ -1,26 +1,26 @@
+export interface SalesforceUserContext {
+  readonly orgId: string;
+  readonly userId: string;
+  readonly onBehalfOfUserId: string;
+  readonly username: string;
+  readonly salesforceBaseUrl: string;
+  readonly orgDomainUrl: string;
+}
+
 export interface SalesforceContextCloudEventExtension {
   readonly apiVersion: string;
   readonly payloadVersion: string;
-  readonly userContext: UserContext;
-}
-
-export interface UserContext {
-  orgId: string;
-  userId: string;
-  onBehalfOfUserId: string;
-  username: string;
-  salesforceBaseUrl: string;
-  orgDomainUrl: string;
+  readonly userContext: SalesforceUserContext;
 }
 
 export interface SalesforceFunctionContextCloudEventExtension {
-  accessToken: string;
-  requestId: string;
-  functionInvocationId?: string;
-  functionName?: string;
-  apexClassId?: string;
-  apexClassFQN?: string;
-  resource?: string;
+  readonly accessToken: string;
+  readonly requestId: string;
+  readonly functionInvocationId?: string;
+  readonly functionName?: string;
+  readonly apexClassId?: string;
+  readonly apexClassFQN?: string;
+  readonly resource?: string;
 }
 
 export function parseSalesforceContextCloudEventExtension(

@@ -5,23 +5,24 @@ import {
   SalesforceFunctionContextCloudEventExtension,
 } from "../extensions";
 
-export function createContext(
-  cloudEvent: CloudEvent,
-  contextExt: SalesforceContextCloudEventExtension,
-  functionContextExt: SalesforceFunctionContextCloudEventExtension
-): Context {
-  let org = new Org(contextExt, functionContextExt);
-  let context = new Context(cloudEvent.id, org);
-
-  return context;
-}
-
 export class Context {
-  id: string;
-  org?: Org;
+  readonly id: string;
+  readonly org?: Org;
 
-  constructor(id, org) {
+  constructor({
+      id
+    }: CloudEvent,
+    contextExt: SalesforceContextCloudEventExtension,
+    functionContextExt: SalesforceFunctionContextCloudEventExtension
+  ) {
     this.id = id;
-    this.org = org;
+    this.org = this.createOrg(contextExt, functionContextExt);
+  }
+
+  private createOrg(
+    contextExt: SalesforceContextCloudEventExtension,
+    functionContextExt: SalesforceFunctionContextCloudEventExtension
+  ): Org {
+    return new Org(contextExt, functionContextExt, contextExt.userContext);
   }
 }
