@@ -1,8 +1,4 @@
-import {
-  Connection,
-  AuthInfo
-} from '@salesforce/core';
-// import { ReferenceId } from "./types/reference-id";
+import { Connection, AuthInfo } from "@salesforce/core";
 import {
   RecordCreate,
   RecordModification,
@@ -11,7 +7,7 @@ import {
   RecordCreateResult,
   RecordQueryResult,
   RecordModificationResult,
-  RecordDeleteResult
+  RecordDeleteResult,
 } from "./records";
 
 export class DataApi {
@@ -35,14 +31,16 @@ export class DataApi {
     return this.conn;
   }
 
-  private async promisifyRequests(callback: Function): Promise<any> {
+  private async promisifyRequests(
+    callback: (conn: Connection) => any
+  ): Promise<any> {
     let conn: Connection;
     let result: RecordResult;
 
     try {
       conn = await this.connect();
       result = callback(conn);
-    } catch(e) {
+    } catch (e) {
       Promise.reject(e);
     }
 
@@ -70,7 +68,12 @@ export class DataApi {
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.autoFetchQuery(soql);
-      const recordQueryResult = new RecordQueryResult(response.done, response.totalSize, response.nextRecordsUrl, response.records);
+      const recordQueryResult = new RecordQueryResult(
+        response.done,
+        response.totalSize,
+        response.nextRecordsUrl,
+        response.records
+      );
 
       return recordQueryResult;
     });
@@ -83,7 +86,12 @@ export class DataApi {
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.autoFetchQuery(queryResult.nextRecordsUrl);
-      const recordQueryResult = new RecordQueryResult(response.done, response.totalSize, response.nextRecordsUrl, response.records);
+      const recordQueryResult = new RecordQueryResult(
+        response.done,
+        response.totalSize,
+        response.nextRecordsUrl,
+        response.records
+      );
 
       return recordQueryResult;
     });
@@ -93,7 +101,9 @@ export class DataApi {
    * Updates an existing record described by the given {@link RecordUpdate}.
    * @param recordUpdate The record update description.
    */
-  async update(recordUpdate: RecordModification): Promise<RecordModificationResult> {
+  async update(
+    recordUpdate: RecordModification
+  ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.update(recordUpdate.type, recordUpdate);
       const result = new RecordModificationResult(response.id);
@@ -103,12 +113,15 @@ export class DataApi {
   }
 
   /**
-  * Deletes a record, based on the given {@link RecordDelete}.
-  * @param recordDelete
-  */
+   * Deletes a record, based on the given {@link RecordDelete}.
+   * @param recordDelete
+   */
   async delete(recordDelete: RecordDelete): Promise<RecordDeleteResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.delete(recordDelete.type, recordDelete.id);
+      const response: any = await conn.delete(
+        recordDelete.type,
+        recordDelete.id
+      );
       const result = new RecordDeleteResult(response.id);
 
       return result;

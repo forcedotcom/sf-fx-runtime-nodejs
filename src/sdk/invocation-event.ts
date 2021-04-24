@@ -16,7 +16,7 @@ export class InvocationEvent {
     data,
     datacontenttype,
     schemaurl,
-    time
+    time,
   }: CloudEvent) {
     this.id = id;
     this.type = type;

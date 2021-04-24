@@ -1,15 +1,12 @@
 import * as fastify from "fastify";
-import {
-  InvocationEvent,
-  Context
-} from "./sdk";
-import { createLogger } from "./logger";
+import { InvocationEvent, Context } from "./sdk";
+import { Logger } from "./logger";
 import * as path from "path";
 import * as CloudEvents from "cloudevents";
 import {
-  parseSalesforceContextCloudEventExtension,
-  parseSalesforceFunctionContextCloudEventExtension,
-} from "./extensions";
+  parseSalesforceContext,
+  parseSalesforceFunctionContext,
+} from "./utils/salesforce";
 
 // TODO: CLI parsing to set the port and host the invoker should bind to.
 
@@ -19,20 +16,27 @@ import {
 // TODO: Validation, Errorhandling, etc...
 const functionDirectory = process.argv[2];
 
+console.log(functionDirectory);
+
 const functionPackageJson = require(path.join(
   functionDirectory,
   "package.json"
 ));
 
-const userFunction: Function = require(path.join(
-  functionDirectory,
-  functionPackageJson.main
-));
+// TODO:
+// Raise error if there's no package.json
+// Raise error if the file specified in package.json is absent
+
+const userFunction: (
+  event: InvocationEvent,
+  context: Context,
+  logger: Logger
+) => any = require(path.join(functionDirectory, functionPackageJson.main));
 
 // Start new webserver to serve invocations
 const server = fastify.fastify({ logger: true });
 
-server.post("/", async (request, response) => {
+server.post("/", async (request) => {
   // If the request is a health check request, stop processing and return a successful result as per spec.
   if (request.headers["x-health-check"] === "true") {
     return "OK";
@@ -44,6 +48,9 @@ server.post("/", async (request, response) => {
     body: request.body,
   });
 
+  console.log("CloudEvent", cloudEvent);
+  console.log("data", cloudEvent.data);
+
   if (typeof cloudEvent.sfcontext !== "string") {
     // TODO: Errorhandling
     return;
@@ -54,22 +61,17 @@ server.post("/", async (request, response) => {
     return;
   }
 
-  const contextExtension = parseSalesforceContextCloudEventExtension(
-    cloudEvent.sfcontext
-  );
-  const functionContextExtension = parseSalesforceFunctionContextCloudEventExtension(
-    cloudEvent.sffncontext
-  );
-
   const invocationEvent = new InvocationEvent(cloudEvent);
-  const context = new Context(cloudEvent, contextExtension, functionContextExtension);
-  const logger = createLogger(cloudEvent);
+  const sfContext = parseSalesforceContext(cloudEvent);
+  const sfFunctionContext = parseSalesforceFunctionContext(cloudEvent);
+  const context = new Context(cloudEvent, sfContext, sfFunctionContext);
+  const logger = new Logger(cloudEvent);
 
   let functionResult: any;
 
   try {
     functionResult = await userFunction(invocationEvent, context, logger);
-  } catch(e) {
+  } catch (e) {
     return "some error";
   }
 

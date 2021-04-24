@@ -1,30 +1,24 @@
 import { CloudEvent } from "cloudevents";
 
-export function createLogger(
-  cloudEvent: CloudEvent
-): Logger {
-  return new Logger(cloudEvent.id);
-}
-
-class Logger {
+export class Logger {
   private readonly id: string;
 
-  constructor(id: string) {
-    this.id = id;
+  constructor(cloudEvent: CloudEvent) {
+    this.id = cloudEvent.id;
   }
 
   // TODO: Mimic a popular logging library? Mimic console.log?
-  info(message: string) {
-    console.log(`[INFO ] [ID: ${this.id}] ${message}`);
+  info(message: string): void {
+    console.log(`[INFO] [ID: ${this.id}] ${message}`);
   }
 
   // TODO: Mimic a popular logging library? Mimic console.log?
-  debug(message: string) {
+  debug(message: string): void {
     console.log(`[DEBUG] [ID: ${this.id}] ${message}`);
   }
 
   // TODO: Mimic a popular logging library? Mimic console.log?
-  error(message: string) {
+  error(message: string): void {
     console.log(`[ERROR] [ID: ${this.id}] ${message}`);
   }
 }

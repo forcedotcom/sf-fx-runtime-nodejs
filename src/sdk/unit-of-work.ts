@@ -1,7 +1,4 @@
-import {
-  RecordCreate,
-  RecordModification
-} from "./records";
+import { RecordCreate, RecordModification } from "./records";
 import { ReferenceId } from "./types/reference-id";
 
 /**

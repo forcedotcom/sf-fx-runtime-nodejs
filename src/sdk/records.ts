@@ -15,5 +15,5 @@ export {
   RecordCreateResult,
   RecordQueryResult,
   RecordModificationResult,
-  RecordDeleteResult
+  RecordDeleteResult,
 };

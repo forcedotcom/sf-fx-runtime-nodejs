@@ -7,13 +7,13 @@ export interface SalesforceUserContext {
   readonly orgDomainUrl: string;
 }
 
-export interface SalesforceContextCloudEventExtension {
+export interface SalesforceContext {
   readonly apiVersion: string;
   readonly payloadVersion: string;
   readonly userContext: SalesforceUserContext;
 }
 
-export interface SalesforceFunctionContextCloudEventExtension {
+export interface SalesforceFunctionContext {
   readonly accessToken: string;
   readonly requestId: string;
   readonly functionInvocationId?: string;
@@ -23,14 +23,12 @@ export interface SalesforceFunctionContextCloudEventExtension {
   readonly resource?: string;
 }
 
-export function parseSalesforceContextCloudEventExtension(
-  extension: string
-): SalesforceContextCloudEventExtension {
-  return JSON.parse(Buffer.from(extension, "base64").toString("utf-8"));
+export function parseSalesforceContext({ sfcontext }: any): SalesforceContext {
+  return JSON.parse(Buffer.from(sfcontext, "base64").toString("utf-8"));
 }
 
-export function parseSalesforceFunctionContextCloudEventExtension(
-  extension: string
-): SalesforceFunctionContextCloudEventExtension {
-  return JSON.parse(Buffer.from(extension, "base64").toString("utf-8"));
+export function parseSalesforceFunctionContext({
+  sffncontext,
+}: any): SalesforceFunctionContext {
+  return JSON.parse(Buffer.from(sffncontext, "base64").toString("utf-8"));
 }
