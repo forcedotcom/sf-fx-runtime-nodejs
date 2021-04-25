@@ -9,6 +9,7 @@ import {
   RecordModificationResult,
   RecordDeleteResult,
 } from "./records";
+import { UnitOfWork, UnitOfWorkResult } from "./unit-of-work";
 
 export class DataApi {
   private baseUrl: string;
@@ -53,7 +54,6 @@ export class DataApi {
    */
   async create(recordInsert: RecordCreate): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      // TODO: shape response to return id
       const response: any = await conn.insert(recordInsert.type, recordInsert);
       const result = new RecordCreateResult(response.id);
 
@@ -131,9 +131,9 @@ export class DataApi {
   /**
    * Creates a new and empty {@link UnitOfWork}.
    */
-  // newUnitOfWork(): UnitOfWork {
-  //   throw "Not yet implemented!";
-  // }
+  newUnitOfWork(): UnitOfWork {
+    return new UnitOfWork();
+  }
 
   /**
    * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
@@ -142,9 +142,10 @@ export class DataApi {
    * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
    * @param unitOfWork The {@link UnitOfWork} to commit.
    */
-  // commitUnitOfWork(
-  //   unitOfWork: UnitOfWork
-  // ): Promise<Map<ReferenceId, RecordModificationResult>> {
-  //   return Promise.reject("Not yet implemented!");
-  // }
+  commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
+    return this.promisifyRequests(async (conn: Connection) => {
+      // Not implemented!
+      return {};
+    });
+  }
 }
