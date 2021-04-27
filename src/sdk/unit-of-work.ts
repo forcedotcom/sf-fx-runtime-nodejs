@@ -1,36 +1,31 @@
+import crypto from "crypto";
 import {
   RecordCreate,
   RecordModification,
+  RecordDelete,
   RecordCreateResult,
   RecordModificationResult,
   RecordDeleteResult,
 } from "./records";
 import { ReferenceId } from "./types/reference-id";
-
-export interface UnitOfWorkResult {
-  [key: string]:
-    | RecordCreateResult
-    | RecordModificationResult
-    | RecordDeleteResult;
-}
+import { CompositeRequest } from "./unit-of-work/composite-request";
 
 export class UnitOfWork {
-  private records?:
-    | RecordCreateResult[]
-    | RecordModificationResult[]
-    | RecordDeleteResult[];
+  private compositeRequest: CompositeRequest;
 
   constructor() {
-    this.records = [];
+    this.compositeRequest = new CompositeRequest();
   }
 
   /**
-   * Registers a record insert with this UnitOfWork.
-   * @param recordInsert
+   * Registers a record create with this UnitOfWork.
+   * @param recordCreate
    */
-  insert(recordInsert: RecordCreate): ReferenceId {
-    // Not implemented!
-    return "reference-id";
+  create(recordCreate: RecordCreate): ReferenceId {
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordCreateResult(referenceId);
+
+    return referenceId;
   }
 
   /**
@@ -38,7 +33,26 @@ export class UnitOfWork {
    * @param recordUpdate
    */
   update(recordUpdate: RecordModification): ReferenceId {
-    // Not implemented!
-    return "reference-id";
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordModificationResult(referenceId);
+
+    return referenceId;
+  }
+
+  /**
+   * Registers a record delete with this UnitOfWork.
+   * @param recordDelete
+   */
+   delete(recordDelete: RecordDelete): ReferenceId {
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordDeleteResult(referenceId);
+
+    return referenceId;
+  }
+
+
+  commit(): UnitOfWork {
+    this.compositeRequest.exec();
+    return this;
   }
 }
