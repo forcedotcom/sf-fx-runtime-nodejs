@@ -1,19 +1,19 @@
 import { RecordCreate } from "./record/create";
-import { RecordModification } from "./record/modification";
+import { RecordUpdate } from "./record/update";
 import { RecordDelete } from "./record/delete";
 import { RecordResult } from "./record/result";
 import { RecordCreateResult } from "./record/result/create";
 import { RecordQueryResult } from "./record/result/query";
-import { RecordModificationResult } from "./record/result/modification";
+import { RecordUpdateResult } from "./record/result/update";
 import { RecordDeleteResult } from "./record/result/delete";
 
 export {
   RecordCreate,
-  RecordModification,
+  RecordUpdate,
   RecordDelete,
   RecordResult,
   RecordCreateResult,
   RecordQueryResult,
-  RecordModificationResult,
+  RecordUpdateResult,
   RecordDeleteResult,
 };

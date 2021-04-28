@@ -1,12 +1,12 @@
 import { Connection, AuthInfo } from "@salesforce/core";
 import {
   RecordCreate,
-  RecordModification,
+  RecordUpdate,
   RecordDelete,
   RecordResult,
   RecordCreateResult,
   RecordQueryResult,
-  RecordModificationResult,
+  RecordUpdateResult,
   RecordDeleteResult,
 } from "./records";
 import { UnitOfWork, UnitOfWorkResult } from "./unit-of-work";
@@ -52,7 +52,7 @@ export class DataApi {
    * Creates a record, based on the given {@link RecordCreate}.
    * @param recordCreate.
    */
-  async create(recordInsert: RecordCreate): Promise<RecordModificationResult> {
+  async create(recordInsert: RecordCreate): Promise<RecordUpdateResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.insert(recordInsert.type, recordInsert);
       const result = new RecordCreateResult(response.id);
@@ -102,11 +102,11 @@ export class DataApi {
    * @param recordUpdate The record update description.
    */
   async update(
-    recordUpdate: RecordModification
-  ): Promise<RecordModificationResult> {
+    recordUpdate: RecordUpdate
+  ): Promise<RecordUpdateResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.update(recordUpdate.type, recordUpdate);
-      const result = new RecordModificationResult(response.id);
+      const result = new RecordUpdateResult(response.id);
 
       return result;
     });

@@ -1,10 +1,10 @@
 import crypto from "crypto";
 import {
   RecordCreate,
-  RecordModification,
+  RecordUpdate,
   RecordDelete,
   RecordCreateResult,
-  RecordModificationResult,
+  RecordUpdateResult,
   RecordDeleteResult,
 } from "./records";
 import { ReferenceId } from "./types/reference-id";
