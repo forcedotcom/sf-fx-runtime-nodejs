@@ -1,6 +1,6 @@
 import { ReferenceId } from "../types/reference-id";
 
-export interface RecordCreate {
+export interface RecordUpdate {
   id: ReferenceId;
   type: string;
 

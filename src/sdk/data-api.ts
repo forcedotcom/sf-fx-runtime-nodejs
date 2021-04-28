@@ -132,7 +132,7 @@ export class DataApi {
    * Creates a new and empty {@link UnitOfWork}.
    */
   newUnitOfWork(): UnitOfWork {
-    return new UnitOfWork();
+    return new UnitOfWork(this.apiVersion);
   }
 
   /**
@@ -144,8 +144,10 @@ export class DataApi {
    */
   commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      // Not implemented!
-      return {};
+      const reqBody = unitOfWork._getRequestBody();
+      const reqResult = await conn.requestRaw(reqBody);
+
+      return unitOfWork._commit(reqResult);
     });
   }
 }
