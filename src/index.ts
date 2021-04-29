@@ -16,8 +16,6 @@ import {
 // TODO: Validation, Errorhandling, etc...
 const functionDirectory = process.argv[2];
 
-console.log(functionDirectory);
-
 const functionPackageJson = require(path.join(
   functionDirectory,
   "package.json"
@@ -47,9 +45,6 @@ server.post("/", async (request) => {
     headers: request.headers,
     body: request.body,
   });
-
-  console.log("CloudEvent", cloudEvent);
-  console.log("data", cloudEvent.data);
 
   if (typeof cloudEvent.sfcontext !== "string") {
     // TODO: Errorhandling

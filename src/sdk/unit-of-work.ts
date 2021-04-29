@@ -1,44 +1,81 @@
+import crypto from "crypto";
 import {
   RecordCreate,
-  RecordModification,
+  RecordUpdate,
+  RecordDelete,
   RecordCreateResult,
-  RecordModificationResult,
+  RecordUpdateResult,
   RecordDeleteResult,
 } from "./records";
 import { ReferenceId } from "./types/reference-id";
+import { CompositeRequest } from "./unit-of-work/composite-request";
+import { UnitOfWorkResult } from "./unit-of-work/result";
+import { JsonMap } from '@salesforce/ts-types';
 
-export interface UnitOfWorkResult {
-  [key: string]:
-    | RecordCreateResult
-    | RecordModificationResult
-    | RecordDeleteResult;
+export { UnitOfWorkResult };
+
+enum Method {
+  POST = "POST",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
 }
 
 export class UnitOfWork {
-  private records?:
-    | RecordCreateResult[]
-    | RecordModificationResult[]
-    | RecordDeleteResult[];
+  private apiVersion: string;
+  private compositeRequest: CompositeRequest;
 
-  constructor() {
-    this.records = [];
+  constructor(apiVersion) {
+    this.compositeRequest = new CompositeRequest();
+    this.apiVersion = apiVersion;
   }
 
   /**
-   * Registers a record insert with this UnitOfWork.
-   * @param recordInsert
+   * Registers a record create with this UnitOfWork.
+   * @param recordCreate
    */
-  insert(recordInsert: RecordCreate): ReferenceId {
-    // Not implemented!
-    return "reference-id";
+  addRecordCreate(recordCreate: RecordCreate): ReferenceId {
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordCreateResult(referenceId);
+    this.compositeRequest.addSubRequest(Method.POST, this.apiVersion, recordCreate);
+
+    return referenceId;
   }
 
   /**
    * Registers a record update with this UnitOfWork.
    * @param recordUpdate
    */
-  update(recordUpdate: RecordModification): ReferenceId {
-    // Not implemented!
-    return "reference-id";
+  addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordUpdateResult(referenceId);
+    this.compositeRequest.addSubRequest(Method.PATCH, this.apiVersion, recordUpdate);
+
+    return referenceId;
+  }
+
+  /**
+   * Registers a record delete with this UnitOfWork.
+   * @param recordDelete
+   */
+   addRecordDelete(recordDelete: RecordDelete): ReferenceId {
+    const referenceId = crypto.randomBytes(16).toString("hex");
+    this[referenceId] = new RecordDeleteResult(referenceId);
+    this.compositeRequest.addSubRequest(Method.DELETE, this.apiVersion, recordDelete);
+
+    return referenceId;
+  }
+
+  _getRequestBody(): JsonMap {
+    const compositeRequest = this.compositeRequest.getSubRequests();
+
+    return {
+      allOrNone: true,
+      compositeRequest,
+    };
+  }
+
+  _commit(reqResult: JsonMap): UnitOfWorkResult {
+    const unitOfWorkResult = new UnitOfWorkResult();
+    return unitOfWorkResult;
   }
 }
