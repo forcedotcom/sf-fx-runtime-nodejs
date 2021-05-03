@@ -101,9 +101,7 @@ export class DataApi {
    * Updates an existing record described by the given {@link RecordUpdate}.
    * @param recordUpdate The record update description.
    */
-  async update(
-    recordUpdate: RecordUpdate
-  ): Promise<RecordUpdateResult> {
+  async update(recordUpdate: RecordUpdate): Promise<RecordUpdateResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.update(recordUpdate.type, recordUpdate);
       const result = new RecordUpdateResult(response.id);

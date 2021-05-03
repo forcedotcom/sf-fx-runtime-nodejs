@@ -10,7 +10,7 @@ import {
 import { ReferenceId } from "./types/reference-id";
 import { CompositeRequest } from "./unit-of-work/composite-request";
 import { UnitOfWorkResult } from "./unit-of-work/result";
-import { JsonMap } from '@salesforce/ts-types';
+import { JsonMap } from "@salesforce/ts-types";
 
 export { UnitOfWorkResult };
 
@@ -36,7 +36,11 @@ export class UnitOfWork {
   addRecordCreate(recordCreate: RecordCreate): ReferenceId {
     const referenceId = crypto.randomBytes(16).toString("hex");
     this[referenceId] = new RecordCreateResult(referenceId);
-    this.compositeRequest.addSubRequest(Method.POST, this.apiVersion, recordCreate);
+    this.compositeRequest.addSubRequest(
+      Method.POST,
+      this.apiVersion,
+      recordCreate
+    );
 
     return referenceId;
   }
@@ -48,7 +52,11 @@ export class UnitOfWork {
   addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
     const referenceId = crypto.randomBytes(16).toString("hex");
     this[referenceId] = new RecordUpdateResult(referenceId);
-    this.compositeRequest.addSubRequest(Method.PATCH, this.apiVersion, recordUpdate);
+    this.compositeRequest.addSubRequest(
+      Method.PATCH,
+      this.apiVersion,
+      recordUpdate
+    );
 
     return referenceId;
   }
@@ -57,10 +65,14 @@ export class UnitOfWork {
    * Registers a record delete with this UnitOfWork.
    * @param recordDelete
    */
-   addRecordDelete(recordDelete: RecordDelete): ReferenceId {
+  addRecordDelete(recordDelete: RecordDelete): ReferenceId {
     const referenceId = crypto.randomBytes(16).toString("hex");
     this[referenceId] = new RecordDeleteResult(referenceId);
-    this.compositeRequest.addSubRequest(Method.DELETE, this.apiVersion, recordDelete);
+    this.compositeRequest.addSubRequest(
+      Method.DELETE,
+      this.apiVersion,
+      recordDelete
+    );
 
     return referenceId;
   }
