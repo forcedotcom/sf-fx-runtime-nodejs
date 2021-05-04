@@ -9,10 +9,11 @@ export class SubRequest {
   constructor(
     method: string,
     apiVersion: string,
-    record: RecordCreate | RecordUpdate | RecordDelete
+    record: RecordCreate | RecordUpdate | RecordDelete,
+    referenceId: ReferenceId
   ) {
     this.url = this.createUrl(apiVersion, record);
-    this.referenceId = record.id;
+    this.referenceId = referenceId;
     this.method = method;
   }
 

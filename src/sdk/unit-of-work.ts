@@ -39,7 +39,8 @@ export class UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.POST,
       this.apiVersion,
-      recordCreate
+      recordCreate,
+      referenceId
     );
 
     return referenceId;
@@ -55,7 +56,8 @@ export class UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.PATCH,
       this.apiVersion,
-      recordUpdate
+      recordUpdate,
+      referenceId
     );
 
     return referenceId;
@@ -71,7 +73,8 @@ export class UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.DELETE,
       this.apiVersion,
-      recordDelete
+      recordDelete,
+      referenceId
     );
 
     return referenceId;

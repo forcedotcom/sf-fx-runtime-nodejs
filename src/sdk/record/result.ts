@@ -1,9 +1,9 @@
 import { ReferenceId } from "../types/reference-id";
 
 export class RecordResult {
-  readonly id: ReferenceId;
+  readonly referenceId: ReferenceId;
 
-  constructor(id: string) {
-    this.id = id;
+  constructor(id: ReferenceId) {
+    this.referenceId = id;
   }
 }

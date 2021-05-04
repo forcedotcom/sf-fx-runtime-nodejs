@@ -1,4 +1,4 @@
-import { Connection, AuthInfo } from "@salesforce/core";
+import { Connection } from "jsforce";
 import {
   RecordCreate,
   RecordUpdate,
@@ -25,8 +25,11 @@ export class DataApi {
 
   private async connect(): Promise<Connection> {
     if (!this.conn) {
-      const authInfo = await AuthInfo.create({ username: this.accessToken });
-      this.conn = await Connection.create({ authInfo });
+      this.conn = new Connection({
+        accessToken: this.accessToken,
+        instanceUrl: this.baseUrl,
+        version: this.apiVersion,
+      });
     }
 
     return this.conn;
@@ -67,13 +70,13 @@ export class DataApi {
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.query(soql);
-      console.log("response from conn", response);
       const recordQueryResult = new RecordQueryResult(
         response.done,
         response.totalSize,
         response.nextRecordsUrl,
         response.records
       );
+
       return recordQueryResult;
     });
   }
@@ -84,7 +87,7 @@ export class DataApi {
    */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.autoFetchQuery(queryResult.nextRecordsUrl);
+      const response = await conn.queryMore(queryResult._nextRecordsUrl);
       const recordQueryResult = new RecordQueryResult(
         response.done,
         response.totalSize,
@@ -102,7 +105,8 @@ export class DataApi {
    */
   async update(recordUpdate: RecordUpdate): Promise<RecordUpdateResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.update(recordUpdate.type, recordUpdate);
+      const params = Object.assign({}, recordUpdate, { Id: recordUpdate.id });
+      const response: any = await conn.update(recordUpdate.type, params);
       const result = new RecordUpdateResult(response.id);
 
       return result;
@@ -139,12 +143,12 @@ export class DataApi {
    * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
    * @param unitOfWork The {@link UnitOfWork} to commit.
    */
-  commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
-    return this.promisifyRequests(async (conn: Connection) => {
-      const reqBody = unitOfWork._getRequestBody();
-      const reqResult = await conn.requestRaw(reqBody);
+  // commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
+  //   return this.promisifyRequests(async (conn: Connection) => {
+  //     const reqBody = unitOfWork._getRequestBody();
+  //     const reqResult = await conn.requestRaw(reqBody);
 
-      return unitOfWork._commit(reqResult);
-    });
-  }
+  //     return unitOfWork._commit(reqResult);
+  //   });
+  // }
 }
