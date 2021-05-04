@@ -9,26 +9,18 @@ export class SubRequest {
 
   constructor(
     method: string,
-    apiVersion: string,
+    url: string,
     record: RecordCreate | RecordUpdate | RecordDelete,
     referenceId: ReferenceId
   ) {
     this.method = method;
-    this.url = this.createUrl(apiVersion, record);
+    this.url = url;
     this.referenceId = referenceId;
     this.body = record;
   }
 
-  createUrl(
-    apiVersion: string,
-    record: RecordCreate | RecordUpdate | RecordDelete
-  ): string {
-    const recordType = record.type;
-    return `services/data/v${apiVersion}/sobjects/${recordType}`;
-  }
-
   toJson() {
-    const { type, ...body } = this.body;
+    const { type, id, ...body } = this.body;
     return {
       url: this.url,
       method: this.method,

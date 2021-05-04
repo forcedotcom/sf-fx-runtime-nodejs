@@ -25,7 +25,7 @@ export class UnitOfWork {
   private apiVersion: string;
   private compositeRequest: CompositeRequest;
 
-  constructor(apiVersion) {
+  constructor(apiVersion: string) {
     this.compositeRequest = new CompositeRequest();
     this.apiVersion = apiVersion;
   }
@@ -40,10 +40,13 @@ export class UnitOfWork {
    */
   addRecordCreate(recordCreate: RecordCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
+
     this[referenceId] = new RecordCreateResult(referenceId);
+
     this.compositeRequest.addSubRequest(
       Method.POST,
-      this.apiVersion,
+      url,
       recordCreate,
       referenceId
     );
@@ -57,10 +60,14 @@ export class UnitOfWork {
    */
   addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
     const referenceId = this.generateReferenceId();
-    this[referenceId] = new RecordUpdateResult(referenceId);
+    const rowId = recordUpdate.id;
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
+
+    this[referenceId] = new RecordUpdateResult(referenceId, recordUpdate.id);
+
     this.compositeRequest.addSubRequest(
       Method.PATCH,
-      this.apiVersion,
+      url,
       recordUpdate,
       referenceId
     );
@@ -74,10 +81,14 @@ export class UnitOfWork {
    */
   addRecordDelete(recordDelete: RecordDelete): ReferenceId {
     const referenceId = this.generateReferenceId();
+    const rowId = recordDelete.id;
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordDelete.type}/${rowId}`;
+
     this[referenceId] = new RecordDeleteResult(referenceId);
+
     this.compositeRequest.addSubRequest(
       Method.DELETE,
-      this.apiVersion,
+      url,
       recordDelete,
       referenceId
     );
@@ -106,8 +117,10 @@ export class UnitOfWork {
 
   _commit({ compositeResponse }: any): any {
     compositeResponse.forEach(({ referenceId, body }) => {
-      const recordResult = this[referenceId];
-      recordResult.id = body.id;
+      if (body) {
+        const recordResult = this[referenceId];
+        recordResult.id = body.id;
+      }
     });
     return this;
   }

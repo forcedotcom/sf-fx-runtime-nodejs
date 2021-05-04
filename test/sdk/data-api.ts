@@ -191,13 +191,15 @@ describe("DataApi Class", async () => {
 
       beforeEach(() => {
         uow = dataApi.newUnitOfWork();
-
-        stub(uow, "generateReferenceId").callsFake(() => {
-          return "insert-anh";
-        });
       });
 
       describe("single create", async () => {
+        beforeEach(() => {
+          stub(uow, "generateReferenceId").callsFake(() => {
+            return "insert-anh";
+          });
+        });
+
         it("success with valid payload", async () => {
           const rId = uow.addRecordCreate({
             type: "Movie__c",
@@ -212,6 +214,12 @@ describe("DataApi Class", async () => {
       });
 
       describe("single query", async () => {
+        beforeEach(() => {
+          stub(uow, "generateReferenceId").callsFake(() => {
+            return "referenceId0";
+          });
+        });
+
         it("success with valid payload", async () => {
           const rId = uow.addRecordUpdate({
             type: "Movie__c",
