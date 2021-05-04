@@ -37,7 +37,6 @@ export class DataApi {
   ): Promise<any> {
     let conn: Connection;
     let result: RecordResult;
-
     try {
       conn = await this.connect();
       result = callback(conn);
@@ -67,14 +66,14 @@ export class DataApi {
    */
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.autoFetchQuery(soql);
+      const response = await conn.query(soql);
+      console.log("response from conn", response);
       const recordQueryResult = new RecordQueryResult(
         response.done,
         response.totalSize,
         response.nextRecordsUrl,
         response.records
       );
-
       return recordQueryResult;
     });
   }
