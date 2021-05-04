@@ -143,12 +143,13 @@ export class DataApi {
    * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
    * @param unitOfWork The {@link UnitOfWork} to commit.
    */
-  // commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
-  //   return this.promisifyRequests(async (conn: Connection) => {
-  //     const reqBody = unitOfWork._getRequestBody();
-  //     const reqResult = await conn.requestRaw(reqBody);
+  commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
+    return this.promisifyRequests(async (conn: Connection) => {
+      const url = `/services/data/v${this.apiVersion}/composite`;
+      const reqBody = unitOfWork._getRequestBody();
+      const reqResult = await conn.requestPost(url, reqBody);
 
-  //     return unitOfWork._commit(reqResult);
-  //   });
-  // }
+      return unitOfWork._commit(reqResult);
+    });
+  }
 }

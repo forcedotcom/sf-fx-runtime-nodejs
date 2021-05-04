@@ -4,6 +4,10 @@ import { SubRequest } from "./sub-request";
 export class CompositeRequest {
   private subRequests: any[];
 
+  constructor() {
+    this.subRequests = [];
+  }
+
   addSubRequest(
     method: string,
     apiVersion: string,

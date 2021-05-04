@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "crypto";
 import {
   RecordCreate,
   RecordUpdate,
@@ -6,6 +6,7 @@ import {
   RecordCreateResult,
   RecordUpdateResult,
   RecordDeleteResult,
+  RecordQueryResult,
 } from "./records";
 import { ReferenceId } from "./types/reference-id";
 import { CompositeRequest } from "./unit-of-work/composite-request";
@@ -29,12 +30,16 @@ export class UnitOfWork {
     this.apiVersion = apiVersion;
   }
 
+  private generateReferenceId() {
+    return crypto.randomBytes(16).toString("hex");
+  }
+
   /**
    * Registers a record create with this UnitOfWork.
    * @param recordCreate
    */
   addRecordCreate(recordCreate: RecordCreate): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
+    const referenceId = this.generateReferenceId();
     this[referenceId] = new RecordCreateResult(referenceId);
     this.compositeRequest.addSubRequest(
       Method.POST,
@@ -51,7 +56,7 @@ export class UnitOfWork {
    * @param recordUpdate
    */
   addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
+    const referenceId = this.generateReferenceId();
     this[referenceId] = new RecordUpdateResult(referenceId);
     this.compositeRequest.addSubRequest(
       Method.PATCH,
@@ -68,7 +73,7 @@ export class UnitOfWork {
    * @param recordDelete
    */
   addRecordDelete(recordDelete: RecordDelete): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
+    const referenceId = this.generateReferenceId();
     this[referenceId] = new RecordDeleteResult(referenceId);
     this.compositeRequest.addSubRequest(
       Method.DELETE,
@@ -80,6 +85,16 @@ export class UnitOfWork {
     return referenceId;
   }
 
+  getRecord(
+    referenceId: ReferenceId
+  ):
+    | RecordCreateResult
+    | RecordUpdateResult
+    | RecordQueryResult
+    | RecordDeleteResult {
+    return this[referenceId];
+  }
+
   _getRequestBody(): JsonMap {
     const compositeRequest = this.compositeRequest.getSubRequests();
 
@@ -89,8 +104,11 @@ export class UnitOfWork {
     };
   }
 
-  _commit(reqResult: JsonMap): UnitOfWorkResult {
-    const unitOfWorkResult = new UnitOfWorkResult();
-    return unitOfWorkResult;
+  _commit({ compositeResponse }: any): any {
+    compositeResponse.forEach(({ referenceId, body }) => {
+      const recordResult = this[referenceId];
+      recordResult.id = body.id;
+    });
+    return this;
   }
 }

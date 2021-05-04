@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { DataApi } from "../../src/sdk";
+import { stub } from "sinon";
 
 const uri = "http://localhost:8080";
 const apiVersion = "51.0";
@@ -185,6 +186,44 @@ describe("DataApi Class", async () => {
   });
 
   describe("Unit of Work", async () => {
+    describe("commit()", async () => {
+      let uow;
 
+      beforeEach(() => {
+        uow = dataApi.newUnitOfWork();
+
+        stub(uow, "generateReferenceId").callsFake(() => {
+          return "insert-anh";
+        });
+      });
+
+      describe("single create", async () => {
+        it("success with valid payload", async () => {
+          const rId = uow.addRecordCreate({
+            type: "Movie__c",
+            Name: "Star Wars Episode IV - A New Hope",
+            Rating__c: "Excellent",
+          });
+          const result = await dataApi.commitUnitOfWork(uow);
+          const createdRecord = result.getRecord(rId);
+
+          expect(createdRecord.id).equal("a00B000000FSkgxIAD");
+        });
+      });
+
+      describe("single query", async () => {
+        it("success with valid payload", async () => {
+          const rId = uow.addRecordUpdate({
+            type: "Movie__c",
+            id: "a00B000000FSjVUIA1",
+            ReleaseDate__c: "1980-05-21",
+          });
+          const result = await dataApi.commitUnitOfWork(uow);
+          const updatedRecord = result.getRecord(rId);
+
+          expect(updatedRecord.id).equal("a00B000000FSjVUIA1");
+        });
+      });
+    });
   });
 });
