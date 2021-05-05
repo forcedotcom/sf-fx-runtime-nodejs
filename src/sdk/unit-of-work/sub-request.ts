@@ -26,10 +26,9 @@ export class SubRequest {
       url: this.url,
       method: this.method,
       referenceId: this.referenceId,
-    }
+    };
 
-    if (this.method !== "DELETE")
-      params["body"] = body;
+    if (this.method !== "DELETE") params["body"] = body;
 
     return params;
   }

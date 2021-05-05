@@ -3,4 +3,5 @@ package.json
 *.md
 
 dist/
+docs/
 node_modules/
