@@ -1,10 +1,20 @@
+import { ReferenceId } from "../types/reference-id";
 import { SubRequest } from "./sub-request";
 
 export class CompositeRequest {
   private subRequests: any[];
 
-  addSubRequest(method: string, apiVersion: string, subReqData: any): void {
-    const subReq = new SubRequest(method, apiVersion, subReqData);
+  constructor() {
+    this.subRequests = [];
+  }
+
+  addSubRequest(
+    method: string,
+    url: string,
+    subReqData: any,
+    referenceId: ReferenceId
+  ): void {
+    const subReq = new SubRequest(method, url, subReqData, referenceId);
     this.subRequests.push(subReq.toJson());
   }
 

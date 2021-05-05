@@ -3,33 +3,34 @@ import { ReferenceId } from "../types/reference-id";
 
 export class SubRequest {
   private method: string;
-  private referenceId: ReferenceId;
   private url: string;
+  private referenceId: ReferenceId;
+  private body: RecordCreate | RecordUpdate | RecordDelete;
 
   constructor(
     method: string,
-    apiVersion: string,
-    record: RecordCreate | RecordUpdate | RecordDelete
+    url: string,
+    record: RecordCreate | RecordUpdate | RecordDelete,
+    referenceId: ReferenceId
   ) {
-    this.url = this.createUrl(apiVersion, record);
-    this.referenceId = record.id;
     this.method = method;
-  }
-
-  createUrl(
-    apiVersion: string,
-    record: RecordCreate | RecordUpdate | RecordDelete
-  ): string {
-    const recordType = record.type;
-    return `services/data/${apiVersion}/sobjects/${recordType}`;
+    this.url = url;
+    this.referenceId = referenceId;
+    this.body = record;
   }
 
   toJson() {
-    return {
-      body: {},
+    const { type, id, ...body } = this.body;
+
+    const params = {
+      url: this.url,
       method: this.method,
       referenceId: this.referenceId,
-      url: this.url,
-    };
+    }
+
+    if (this.method !== "DELETE")
+      params["body"] = body;
+
+    return params;
   }
 }

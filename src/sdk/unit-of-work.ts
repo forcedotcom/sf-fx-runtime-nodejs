@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "crypto";
 import {
   RecordCreate,
   RecordUpdate,
@@ -6,6 +6,7 @@ import {
   RecordCreateResult,
   RecordUpdateResult,
   RecordDeleteResult,
+  RecordQueryResult,
 } from "./records";
 import { ReferenceId } from "./types/reference-id";
 import { CompositeRequest } from "./unit-of-work/composite-request";
@@ -24,9 +25,13 @@ export class UnitOfWork {
   private apiVersion: string;
   private compositeRequest: CompositeRequest;
 
-  constructor(apiVersion) {
+  constructor(apiVersion: string) {
     this.compositeRequest = new CompositeRequest();
     this.apiVersion = apiVersion;
+  }
+
+  private generateReferenceId() {
+    return crypto.randomBytes(16).toString("hex");
   }
 
   /**
@@ -34,12 +39,16 @@ export class UnitOfWork {
    * @param recordCreate
    */
   addRecordCreate(recordCreate: RecordCreate): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
+    const referenceId = this.generateReferenceId();
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
+
     this[referenceId] = new RecordCreateResult(referenceId);
+
     this.compositeRequest.addSubRequest(
       Method.POST,
-      this.apiVersion,
-      recordCreate
+      url,
+      recordCreate,
+      referenceId
     );
 
     return referenceId;
@@ -50,12 +59,17 @@ export class UnitOfWork {
    * @param recordUpdate
    */
   addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
-    this[referenceId] = new RecordUpdateResult(referenceId);
+    const referenceId = this.generateReferenceId();
+    const rowId = recordUpdate.id;
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
+
+    this[referenceId] = new RecordUpdateResult(referenceId, recordUpdate.id);
+
     this.compositeRequest.addSubRequest(
       Method.PATCH,
-      this.apiVersion,
-      recordUpdate
+      url,
+      recordUpdate,
+      referenceId
     );
 
     return referenceId;
@@ -66,15 +80,30 @@ export class UnitOfWork {
    * @param recordDelete
    */
   addRecordDelete(recordDelete: RecordDelete): ReferenceId {
-    const referenceId = crypto.randomBytes(16).toString("hex");
+    const referenceId = this.generateReferenceId();
+    const rowId = recordDelete.id;
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordDelete.type}/${rowId}`;
+
     this[referenceId] = new RecordDeleteResult(referenceId);
+
     this.compositeRequest.addSubRequest(
       Method.DELETE,
-      this.apiVersion,
-      recordDelete
+      url,
+      recordDelete,
+      referenceId
     );
 
     return referenceId;
+  }
+
+  getRecord(
+    referenceId: ReferenceId
+  ):
+    | RecordCreateResult
+    | RecordUpdateResult
+    | RecordQueryResult
+    | RecordDeleteResult {
+    return this[referenceId];
   }
 
   _getRequestBody(): JsonMap {
@@ -86,8 +115,13 @@ export class UnitOfWork {
     };
   }
 
-  _commit(reqResult: JsonMap): UnitOfWorkResult {
-    const unitOfWorkResult = new UnitOfWorkResult();
-    return unitOfWorkResult;
+  _commit({ compositeResponse }: any): any {
+    compositeResponse.forEach(({ referenceId, body }) => {
+      if (body) {
+        const recordResult = this[referenceId];
+        recordResult.id = body.id;
+      }
+    });
+    return this;
   }
 }
