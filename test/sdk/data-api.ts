@@ -206,6 +206,7 @@ describe("DataApi Class", async () => {
             Name: "Star Wars Episode IV - A New Hope",
             Rating__c: "Excellent",
           });
+
           const result = await dataApi.commitUnitOfWork(uow);
           const createdRecord = result.getRecord(rId);
 
@@ -230,6 +231,72 @@ describe("DataApi Class", async () => {
           const updatedRecord = result.getRecord(rId);
 
           expect(updatedRecord.id).equal("a00B000000FSjVUIA1");
+        });
+      });
+
+      describe("single delete", async () => {
+        beforeEach(() => {
+          stub(uow, "generateReferenceId").callsFake(() => {
+            return "referenceId0";
+          });
+        });
+
+        it("successfully deletes record", async () => {
+          const rId = uow.addRecordDelete({
+            type: "Movie__c",
+            id: "a00B000000FeYyKIAV",
+          });
+
+          // const result = await dataApi.commitUnitOfWork(uow);
+          // const deletedRecord = result.getRecord(rId);
+
+          // expect(deletedRecord.id).equal("a00B000000FeYyKIAV");
+        });
+      });
+
+      describe("composite create tree", async () => {
+        beforeEach(() => {
+          let num = -1;
+          stub(uow, "generateReferenceId").callsFake(() => {
+            num++;
+            return `referenceId${num}`;
+          });
+        });
+
+        it("creates a composite request", async () => {
+          const rId0 = uow.addRecordCreate({
+            type: "Franchise__c",
+            Name: "Star Wars",
+          });
+
+          const rId1 = uow.addRecordCreate({
+            type: "Movie__c",
+            Name: "Star Wars Episode I - A Phantom Menace",
+            Franchise__c: "@{referenceId0.id}",
+          });
+
+          const rId2 = uow.addRecordCreate({
+            type: "Movie__c",
+            Name: "Star Wars Episode II - Attack Of The Clones",
+            Franchise__c: "@{referenceId0.id}",
+          });
+
+          const rId3 = uow.addRecordCreate({
+            type: "Movie__c",
+            Name: "Star Wars Episode III - Revenge Of The Sith",
+            Franchise__c: "@{referenceId0.id}",
+          });
+
+          const result = await dataApi.commitUnitOfWork(uow);
+          const createdRecord0 = result.getRecord(rId0);
+          const createdRecord1 = result.getRecord(rId1);
+          const createdRecord2 = result.getRecord(rId2);
+          const createdRecord3 = result.getRecord(rId3);
+
+          expect(createdRecord0.id).equal("a03B0000007BhQQIA0");
+          expect(createdRecord1.id).equal("a00B000000FSkioIAD");
+          expect(createdRecord2.id).equal("a00B000000FSkipIAD");
+          expect(createdRecord3.id).equal("a00B000000FSkiqIAD");
         });
       });
     });

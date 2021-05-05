@@ -21,11 +21,16 @@ export class SubRequest {
 
   toJson() {
     const { type, id, ...body } = this.body;
-    return {
+
+    const params = {
       url: this.url,
       method: this.method,
       referenceId: this.referenceId,
-      body,
-    };
+    }
+
+    if (this.method !== "DELETE")
+      params["body"] = body;
+
+    return params;
   }
 }
