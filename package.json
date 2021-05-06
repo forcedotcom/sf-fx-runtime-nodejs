@@ -1,6 +1,6 @@
 {
   "name": "sf-fx-runtime-nodejs",
-  "version": "1.0.0",
+  "version": "0.1.0-ea",
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -9,8 +9,10 @@
     "format": "npm run format:write && npm run format:check",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "docs": "sf-docs"
+    "docs": "sf-docs",
+    "prepare": "npm run build"
   },
+  "files": ["dist/**/*"],
   "author": "",
   "license": "ISC",
   "dependencies": {
