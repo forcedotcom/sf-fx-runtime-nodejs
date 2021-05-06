@@ -31,7 +31,7 @@ echo "Running npm pack..."
 npm pack
 
 echo "Pushing packaged tarball to s3 bucket:"
-aws s3 cp "${package_filename}" "s3://${bucket_name}" --profile "${aws_cli_profile}" --acl public-read
+aws s3 cp "${package_filename}" "s3://${bucket_name}" --profile "${aws_cli_profile}"
 
 echo "Cleaning up..."
 rm "${package_filename}"
