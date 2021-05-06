@@ -73,7 +73,7 @@ server.post("/", async (request) => {
   return functionResult;
 });
 
-server.listen(8080, function (err, address) {
+server.listen(8080, '0.0.0.0', function (err, address) {
   if (err) {
     server.log.error(err);
     process.exit(1);
