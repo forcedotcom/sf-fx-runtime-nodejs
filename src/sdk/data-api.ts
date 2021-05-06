@@ -54,9 +54,9 @@ export class DataApi {
    * Creates a record, based on the given {@link RecordCreate}.
    * @param recordCreate.
    */
-  async create(recordInsert: RecordCreate): Promise<RecordUpdateResult> {
+  async create(recordCreate: RecordCreate): Promise<RecordCreateResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.insert(recordInsert.type, recordInsert);
+      const response: any = await conn.insert(recordCreate.type, recordCreate);
       const result = new RecordCreateResult(response.id);
 
       return result;

@@ -96,6 +96,10 @@ export class UnitOfWork {
     return referenceId;
   }
 
+  /**
+   * Retrieves a record corresponding to the ReferenceID.
+   * @param referenceId
+   */
   getRecord(
     referenceId: ReferenceId
   ):
