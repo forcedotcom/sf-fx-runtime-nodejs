@@ -7,7 +7,7 @@ import {
 } from "./utils/salesforce";
 import { Context } from "./sdk/context";
 import { Logger } from "./logger";
-import { UserFunction } from "./function";
+import { UserFunction } from "./user-function";
 
 export default function startServer<A>(
   host: string,
