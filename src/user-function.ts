@@ -14,7 +14,7 @@ export function loadUserFunctionFromDirectory(
     packageJson = require(packageJsonPath);
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
-      throw new Error("Could not load 'package.json' from project directory!");
+      throw new Error("Could not load 'package.json' from project directory: " + error.message);
     }
   }
 
@@ -32,7 +32,7 @@ export function loadUserFunctionFromDirectory(
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
       throw new Error(
-        "Could not load module referenced in 'main' field of 'package.json'!"
+        "Could not load module referenced in 'main' field of 'package.json': " + error.message
       );
     }
   }
