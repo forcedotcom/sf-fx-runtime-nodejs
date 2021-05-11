@@ -23,6 +23,7 @@
     "fastify": "^3.14.2",
     "jsforce": "^2.0.0-beta.3",
     "pino": "^6.11.3",
+    "whatwg-mimetype": "^2.3.0",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

@@ -1,27 +1,16 @@
-import { CloudEvent } from "cloudevents";
 import { Org } from "./org";
-import {
-  SalesforceContext,
-  SalesforceFunctionContext,
-} from "../utils/salesforce";
+import { SalesforceFunctionsCloudEvent } from "../cloud-event";
 
 export class Context {
   readonly id: string;
   readonly org?: Org;
 
-  constructor(
-    { id }: CloudEvent,
-    sfContext: SalesforceContext,
-    sfFunctionContext: SalesforceFunctionContext
-  ) {
-    this.id = id;
-    this.org = this.createOrg(sfContext, sfFunctionContext);
-  }
-
-  private createOrg(
-    sfContext: SalesforceContext,
-    sfFunctionContext: SalesforceFunctionContext
-  ): Org {
-    return new Org(sfContext, sfFunctionContext, sfContext.userContext);
+  constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
+    this.id = salesforceFunctionsCloudEvent.cloudEvent.id;
+    this.org = new Org(
+      salesforceFunctionsCloudEvent.sfContext,
+      salesforceFunctionsCloudEvent.sfFunctionContext,
+      salesforceFunctionsCloudEvent.sfContext.userContext
+    );
   }
 }
