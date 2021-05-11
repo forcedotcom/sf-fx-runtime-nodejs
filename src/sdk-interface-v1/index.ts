@@ -52,8 +52,8 @@ export interface Context {
  * @property baseUrl The base URL of the Salesforce organization.
  * @property domainUrl The domain URL of the Salesforce organization.
  * @property apiVersion The API version the Salesforce organization is currently using.
- * @property dataApi
- * @property user
+ * @property dataApi An initialized data API client instance.
+ * @property user The currently logged in user
  */
 export interface Org {
     readonly id: string;
@@ -110,8 +110,29 @@ export type RecordForUpdate = { type: string, id: string, [key: string]: unknown
  * @param unitOfWork The {@link UnitOfWork} to commit.
  */
 export interface UnitOfWork {
+
+    /**
+     * Registers a record creation for the {@link UnitOfWork} and returns a {@link ReferenceId} that
+     * can be used to refer to the created record in subsequent operations in this UnitOfWork.
+     *
+     * @param record The record to create.
+     */
     registerCreate(record: RecordForCreate): ReferenceId;
+
+    /**
+     * Registers a record update for the {@link UnitOfWork} and returns a {@link ReferenceId} that can
+     * be used to refer to the updated record in subsequent operations in this UnitOfWork.
+     *
+     * @param record The record to update.
+     */
     registerUpdate(record: RecordForUpdate): ReferenceId;
+
+    /**
+   * Registers a deletion of an existing record of the given type and id.
+   *
+   * @param type The object type of the record to delete.
+   * @param id The id of the record to delete.
+   */
     registerDelete(type: string, id: string): ReferenceId;
 }
 
@@ -131,25 +152,26 @@ export interface DataApi {
 
     /**
      * Queries for more records, based on the given {@link RecordQueryResult}.
-     * @param queryResult
+     * @param recordQueryResult The query result to query more data for.
      */
     queryMore(recordQueryResult: RecordQueryResult): Promise<RecordQueryResult>;
 
     /**
      * Creates a new record described by the given {@link RecordCreate}.
-     * @param recordCreate The record create description.
+     * @param record The record create description.
      */
     create(record: RecordForCreate): Promise<RecordModificationResult>;
 
     /**
      * Updates an existing record described by the given {@link RecordUpdate}.
-     * @param recordUpdate The record update description.
+     * @param update The record update description.
      */
     update(update: RecordForUpdate): Promise<RecordModificationResult>;
 
     /**
      * Deletes a record, based on the given {@link RecordDelete}.
-     * @param recordDelete
+     * @param type The object type of the record to delete.
+     * @param id The id of the record to delete.
      */
     delete(type: string, id: string): Promise<RecordModificationResult>;
 
@@ -174,7 +196,7 @@ export interface DataApi {
  * @interface User
  * @property id The user's ID.
  * @property username The name of the user.
- * @property onBehalfOfUserId
+ * @property onBehalfOfUserId The id of the user this user operates in behalf of.
  */
 export interface User {
     readonly id: string;
