@@ -128,7 +128,7 @@ export class DataApiImpl implements DataApi {
   }
 
   commitUnitOfWork(
-    unitOfWork: UnitOfWork
+    unitOfWork: UnitOfWorkImpl
   ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
       const url = `/services/data/v${this.apiVersion}/composite`;
