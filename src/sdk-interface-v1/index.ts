@@ -1,7 +1,11 @@
 /**
  * Main interface for Salesforce Functions.
  */
-export type SalesforceFunction<A, B> = (event: InvocationEvent<A>, context: Context, logger: Logger) => Promise<B> | B;
+export type SalesforceFunction<A, B> = (
+  event: InvocationEvent<A>,
+  context: Context,
+  logger: Logger
+) => Promise<B> | B;
 
 /**
  * An InvocationEvent is representative of the data associated with the occurrence of an event,
@@ -23,13 +27,13 @@ export type SalesforceFunction<A, B> = (event: InvocationEvent<A>, context: Cont
  * the same algorithm to determine the value used.
  */
 export interface InvocationEvent<A> {
-    readonly id: string;
-    readonly type: string;
-    readonly source: string;
-    readonly data: A;
-    readonly dataContentType?: string;
-    readonly dataSchema?: string;
-    readonly time?: string;
+  readonly id: string;
+  readonly type: string;
+  readonly source: string;
+  readonly data: A;
+  readonly dataContentType?: string;
+  readonly dataSchema?: string;
+  readonly time?: string;
 }
 
 /**
@@ -40,8 +44,8 @@ export interface InvocationEvent<A> {
  * @property org Information about the invoking Salesforce organization in Customer 360.
  */
 export interface Context {
-    readonly id: string;
-    readonly org?: Org;
+  readonly id: string;
+  readonly org?: Org;
 }
 
 /**
@@ -55,12 +59,12 @@ export interface Context {
  * @property user The currently logged in user
  */
 export interface Org {
-    readonly id: string;
-    readonly baseUrl: string;
-    readonly domainUrl: string;
-    readonly apiVersion: string;
-    readonly dataApi: DataApi;
-    readonly user: User;
+  readonly id: string;
+  readonly baseUrl: string;
+  readonly domainUrl: string;
+  readonly apiVersion: string;
+  readonly dataApi: DataApi;
+  readonly user: User;
 }
 
 /**
@@ -71,9 +75,9 @@ export interface Org {
  * @property records The records in this query result.
  */
 export interface RecordQueryResult {
-    readonly done: boolean;
-    readonly totalSize: number;
-    readonly records: Array<Record<string, unknown>>;
+  readonly done: boolean;
+  readonly totalSize: number;
+  readonly records: Array<Record<string, unknown>>;
 }
 
 /**
@@ -82,7 +86,7 @@ export interface RecordQueryResult {
  * @property id The ID of the modified record.
  */
 export interface RecordModificationResult {
-    readonly id: string;
+  readonly id: string;
 }
 
 /**
@@ -93,12 +97,16 @@ export type ReferenceId = string;
 /**
  * Registers a record creation for the {@link UnitOfWork} and returns a {@link ReferenceId} that can be used to refer to the created record in subsequent operations in this UnitOfWork.
  */
-export type RecordForCreate = { type: string, [key: string]: unknown };
+export type RecordForCreate = { type: string; [key: string]: unknown };
 
 /**
  * Registers a record update for the {@link UnitOfWork} and returns a {@link ReferenceId} that can be used to refer to the updated record in subsequent operations in this UnitOfWork.
  */
-export type RecordForUpdate = { type: string, id: string, [key: string]: unknown };
+export type RecordForUpdate = {
+  type: string;
+  id: string;
+  [key: string]: unknown;
+};
 
 /**
  * Represents a UnitOfWork.
@@ -130,7 +138,9 @@ export interface UnitOfWork {
    * @param id The id of the record to delete.
    * @returns The ReferenceId for the deleted record.
    */
-    registerDelete(type: string, id: string): ReferenceId;
+    registerDelete(type: string, id: string): ReferenceId;  
+ 
+    getRecord(referenceId: ReferenceId): RecordModificationResult;
 }
 
 /**
@@ -140,7 +150,7 @@ export interface UnitOfWork {
  * third-party API client or to perform custom API calls with a HTTP library.
  */
 export interface DataApi {
-    readonly accessToken: string;
+  readonly accessToken: string;
 
     /**
      * Queries for records with a given SOQL string.
@@ -182,7 +192,7 @@ export interface DataApi {
      * Creates a new and empty {@link UnitOfWork}.
      * @returns An empty {@link UnitOfWork}.
      */
-    newUnitOfWork(): UnitOfWork
+    newUnitOfWork(): UnitOfWork;
 
     /**
      * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
@@ -192,7 +202,9 @@ export interface DataApi {
      * @param unitOfWork The {@link UnitOfWork} to commit.
      * @returns A map of {@link RecordModificationResult}s, indexed by their {@link ReferenceId}s.
      */
-    commitUnitOfWork(unitOfWork: UnitOfWork): Map<ReferenceId, RecordModificationResult>
+    commitUnitOfWork(
+    unitOfWork: UnitOfWork
+  ): Promise<Map<ReferenceId, RecordModificationResult>>;
 }
 
 /**
@@ -203,9 +215,9 @@ export interface DataApi {
  * @property onBehalfOfUserId The id of the user this user operates in behalf of.
  */
 export interface User {
-    readonly id: string;
-    readonly username: string;
-    readonly onBehalfOfUserId?: string;
+  readonly id: string;
+  readonly username: string;
+  readonly onBehalfOfUserId?: string;
 }
 
 /**
@@ -213,38 +225,38 @@ export interface User {
  * @interface Logger
  */
 export interface Logger {
-    /**
-     * Logs the given message at the 'error' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    error(message: string): void;
+  /**
+   * Logs the given message at the 'error' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  error(message: string): void;
 
-    /**
-     * Logs the given message at the 'warn' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    warn(message: string): void;
+  /**
+   * Logs the given message at the 'warn' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  warn(message: string): void;
 
-    /**
-     * Logs the given message at the 'info' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    info(message: string): void;
+  /**
+   * Logs the given message at the 'info' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  info(message: string): void;
 
-    /**
-     * Logs the given message at the 'debug' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    debug(message: string): void;
+  /**
+   * Logs the given message at the 'debug' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  debug(message: string): void;
 
-    /**
-     * Logs the given message at the 'trace' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    trace(message: string): void;
+  /**
+   * Logs the given message at the 'trace' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  trace(message: string): void;
 }

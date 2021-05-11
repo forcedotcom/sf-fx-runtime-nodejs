@@ -1,4 +1,4 @@
-export class RecordQueryResult {
+export class RecordQueryResultImpl {
   readonly done: boolean;
   readonly totalSize: number;
   readonly _nextRecordsUrl?: string;

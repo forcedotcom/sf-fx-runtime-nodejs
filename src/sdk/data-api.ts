@@ -1,12 +1,14 @@
 import { Connection } from "jsforce";
 import { UnitOfWorkImpl } from "./unit-of-work";
+import { RecordQueryResultImpl } from "./record/result/query";
 import {
   DataApi,
   RecordForCreate,
   RecordForUpdate,
-  RecordModificationResult, RecordQueryResult,
+  RecordModificationResult,
+  RecordQueryResult,
   ReferenceId,
-  UnitOfWork
+  UnitOfWork,
 } from "../sdk-interface-v1";
 
 export class DataApiImpl implements DataApi {
@@ -52,10 +54,12 @@ export class DataApiImpl implements DataApi {
    * Creates a record, based on the given {@link RecordCreate}.
    * @param recordCreate.
    */
-  async create(recordCreate: RecordForCreate): Promise<RecordModificationResult> {
+  async create(
+    recordCreate: RecordForCreate
+  ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.insert(recordCreate.type, recordCreate);
-      return {id: response.id};
+      return { id: response.id };
     });
   }
 
@@ -70,7 +74,7 @@ export class DataApiImpl implements DataApi {
       return {
         done: response.done,
         totalSize: response.totalSize,
-        records: response.records
+        records: response.records,
       };
     });
   }
@@ -81,25 +85,41 @@ export class DataApiImpl implements DataApi {
    */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      //const response = await conn.queryMore(queryResult._nextRecordsUrl);
-      const response = await conn.queryMore("");
+      const queryResultInstance = this.castQueryObject(queryResult);
+      const response = await conn.queryMore(
+        queryResultInstance._nextRecordsUrl
+      );
+
       return {
         done: response.done,
         totalSize: response.totalSize,
-        records: response.records
+        records: response.records,
       };
     });
+  }
+
+  private castQueryObject(
+    queryResult: RecordQueryResult
+  ): RecordQueryResultImpl {
+    if (queryResult instanceof RecordQueryResultImpl)
+      return <RecordQueryResultImpl>queryResult;
+    else
+      throw Error(
+        "Incorrect arg. Requires instance of RecordQueryResultImpl to use queryMore()"
+      );
   }
 
   /**
    * Updates an existing record described by the given {@link RecordUpdate}.
    * @param recordUpdate The record update description.
    */
-  async update(recordUpdate: RecordForUpdate): Promise<RecordModificationResult> {
+  async update(
+    recordUpdate: RecordForUpdate
+  ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const params = Object.assign({}, recordUpdate, { Id: recordUpdate.id });
       const response: any = await conn.update(recordUpdate.type, params);
-      return {id: response.id};
+      return { id: response.id };
     });
   }
 
@@ -109,12 +129,9 @@ export class DataApiImpl implements DataApi {
    */
   async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.delete(
-        type,
-        id
-      );
+      const response: any = await conn.delete(type, id);
 
-      return {id: response.id};
+      return { id: response.id };
     });
   }
 
@@ -125,7 +142,9 @@ export class DataApiImpl implements DataApi {
     return new UnitOfWorkImpl(this.apiVersion);
   }
 
-  commitUnitOfWork(unitOfWork: UnitOfWork): Map<ReferenceId, RecordModificationResult> {
+  commitUnitOfWork(
+    unitOfWork: UnitOfWorkImpl
+  ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
       const url = `/services/data/v${this.apiVersion}/composite`;
       const reqBody = unitOfWork._getRequestBody();

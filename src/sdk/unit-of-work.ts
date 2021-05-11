@@ -1,10 +1,13 @@
 import * as crypto from "crypto";
 import { CompositeRequest } from "./unit-of-work/composite-request";
-import { UnitOfWorkResult } from "./unit-of-work/result";
 import { JsonMap } from "@salesforce/ts-types";
-import {UnitOfWork, ReferenceId, RecordForCreate, RecordForUpdate} from "../sdk-interface-v1";
-
-export { UnitOfWorkResult };
+import {
+  UnitOfWork,
+  ReferenceId,
+  RecordForCreate,
+  RecordForUpdate,
+  RecordModificationResult,
+} from "../sdk-interface-v1";
 
 enum Method {
   POST = "POST",
@@ -15,6 +18,8 @@ enum Method {
 export class UnitOfWorkImpl implements UnitOfWork {
   private apiVersion: string;
   private compositeRequest: CompositeRequest;
+
+  readonly records: Map<ReferenceId, RecordModificationResult>;
 
   constructor(apiVersion: string) {
     this.compositeRequest = new CompositeRequest();
@@ -32,8 +37,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
   registerCreate(recordCreate: RecordForCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
-
-    this[referenceId] = new RecordCreateResult(referenceId);
 
     this.compositeRequest.addSubRequest(
       Method.POST,
@@ -54,8 +57,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     const rowId = recordUpdate.id;
     const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
 
-    this[referenceId] = new RecordUpdateResult(referenceId, recordUpdate.id);
-
     this.compositeRequest.addSubRequest(
       Method.PATCH,
       url,
@@ -74,13 +75,11 @@ export class UnitOfWorkImpl implements UnitOfWork {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
 
-    this[referenceId] = new RecordDeleteResult(referenceId);
-
     this.compositeRequest.addSubRequest(
-        Method.DELETE,
-        url,
-        null, // TODO
-        referenceId
+      Method.DELETE,
+      url,
+      null, // TODO
+      referenceId
     );
 
     return referenceId;
@@ -90,14 +89,8 @@ export class UnitOfWorkImpl implements UnitOfWork {
    * Retrieves a record corresponding to the ReferenceID.
    * @param referenceId
    */
-  getRecord(
-    referenceId: ReferenceId
-  ):
-    | RecordCreateResult
-    | RecordUpdateResult
-    | RecordQueryResult
-    | RecordDeleteResult {
-    return this[referenceId];
+  getRecord(referenceId: ReferenceId): RecordModificationResult {
+    return this.records[referenceId];
   }
 
   _getRequestBody(): JsonMap {
@@ -111,10 +104,9 @@ export class UnitOfWorkImpl implements UnitOfWork {
 
   _commit({ compositeResponse }: any): any {
     compositeResponse.forEach(({ referenceId, body }) => {
-      if (body) {
-        const recordResult = this[referenceId];
-        recordResult.id = body.id;
-      }
+      if (!this.records[referenceId]) this.records[referenceId] = {};
+
+      if (body && body.id) this.records[referenceId].id = body.id;
     });
     return this;
   }

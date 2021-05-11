@@ -5,7 +5,7 @@ import {
 } from "../cloud-event";
 import { UserImpl } from "./user";
 import { Org, User, DataApi } from "../sdk-interface-v1";
-import {DataApiImpl} from "./data-api";
+import { DataApiImpl } from "./data-api";
 
 export class OrgImpl implements Org {
   readonly id: string;

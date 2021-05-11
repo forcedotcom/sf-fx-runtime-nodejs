@@ -1,8 +1,8 @@
 import { SalesforceFunctionsCloudEvent } from "../cloud-event";
-import {Context, Org} from "../sdk-interface-v1";
-import {OrgImpl} from "./org";
+import { Context, Org } from "../sdk-interface-v1";
+import { OrgImpl } from "./org";
 
-export class ContextImpl implements Context{
+export class ContextImpl implements Context {
   readonly id: string;
   readonly org?: Org;
 
