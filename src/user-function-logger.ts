@@ -55,7 +55,10 @@ export class Logger {
 const underlyingFunctionLogger = pino({ level: getLogLevelFromEnvironment() });
 
 function getLogLevelFromEnvironment(): pino.Level {
-  const logLevel = (process.env.SF_FX_LOGLEVEL || "info").toLowerCase();
+  const defaultLogLevel = "info";
+  const logLevel = (
+    process.env.SF_FX_LOGLEVEL || defaultLogLevel
+  ).toLowerCase();
   switch (logLevel) {
     case "trace":
     case "debug":
@@ -65,8 +68,8 @@ function getLogLevelFromEnvironment(): pino.Level {
       return logLevel;
     default:
       logger.warn(
-        `SF_FX_LOGLEVEL environment variable contains unknown log level ${logLevel}! Effective log level will be 'info'!`
+        `SF_FX_LOGLEVEL environment variable contains unknown log level ${logLevel}! Effective log level will be '${defaultLogLevel}'!`
       );
-      return "info";
+      return defaultLogLevel;
   }
 }
