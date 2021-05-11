@@ -55,17 +55,14 @@ export class Logger {
 const underlyingFunctionLogger = pino({ level: getLogLevelFromEnvironment() });
 
 function getLogLevelFromEnvironment(): Level {
-  switch ((process.env.SF_FX_LOGLEVEL || "info").toLowerCase()) {
+  const logLevel = (process.env.SF_FX_LOGLEVEL || "info").toLowerCase();
+  switch (logLevel) {
     case "trace":
-      return "trace";
     case "debug":
-      return "debug";
     case "info":
-      return "info";
     case "warn":
-      return "warn";
     case "error":
-      return "error";
+      return logLevel;
     default:
       return "info";
   }
