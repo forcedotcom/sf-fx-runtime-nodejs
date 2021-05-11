@@ -1,13 +1,18 @@
 import * as fastify from "fastify";
-import * as CloudEvents from "cloudevents";
+import { FastifyReply } from "fastify";
 import { InvocationEvent } from "./sdk/invocation-event";
-import {
-  parseSalesforceContext,
-  parseSalesforceFunctionContext,
-} from "./utils/salesforce";
 import { Context } from "./sdk/context";
 import { Logger } from "./logger";
-import { UserFunction } from "./function";
+import { UserFunction } from "./user-function";
+import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
+import { performance } from "perf_hooks";
+import getRebasedStack from "./stacktrace";
+import * as mimetype from "whatwg-mimetype";
+
+const OK_STATUS = 200;
+const BAD_REQUEST_STATUS = 400;
+const INTERNAL_SERVER_ERROR_STATUS = 500;
+const SERVICE_UNAVAILABLE_STATUS = 503;
 
 export default function startServer<A>(
   host: string,
@@ -16,50 +21,146 @@ export default function startServer<A>(
 ): void {
   const server = fastify.fastify({ logger: true });
 
-  server.post("/", async (request) => {
+  server.post("/", async (request, reply) => {
     // If the request is a health check request, stop processing and return a successful result as per spec.
     if (request.headers["x-health-check"] === "true") {
-      return "OK";
-    }
-
-    // Parse the incoming cloud event
-    const cloudEvent = CloudEvents.HTTP.toEvent({
-      headers: request.headers,
-      body: request.body,
-    });
-
-    if (typeof cloudEvent.sfcontext !== "string") {
-      // TODO: Errorhandling
+      makeResponse(reply, OK_STATUS, "OK", emptyExtraInfo);
       return;
     }
 
-    if (typeof cloudEvent.sffncontext !== "string") {
-      // TODO: Errorhandling
+    let salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent;
+    try {
+      salesforceFunctionsCloudEvent = parseCloudEvent(
+        request.headers,
+        request.body
+      );
+    } catch (error) {
+      makeResponse(
+        reply,
+        BAD_REQUEST_STATUS,
+        "Could not parse CloudEvent: " + error.message,
+        emptyExtraInfo
+      );
       return;
     }
 
-    const invocationEvent = new InvocationEvent(cloudEvent);
-    const sfContext = parseSalesforceContext(cloudEvent);
-    const sfFunctionContext = parseSalesforceFunctionContext(cloudEvent);
-    const context = new Context(cloudEvent, sfContext, sfFunctionContext);
-    const logger = new Logger(cloudEvent);
+    if (
+      salesforceFunctionsCloudEvent.cloudEvent.type !==
+      "com.salesforce.function.invoke.sync"
+    ) {
+      makeResponse(
+        reply,
+        BAD_REQUEST_STATUS,
+        "CloudEvent must be of type 'com.salesforce.function.invoke.sync'!",
+        emptyExtraInfo
+      );
+      return;
+    }
 
-    let functionResult: any;
+    const parsedMimeType = mimetype.parse(
+      salesforceFunctionsCloudEvent.cloudEvent.datacontenttype
+    );
+    if (
+      parsedMimeType === null ||
+      parsedMimeType.essence !== "application/json"
+    ) {
+      makeResponse(
+        reply,
+        BAD_REQUEST_STATUS,
+        "CloudEvent data must be of type application/json!",
+        emptyExtraInfo
+      );
+      return;
+    }
+
+    const invocationEvent = new InvocationEvent(salesforceFunctionsCloudEvent);
+    const context = new Context(salesforceFunctionsCloudEvent);
+    const logger = new Logger(salesforceFunctionsCloudEvent);
 
     try {
-      functionResult = await userFunction(invocationEvent, context, logger);
-    } catch (e) {
-      return "some error";
-    }
+      const userFunctionStart = performance.now();
+      const functionResult = await userFunction(
+        invocationEvent,
+        context,
+        logger
+      );
+      const userFunctionEnd = performance.now();
 
-    return functionResult;
+      makeResponse(reply, OK_STATUS, JSON.stringify(functionResult), {
+        ...emptyExtraInfo,
+        requestId: salesforceFunctionsCloudEvent.cloudEvent.id,
+        source: salesforceFunctionsCloudEvent.cloudEvent.source,
+        execTimeMs: userFunctionEnd - userFunctionStart,
+      });
+      return;
+    } catch (error) {
+      let stacktrace;
+      let message;
+
+      if (error instanceof Error) {
+        message = error.message;
+        stacktrace = getRebasedStack(__filename, error);
+      } else {
+        message = error.toString();
+        stacktrace = "";
+      }
+
+      makeResponse(
+        reply,
+        INTERNAL_SERVER_ERROR_STATUS,
+        `Function threw: ${message}`,
+        {
+          requestId: salesforceFunctionsCloudEvent.cloudEvent.id,
+          source: salesforceFunctionsCloudEvent.cloudEvent.source,
+          execTimeMs: 0,
+          isFunctionError: true,
+          stacktrace,
+        }
+      );
+      return;
+    }
   });
 
-  server.listen(port, host, function (err, address) {
+  server.setErrorHandler((error, request, reply) => {
+    makeResponse(reply, SERVICE_UNAVAILABLE_STATUS, error.toString(), {
+      ...emptyExtraInfo,
+      stacktrace: error.stack,
+    });
+  });
+
+  server.listen(port, host, function (err) {
     if (err) {
       server.log.error(err);
       process.exit(1);
     }
-    server.log.info(`server listening on ${address}`);
   });
 }
+
+function makeResponse(
+  reply: FastifyReply,
+  status: number,
+  data: any,
+  extraInfo: ExtraInfo
+) {
+  return reply
+    .status(status)
+    .header("x-extra-info", encodeURI(JSON.stringify(extraInfo)))
+    .header("content-type", "application/json")
+    .send(JSON.stringify(data));
+}
+
+interface ExtraInfo {
+  readonly requestId: string;
+  readonly source: string;
+  readonly execTimeMs: number;
+  readonly isFunctionError: boolean;
+  readonly stacktrace: string;
+}
+
+const emptyExtraInfo = {
+  requestId: "n/a",
+  source: "n/a",
+  execTimeMs: 0,
+  isFunctionError: false,
+  stacktrace: "",
+};

@@ -1,10 +1,10 @@
-import { CloudEvent } from "cloudevents";
+import { SalesforceFunctionsCloudEvent } from "./cloud-event";
 
 export class Logger {
   private readonly id: string;
 
-  constructor(cloudEvent: CloudEvent) {
-    this.id = cloudEvent.id;
+  constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
+    this.id = salesforceFunctionsCloudEvent.cloudEvent.id;
   }
 
   // TODO: Mimic a popular logging library? Mimic console.log?

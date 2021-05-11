@@ -2,7 +2,7 @@ import {
   SalesforceContext,
   SalesforceFunctionContext,
   SalesforceUserContext,
-} from "../utils/salesforce";
+} from "../cloud-event";
 import { DataApi } from "./data-api";
 import { User } from "./user";
 

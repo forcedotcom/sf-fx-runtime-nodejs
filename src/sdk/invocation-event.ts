@@ -1,4 +1,4 @@
-import { CloudEvent } from "cloudevents";
+import { SalesforceFunctionsCloudEvent } from "../cloud-event";
 
 export class InvocationEvent {
   id: string;
@@ -9,21 +9,14 @@ export class InvocationEvent {
   dataSchema?: string;
   time?: string;
 
-  constructor({
-    id,
-    type,
-    source,
-    data,
-    datacontenttype,
-    schemaurl,
-    time,
-  }: CloudEvent) {
-    this.id = id;
-    this.type = type;
-    this.source = source;
-    this.data = data;
-    this.dataContentType = datacontenttype;
-    this.dataSchema = schemaurl;
-    this.time = time;
+  constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
+    this.id = salesforceFunctionsCloudEvent.cloudEvent.id;
+    this.type = salesforceFunctionsCloudEvent.cloudEvent.type;
+    this.source = salesforceFunctionsCloudEvent.cloudEvent.source;
+    this.data = salesforceFunctionsCloudEvent.cloudEvent.data;
+    this.dataContentType =
+      salesforceFunctionsCloudEvent.cloudEvent.datacontenttype;
+    this.dataSchema = salesforceFunctionsCloudEvent.cloudEvent.schemaurl;
+    this.time = salesforceFunctionsCloudEvent.cloudEvent.time;
   }
 }
