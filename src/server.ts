@@ -2,7 +2,7 @@ import * as fastify from "fastify";
 import { FastifyReply } from "fastify";
 import { InvocationEvent } from "./sdk/invocation-event";
 import { Context } from "./sdk/context";
-import { Logger } from "./logger";
+import { Logger } from "./user-function-logger";
 import { UserFunction } from "./user-function";
 import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
