@@ -24,6 +24,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   constructor(apiVersion: string) {
     this.compositeRequest = new CompositeRequest();
     this.apiVersion = apiVersion;
+    this.records = new Map<ReferenceId, RecordModificationResult>();
   }
 
   private generateReferenceId() {
@@ -105,7 +106,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
   _commit({ compositeResponse }: any): any {
     compositeResponse.forEach(({ referenceId, body }) => {
       if (!this.records[referenceId]) this.records[referenceId] = {};
-
       if (body && body.id) this.records[referenceId].id = body.id;
     });
     return this.records;
