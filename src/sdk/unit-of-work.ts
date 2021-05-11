@@ -55,8 +55,10 @@ export class UnitOfWorkImpl implements UnitOfWork {
    */
   registerUpdate(recordUpdate: RecordForUpdate): ReferenceId {
     const referenceId = this.generateReferenceId();
-    const rowId = recordUpdate.id;
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
+    const id = recordUpdate.id;
+    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${id}`;
+
+    this.records[referenceId] = { id };
 
     this.compositeRequest.addSubRequest(
       Method.PATCH,
@@ -75,6 +77,8 @@ export class UnitOfWorkImpl implements UnitOfWork {
   registerDelete(type: string, id: string): ReferenceId {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
+
+    this.records[referenceId] = { id };
 
     this.compositeRequest.addSubRequest(
       Method.DELETE,

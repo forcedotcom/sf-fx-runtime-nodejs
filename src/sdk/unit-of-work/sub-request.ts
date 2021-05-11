@@ -15,7 +15,7 @@ export class SubRequest {
     this.method = method;
     this.url = url;
     this.referenceId = referenceId;
-    this.body = record;
+    this.body = record || {};
   }
 
   toJson() {
