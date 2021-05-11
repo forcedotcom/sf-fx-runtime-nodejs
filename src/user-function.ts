@@ -1,6 +1,6 @@
 import { InvocationEvent } from "./sdk/invocation-event";
 import { Context } from "./sdk/context";
-import { Logger } from "./logger";
+import { Logger } from "./user-function-logger";
 import * as path from "path";
 
 export function loadUserFunctionFromDirectory(
