@@ -5,9 +5,9 @@ import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace";
 import * as mimetype from "whatwg-mimetype";
-import {SalesforceFunction} from "./sdk-interface-v1";
-import {InvocationEventImpl} from "./sdk/invocation-event";
-import {ContextImpl} from "./sdk/context";
+import { SalesforceFunction } from "./sdk-interface-v1";
+import { InvocationEventImpl } from "./sdk/invocation-event";
+import { ContextImpl } from "./sdk/context";
 
 const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
@@ -73,7 +73,9 @@ export default function startServer<A>(
       return;
     }
 
-    const invocationEvent = new InvocationEventImpl(salesforceFunctionsCloudEvent);
+    const invocationEvent = new InvocationEventImpl(
+      salesforceFunctionsCloudEvent
+    );
     const context = new ContextImpl(salesforceFunctionsCloudEvent);
     const logger = new Logger(salesforceFunctionsCloudEvent);
 

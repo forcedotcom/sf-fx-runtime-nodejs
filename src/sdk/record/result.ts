@@ -1,4 +1,4 @@
-import {ReferenceId} from "../../sdk-interface-v1";
+import { ReferenceId } from "../../sdk-interface-v1";
 
 export class RecordResult {
   readonly referenceId: ReferenceId;
