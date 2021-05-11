@@ -103,11 +103,7 @@ export type RecordForCreate = { type: string, [key: string]: unknown };
 export type RecordForUpdate = { type: string, id: string, [key: string]: unknown };
 
 /**
- * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
- * operations fail, the whole unit is rolled back. To examine results for a single operation,
- * inspect the returned map (which is keyed with {@link ReferenceId} returned from
- * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
- * @param unitOfWork The {@link UnitOfWork} to commit.
+ * Represents a UnitOfWork.
  */
 export interface UnitOfWork {
 
