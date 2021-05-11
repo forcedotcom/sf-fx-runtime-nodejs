@@ -68,7 +68,7 @@ function getLogLevelFromEnvironment(): pino.Level {
       return logLevel;
     default:
       logger.warn(
-        `SF_FX_LOGLEVEL environment variable contains unknown log level ${logLevel}! Effective log level will be '${defaultLogLevel}'!`
+        `SF_FX_LOGLEVEL environment variable contains unknown log level '${logLevel}'! Effective log level will be '${defaultLogLevel}'!`
       );
       return defaultLogLevel;
   }
