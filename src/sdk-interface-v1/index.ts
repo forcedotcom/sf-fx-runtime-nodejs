@@ -6,7 +6,6 @@ export type SalesforceFunction<A, B> = (event: InvocationEvent<A>, context: Cont
 /**
  * An InvocationEvent is representative of the data associated with the occurrence of an event,
  * and supporting metadata about the source of that occurrence.
- *
  * @interface InvocationEvent
  * @property id The platform event occurrence id for event invocation.
  * @property type A value describing the type of invocation. The format of this is producer defined
@@ -47,7 +46,7 @@ export interface Context {
 
 /**
  * Holds information about the invoking Salesforce organization and user in Customer 360.
- *
+ * @interface Org
  * @property id The Salesforce organization ID.
  * @property baseUrl The base URL of the Salesforce organization.
  * @property domainUrl The domain URL of the Salesforce organization.
@@ -66,9 +65,8 @@ export interface Org {
 
 /**
  * Represents the result of a record query.
- *
- * @property done If true, no additional records can be retrieved from the query result. If false, one or more
-   * records remain to be retrieved.
+ * @interface RecordQueryResult
+ * @property done If true, no additional records can be retrieved from the query result. If false, one or more records remain to be retrieved.
  * @property totalSize The total amount of records returned by the query.
  * @property records The records in this query result.
  */
@@ -80,7 +78,7 @@ export interface RecordQueryResult {
 
 /**
  * Represents the result of a record modification such as a create, delete, or insert.
- *
+ * @interface RecordModificationResult
  * @property id The ID of the modified record.
  */
 export interface RecordModificationResult {
@@ -112,6 +110,7 @@ export interface UnitOfWork {
      * can be used to refer to the created record in subsequent operations in this UnitOfWork.
      *
      * @param record The record to create.
+     * @returns The ReferenceId for the created record.
      */
     registerCreate(record: RecordForCreate): ReferenceId;
 
@@ -120,6 +119,7 @@ export interface UnitOfWork {
      * be used to refer to the updated record in subsequent operations in this UnitOfWork.
      *
      * @param record The record to update.
+     * @returns The ReferenceId for the updated record.
      */
     registerUpdate(record: RecordForUpdate): ReferenceId;
 
@@ -128,11 +128,13 @@ export interface UnitOfWork {
    *
    * @param type The object type of the record to delete.
    * @param id The id of the record to delete.
+   * @returns The ReferenceId for the deleted record.
    */
     registerDelete(type: string, id: string): ReferenceId;
 }
 
 /**
+ * Data API client to interact with data in a Salesforce org.
  * @interface DataApi
  * @property accessToken The access token used by this API client. Can be used to initialize a
  * third-party API client or to perform custom API calls with a HTTP library.
@@ -143,24 +145,28 @@ export interface DataApi {
     /**
      * Queries for records with a given SOQL string.
      * @param soql The SOQL string.
+     * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
      */
     query(soql: string): Promise<RecordQueryResult>;
 
     /**
      * Queries for more records, based on the given {@link RecordQueryResult}.
      * @param recordQueryResult The query result to query more data for.
+     * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
      */
     queryMore(recordQueryResult: RecordQueryResult): Promise<RecordQueryResult>;
 
     /**
      * Creates a new record described by the given {@link RecordCreate}.
      * @param record The record create description.
+     * @returns A {@link RecordModificationResult} that contains the created data wrapped in a Promise.
      */
     create(record: RecordForCreate): Promise<RecordModificationResult>;
 
     /**
      * Updates an existing record described by the given {@link RecordUpdate}.
      * @param update The record update description.
+     * @returns A {@link RecordModificationResult} that contains the updated data wrapped in a Promise.
      */
     update(update: RecordForUpdate): Promise<RecordModificationResult>;
 
@@ -168,11 +174,13 @@ export interface DataApi {
      * Deletes a record, based on the given {@link RecordDelete}.
      * @param type The object type of the record to delete.
      * @param id The id of the record to delete.
+     * @returns A {@link RecordModificationResult} that contains the deleted data wrapped in a Promise.
      */
     delete(type: string, id: string): Promise<RecordModificationResult>;
 
     /**
      * Creates a new and empty {@link UnitOfWork}.
+     * @returns An empty {@link UnitOfWork}.
      */
     newUnitOfWork(): UnitOfWork
 
@@ -180,15 +188,15 @@ export interface DataApi {
      * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
      * operations fail, the whole unit is rolled back. To examine results for a single operation,
      * inspect the returned map (which is keyed with {@link ReferenceId} returned from
-     * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
+     * {@link UnitOfWork#registerCreate} and {@link UnitOfWork#registerUpdate}).
      * @param unitOfWork The {@link UnitOfWork} to commit.
+     * @returns A map of {@link RecordModificationResult}s, indexed by their {@link ReferenceId}s.
      */
     commitUnitOfWork(unitOfWork: UnitOfWork): Map<ReferenceId, RecordModificationResult>
 }
 
 /**
  * Holds information about the invoking Salesforce user in Customer 360.
- *
  * @interface User
  * @property id The user's ID.
  * @property username The name of the user.
@@ -202,35 +210,41 @@ export interface User {
 
 /**
  * Represents the logging functionality to log given messages at various levels.
+ * @interface Logger
  */
 export interface Logger {
     /**
      * Logs the given message at the 'error' level.
      * @param message The message to log.
+     * @returns void
      */
     error(message: string): void;
 
     /**
      * Logs the given message at the 'warn' level.
      * @param message The message to log.
+     * @returns void
      */
     warn(message: string): void;
 
     /**
      * Logs the given message at the 'info' level.
      * @param message The message to log.
+     * @returns void
      */
     info(message: string): void;
 
     /**
      * Logs the given message at the 'debug' level.
      * @param message The message to log.
+     * @returns void
      */
     debug(message: string): void;
 
     /**
      * Logs the given message at the 'trace' level.
      * @param message The message to log.
+     * @returns void
      */
     trace(message: string): void;
 }
