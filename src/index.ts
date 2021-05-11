@@ -2,9 +2,7 @@ import * as yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { loadUserFunctionFromDirectory, UserFunction } from "./user-function";
 import startServer from "./server";
-import pino from "pino";
-
-const logger = pino();
+import logger from "./logger";
 
 yargs(hideBin(process.argv))
   .command(
