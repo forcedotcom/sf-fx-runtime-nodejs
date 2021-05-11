@@ -129,7 +129,7 @@ export class DataApiImpl implements DataApi {
 
   commitUnitOfWork(
     unitOfWork: UnitOfWork
-  ): Map<ReferenceId, RecordModificationResult> {
+  ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
       const url = `/services/data/v${this.apiVersion}/composite`;
       const reqBody = unitOfWork._getRequestBody();
