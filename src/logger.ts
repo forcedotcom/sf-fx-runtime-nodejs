@@ -1,36 +1,72 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event";
+import pino from "pino";
+import { Level } from "pino";
 
 export class Logger {
-  private readonly id: string;
+  private readonly properties: Record<string, unknown>;
 
   constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
-    this.id = salesforceFunctionsCloudEvent.cloudEvent.id;
+    this.properties = {
+      invocationId: salesforceFunctionsCloudEvent.cloudEvent.id,
+    };
   }
 
-  // TODO: Mimic a popular logging library? Mimic console.log?
   /**
-   * Logs an info message in the console output.
-   * @param message
-   */
-  info(message: string): void {
-    console.log(`[INFO] [ID: ${this.id}] ${message}`);
-  }
-
-  // TODO: Mimic a popular logging library? Mimic console.log?
-  /**
-   * Logs a debugging message in the console output.
-   * @param message
-   */
-  debug(message: string): void {
-    console.log(`[DEBUG] [ID: ${this.id}] ${message}`);
-  }
-
-  // TODO: Mimic a popular logging library? Mimic console.log?
-  /**
-   * Logs an error message in the console output.
-   * @param message
+   * Logs the given message at the 'error' level.
+   * @param message The message to log.
    */
   error(message: string): void {
-    console.log(`[ERROR] [ID: ${this.id}] ${message}`);
+    underlyingFunctionLogger.error(this.properties, message);
+  }
+
+  /**
+   * Logs the given message at the 'warn' level.
+   * @param message The message to log.
+   */
+  warn(message: string): void {
+    underlyingFunctionLogger.warn(this.properties, message);
+  }
+
+  /**
+   * Logs the given message at the 'info' level.
+   * @param message The message to log.
+   */
+  info(message: string): void {
+    underlyingFunctionLogger.info(this.properties, message);
+  }
+
+  /**
+   * Logs the given message at the 'debug' level.
+   * @param message The message to log.
+   */
+  debug(message: string): void {
+    underlyingFunctionLogger.debug(this.properties, message);
+  }
+
+  /**
+   * Logs the given message at the 'trace' level.
+   * @param message The message to log.
+   */
+  trace(message: string): void {
+    underlyingFunctionLogger.trace(this.properties, message);
+  }
+}
+
+const underlyingFunctionLogger = pino({ level: getLogLevelFromEnvironment() });
+
+function getLogLevelFromEnvironment(): Level {
+  switch ((process.env.SF_FX_LOGLEVEL || "info").toLowerCase()) {
+    case "trace":
+      return "trace";
+    case "debug":
+      return "debug";
+    case "info":
+      return "info";
+    case "warn":
+      return "warn";
+    case "error":
+      return "error";
+    default:
+      return "info";
   }
 }

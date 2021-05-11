@@ -19,7 +19,7 @@ export default function startServer<A>(
   port: number,
   userFunction: UserFunction<A>
 ): void {
-  const server = fastify.fastify({ logger: true });
+  const server = fastify.fastify({ logger: false });
 
   server.post("/", async (request, reply) => {
     // If the request is a health check request, stop processing and return a successful result as per spec.
