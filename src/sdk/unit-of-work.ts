@@ -1,6 +1,5 @@
 import * as crypto from "crypto";
 import { CompositeRequest } from "./unit-of-work/composite-request";
-import { UnitOfWorkResult } from "./unit-of-work/result";
 import { JsonMap } from "@salesforce/ts-types";
 import {
   UnitOfWork,
@@ -9,8 +8,6 @@ import {
   RecordForUpdate,
   RecordModificationResult,
 } from "../sdk-interface-v1";
-
-export { UnitOfWorkResult };
 
 enum Method {
   POST = "POST",
