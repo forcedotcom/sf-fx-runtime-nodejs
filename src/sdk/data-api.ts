@@ -1,5 +1,6 @@
 import { Connection } from "jsforce";
 import { UnitOfWorkImpl } from "./unit-of-work";
+import { RecordQueryResultImpl } from "./record/result/query";
 import {
   DataApi,
   RecordForCreate,
@@ -84,14 +85,28 @@ export class DataApiImpl implements DataApi {
    */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      //const response = await conn.queryMore(queryResult._nextRecordsUrl);
-      const response = await conn.queryMore("");
+      const queryResultInstance = this.castQueryObject(queryResult);
+      const response = await conn.queryMore(
+        queryResultInstance._nextRecordsUrl
+      );
+
       return {
         done: response.done,
         totalSize: response.totalSize,
         records: response.records,
       };
     });
+  }
+
+  private castQueryObject(
+    queryResult: RecordQueryResult
+  ): RecordQueryResultImpl {
+    if (queryResult instanceof RecordQueryResultImpl)
+      return <RecordQueryResultImpl>queryResult;
+    else
+      throw Error(
+        "Incorrect arg. Requires instance of RecordQueryResultImpl to use queryMore()"
+      );
   }
 
   /**
