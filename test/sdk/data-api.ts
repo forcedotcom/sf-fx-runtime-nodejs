@@ -1,24 +1,24 @@
 import { expect } from "chai";
-import { DataApi } from "../../src/sdk";
+import { DataApiImpl } from "../../src/sdk/data-api";
 import { stub } from "sinon";
 
 const uri = "http://localhost:8080";
 const apiVersion = "51.0";
 const token =
   "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
-const dataApi = new DataApi(uri, apiVersion, token);
+const dataApi = new DataApiImpl(uri, apiVersion, token);
 
 describe("DataApi Class", async () => {
   describe("create()", async () => {
     describe("valid request", async () => {
       it("returns the reference id", async () => {
-        const { referenceId } = await dataApi.create({
+        const { id } = await dataApi.create({
           type: "Movie__c",
           Name: "Star Wars Episode V: The Empire Strikes Back",
           Rating__c: "Excellent",
         });
 
-        expect(referenceId).equal("a00B000000FSkcvIAD");
+        expect(id).equal("a00B000000FSkcvIAD");
       });
     });
 
@@ -171,16 +171,10 @@ describe("DataApi Class", async () => {
         expect(result.done).equal(false);
         expect(result.totalSize).equal(10000);
         expect(result.records.length).equal(2000);
-        expect(result._nextRecordsUrl).equal(
-          "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
-        );
 
         result = await dataApi.queryMore(result);
 
         expect(result.done).equal(false);
-        expect(result._nextRecordsUrl).equal(
-          "/services/data/v51.0/query/01gB000003OCxSPIA1-4000"
-        );
       });
     });
   });
@@ -201,20 +195,21 @@ describe("DataApi Class", async () => {
         });
 
         it("success with valid payload", async () => {
-          const rId = uow.addRecordCreate({
+          const rId = uow.registerCreate({
             type: "Movie__c",
             Name: "Star Wars Episode IV - A New Hope",
             Rating__c: "Excellent",
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
-          const createdRecord = result.getRecord(rId);
+          const createdRecord = uow.getRecord(rId);
 
+          expect(result[rId].id).equal("a00B000000FSkgxIAD");
           expect(createdRecord.id).equal("a00B000000FSkgxIAD");
         });
       });
 
-      describe("single query", async () => {
+      describe("single update", async () => {
         beforeEach(() => {
           stub(uow, "generateReferenceId").callsFake(() => {
             return "referenceId0";
@@ -222,14 +217,15 @@ describe("DataApi Class", async () => {
         });
 
         it("success with valid payload", async () => {
-          const rId = uow.addRecordUpdate({
+          const rId = uow.registerUpdate({
             type: "Movie__c",
             id: "a00B000000FSjVUIA1",
             ReleaseDate__c: "1980-05-21",
           });
           const result = await dataApi.commitUnitOfWork(uow);
-          const updatedRecord = result.getRecord(rId);
+          const updatedRecord = uow.getRecord(rId);
 
+          expect(result[rId].id).equal("a00B000000FSjVUIA1");
           expect(updatedRecord.id).equal("a00B000000FSjVUIA1");
         });
       });
@@ -242,15 +238,16 @@ describe("DataApi Class", async () => {
         });
 
         it("successfully deletes record", async () => {
-          const rId = uow.addRecordDelete({
-            type: "Movie__c",
-            id: "a00B000000FeYyKIAV",
-          });
+          const rId = uow.registerDelete(
+            "Movie__c",
+            "a00B000000FeYyKIAV"
+          );
 
-          // const result = await dataApi.commitUnitOfWork(uow);
-          // const deletedRecord = result.getRecord(rId);
+          const result = await dataApi.commitUnitOfWork(uow);
+          const deletedRecord = uow.getRecord(rId);
 
-          // expect(deletedRecord.id).equal("a00B000000FeYyKIAV");
+          expect(result[rId].id).equal("a00B000000FeYyKIAV");
+          expect(deletedRecord.id).equal("a00B000000FeYyKIAV");
         });
       });
 
@@ -264,35 +261,37 @@ describe("DataApi Class", async () => {
         });
 
         it("creates a composite request", async () => {
-          const rId0 = uow.addRecordCreate({
+          const rId0 = uow.registerCreate({
             type: "Franchise__c",
             Name: "Star Wars",
           });
 
-          const rId1 = uow.addRecordCreate({
+          const rId1 = uow.registerCreate({
             type: "Movie__c",
             Name: "Star Wars Episode I - A Phantom Menace",
             Franchise__c: "@{referenceId0.id}",
           });
 
-          const rId2 = uow.addRecordCreate({
+          const rId2 = uow.registerCreate({
             type: "Movie__c",
             Name: "Star Wars Episode II - Attack Of The Clones",
             Franchise__c: "@{referenceId0.id}",
           });
 
-          const rId3 = uow.addRecordCreate({
+          const rId3 = uow.registerCreate({
             type: "Movie__c",
             Name: "Star Wars Episode III - Revenge Of The Sith",
             Franchise__c: "@{referenceId0.id}",
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
-          const createdRecord0 = result.getRecord(rId0);
-          const createdRecord1 = result.getRecord(rId1);
-          const createdRecord2 = result.getRecord(rId2);
-          const createdRecord3 = result.getRecord(rId3);
+          const resultRecord0 = result[rId0];
+          const createdRecord0 = uow.getRecord(rId0);
+          const createdRecord1 = uow.getRecord(rId1);
+          const createdRecord2 = uow.getRecord(rId2);
+          const createdRecord3 = uow.getRecord(rId3);
 
+          expect(resultRecord0.id).equal("a03B0000007BhQQIA0");
           expect(createdRecord0.id).equal("a03B0000007BhQQIA0");
           expect(createdRecord1.id).equal("a00B000000FSkioIAD");
           expect(createdRecord2.id).equal("a00B000000FSkipIAD");
