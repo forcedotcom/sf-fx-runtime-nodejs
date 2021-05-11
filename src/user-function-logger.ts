@@ -1,5 +1,6 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event";
 import pino from "pino";
+import logger from "./logger";
 
 export class Logger {
   private readonly properties: Record<string, unknown>;
@@ -63,6 +64,9 @@ function getLogLevelFromEnvironment(): pino.Level {
     case "error":
       return logLevel;
     default:
+      logger.warn(
+        `SF_FX_LOGLEVEL environment variable contains unknown log level ${logLevel}! Effective log level will be 'info'!`
+      );
       return "info";
   }
 }
