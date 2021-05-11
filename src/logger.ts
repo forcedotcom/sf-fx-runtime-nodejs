@@ -1,6 +1,5 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event";
 import pino from "pino";
-import { Level } from "pino";
 
 export class Logger {
   private readonly properties: Record<string, unknown>;
@@ -54,7 +53,7 @@ export class Logger {
 
 const underlyingFunctionLogger = pino({ level: getLogLevelFromEnvironment() });
 
-function getLogLevelFromEnvironment(): Level {
+function getLogLevelFromEnvironment(): pino.Level {
   const logLevel = (process.env.SF_FX_LOGLEVEL || "info").toLowerCase();
   switch (logLevel) {
     case "trace":
