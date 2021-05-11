@@ -1,5 +1,5 @@
 import { SubRequest } from "./sub-request";
-import {ReferenceId} from "../../sdk-interface-v1";
+import { ReferenceId } from "../../sdk-interface-v1";
 
 export class CompositeRequest {
   private subRequests: any[];

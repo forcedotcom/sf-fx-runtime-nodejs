@@ -2,7 +2,12 @@ import * as crypto from "crypto";
 import { CompositeRequest } from "./unit-of-work/composite-request";
 import { UnitOfWorkResult } from "./unit-of-work/result";
 import { JsonMap } from "@salesforce/ts-types";
-import {UnitOfWork, ReferenceId, RecordForCreate, RecordForUpdate} from "../sdk-interface-v1";
+import {
+  UnitOfWork,
+  ReferenceId,
+  RecordForCreate,
+  RecordForUpdate,
+} from "../sdk-interface-v1";
 
 export { UnitOfWorkResult };
 
@@ -77,10 +82,10 @@ export class UnitOfWorkImpl implements UnitOfWork {
     this[referenceId] = new RecordDeleteResult(referenceId);
 
     this.compositeRequest.addSubRequest(
-        Method.DELETE,
-        url,
-        null, // TODO
-        referenceId
+      Method.DELETE,
+      url,
+      null, // TODO
+      referenceId
     );
 
     return referenceId;

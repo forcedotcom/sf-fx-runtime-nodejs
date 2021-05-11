@@ -1,5 +1,5 @@
 import * as path from "path";
-import {SalesforceFunction} from "./sdk-interface-v1";
+import { SalesforceFunction } from "./sdk-interface-v1";
 
 export function loadUserFunctionFromDirectory(
   directory: string
@@ -12,7 +12,9 @@ export function loadUserFunctionFromDirectory(
     packageJson = require(packageJsonPath);
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
-      throw new Error("Could not load 'package.json' from project directory: " + error.message);
+      throw new Error(
+        "Could not load 'package.json' from project directory: " + error.message
+      );
     }
   }
 
@@ -30,7 +32,8 @@ export function loadUserFunctionFromDirectory(
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
       throw new Error(
-        "Could not load module referenced in 'main' field of 'package.json': " + error.message
+        "Could not load module referenced in 'main' field of 'package.json': " +
+          error.message
       );
     }
   }
