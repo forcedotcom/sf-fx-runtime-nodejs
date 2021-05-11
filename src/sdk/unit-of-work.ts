@@ -108,6 +108,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
 
       if (body && body.id) this.records[referenceId].id = body.id;
     });
-    return this.records;
+    return this;
   }
 }
