@@ -1,21 +1,19 @@
 import { Connection } from "jsforce";
+import { UnitOfWorkImpl } from "./unit-of-work";
 import {
-  RecordCreate,
-  RecordUpdate,
-  RecordDelete,
-  RecordResult,
-  RecordCreateResult,
-  RecordQueryResult,
-  RecordUpdateResult,
-  RecordDeleteResult,
-} from "./records";
-import { UnitOfWork, UnitOfWorkResult } from "./unit-of-work";
+  DataApi,
+  RecordForCreate,
+  RecordForUpdate,
+  RecordModificationResult, RecordQueryResult,
+  ReferenceId,
+  UnitOfWork
+} from "../sdk-interface-v1";
 
-export class DataApi {
-  private baseUrl: string;
-  private apiVersion: string;
-  readonly accessToken: string;
+export class DataApiImpl implements DataApi {
+  private readonly baseUrl: string;
+  private readonly apiVersion: string;
   private conn: Connection;
+  readonly accessToken: string;
 
   constructor(baseUrl: string, apiVersion: string, accessToken: string) {
     this.baseUrl = baseUrl;
@@ -39,7 +37,7 @@ export class DataApi {
     callback: (conn: Connection) => any
   ): Promise<any> {
     let conn: Connection;
-    let result: RecordResult;
+    let result;
     try {
       conn = await this.connect();
       result = callback(conn);
@@ -54,12 +52,10 @@ export class DataApi {
    * Creates a record, based on the given {@link RecordCreate}.
    * @param recordCreate.
    */
-  async create(recordCreate: RecordCreate): Promise<RecordCreateResult> {
+  async create(recordCreate: RecordForCreate): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.insert(recordCreate.type, recordCreate);
-      const result = new RecordCreateResult(response.id);
-
-      return result;
+      return {id: response.id};
     });
   }
 
@@ -70,14 +66,12 @@ export class DataApi {
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.query(soql);
-      const recordQueryResult = new RecordQueryResult(
-        response.done,
-        response.totalSize,
-        response.nextRecordsUrl,
-        response.records
-      );
 
-      return recordQueryResult;
+      return {
+        done: response.done,
+        totalSize: response.totalSize,
+        records: response.records
+      };
     });
   }
 
@@ -87,15 +81,13 @@ export class DataApi {
    */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.queryMore(queryResult._nextRecordsUrl);
-      const recordQueryResult = new RecordQueryResult(
-        response.done,
-        response.totalSize,
-        response.nextRecordsUrl,
-        response.records
-      );
-
-      return recordQueryResult;
+      //const response = await conn.queryMore(queryResult._nextRecordsUrl);
+      const response = await conn.queryMore("");
+      return {
+        done: response.done,
+        totalSize: response.totalSize,
+        records: response.records
+      };
     });
   }
 
@@ -103,13 +95,11 @@ export class DataApi {
    * Updates an existing record described by the given {@link RecordUpdate}.
    * @param recordUpdate The record update description.
    */
-  async update(recordUpdate: RecordUpdate): Promise<RecordUpdateResult> {
+  async update(recordUpdate: RecordForUpdate): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const params = Object.assign({}, recordUpdate, { Id: recordUpdate.id });
       const response: any = await conn.update(recordUpdate.type, params);
-      const result = new RecordUpdateResult(response.id);
-
-      return result;
+      return {id: response.id};
     });
   }
 
@@ -117,15 +107,14 @@ export class DataApi {
    * Deletes a record, based on the given {@link RecordDelete}.
    * @param recordDelete
    */
-  async delete(recordDelete: RecordDelete): Promise<RecordDeleteResult> {
+  async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.delete(
-        recordDelete.type,
-        recordDelete.id
+        type,
+        id
       );
-      const result = new RecordDeleteResult(response.id);
 
-      return result;
+      return {id: response.id};
     });
   }
 
@@ -133,17 +122,10 @@ export class DataApi {
    * Creates a new and empty {@link UnitOfWork}.
    */
   newUnitOfWork(): UnitOfWork {
-    return new UnitOfWork(this.apiVersion);
+    return new UnitOfWorkImpl(this.apiVersion);
   }
 
-  /**
-   * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
-   * operations fail, the whole unit is rolled back. To examine results for a single operation,
-   * inspect the returned map (which is keyed with {@link ReferenceId} returned from
-   * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
-   * @param unitOfWork The {@link UnitOfWork} to commit.
-   */
-  commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
+  commitUnitOfWork(unitOfWork: UnitOfWork): Map<ReferenceId, RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const url = `/services/data/v${this.apiVersion}/composite`;
       const reqBody = unitOfWork._getRequestBody();

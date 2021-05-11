@@ -1,17 +1,8 @@
 import * as crypto from "crypto";
-import {
-  RecordCreate,
-  RecordUpdate,
-  RecordDelete,
-  RecordCreateResult,
-  RecordUpdateResult,
-  RecordDeleteResult,
-  RecordQueryResult,
-} from "./records";
-import { ReferenceId } from "./types/reference-id";
 import { CompositeRequest } from "./unit-of-work/composite-request";
 import { UnitOfWorkResult } from "./unit-of-work/result";
 import { JsonMap } from "@salesforce/ts-types";
+import {UnitOfWork, ReferenceId, RecordForCreate, RecordForUpdate} from "../sdk-interface-v1";
 
 export { UnitOfWorkResult };
 
@@ -21,7 +12,7 @@ enum Method {
   DELETE = "DELETE",
 }
 
-export class UnitOfWork {
+export class UnitOfWorkImpl implements UnitOfWork {
   private apiVersion: string;
   private compositeRequest: CompositeRequest;
 
@@ -38,7 +29,7 @@ export class UnitOfWork {
    * Registers a record create with this UnitOfWork.
    * @param recordCreate
    */
-  addRecordCreate(recordCreate: RecordCreate): ReferenceId {
+  registerCreate(recordCreate: RecordForCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
 
@@ -58,7 +49,7 @@ export class UnitOfWork {
    * Registers a record update with this UnitOfWork.
    * @param recordUpdate
    */
-  addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
+  registerUpdate(recordUpdate: RecordForUpdate): ReferenceId {
     const referenceId = this.generateReferenceId();
     const rowId = recordUpdate.id;
     const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
@@ -79,18 +70,17 @@ export class UnitOfWork {
    * Registers a record delete with this UnitOfWork.
    * @param recordDelete
    */
-  addRecordDelete(recordDelete: RecordDelete): ReferenceId {
+  registerDelete(type: string, id: string): ReferenceId {
     const referenceId = this.generateReferenceId();
-    const rowId = recordDelete.id;
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordDelete.type}/${rowId}`;
+    const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
 
     this[referenceId] = new RecordDeleteResult(referenceId);
 
     this.compositeRequest.addSubRequest(
-      Method.DELETE,
-      url,
-      recordDelete,
-      referenceId
+        Method.DELETE,
+        url,
+        null, // TODO
+        referenceId
     );
 
     return referenceId;

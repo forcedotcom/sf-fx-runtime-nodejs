@@ -1,11 +1,9 @@
-import { InvocationEvent } from "./sdk/invocation-event";
-import { Context } from "./sdk/context";
-import { Logger } from "./user-function-logger";
 import * as path from "path";
+import {SalesforceFunction} from "./sdk-interface-v1";
 
 export function loadUserFunctionFromDirectory(
   directory: string
-): UserFunction<any> {
+): SalesforceFunction<unknown, unknown> {
   const packageJsonPath = path.join(directory, "package.json");
 
   // Load package.json
@@ -46,9 +44,3 @@ export function loadUserFunctionFromDirectory(
 
   return defaultExport;
 }
-
-export type UserFunction<A> = (
-  event: InvocationEvent,
-  context: Context,
-  logger: Logger
-) => Promise<A> | A;

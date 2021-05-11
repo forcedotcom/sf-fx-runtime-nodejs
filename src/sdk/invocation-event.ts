@@ -1,10 +1,11 @@
 import { SalesforceFunctionsCloudEvent } from "../cloud-event";
+import {InvocationEvent} from "../sdk-interface-v1";
 
-export class InvocationEvent {
+export class InvocationEventImpl implements InvocationEvent<unknown> {
   id: string;
   type: string;
   source: string;
-  data: any;
+  data: unknown;
   dataContentType?: string;
   dataSchema?: string;
   time?: string;

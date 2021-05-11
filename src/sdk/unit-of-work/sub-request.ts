@@ -1,16 +1,15 @@
-import { RecordCreate, RecordUpdate, RecordDelete } from "../records";
-import { ReferenceId } from "../types/reference-id";
+import {ReferenceId} from "../../sdk-interface-v1";
 
 export class SubRequest {
   private method: string;
   private url: string;
   private referenceId: ReferenceId;
-  private body: RecordCreate | RecordUpdate | RecordDelete;
+  private body: any;
 
   constructor(
     method: string,
     url: string,
-    record: RecordCreate | RecordUpdate | RecordDelete,
+    record: any,
     referenceId: ReferenceId
   ) {
     this.method = method;
