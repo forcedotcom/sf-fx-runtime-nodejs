@@ -51,6 +51,7 @@ export interface UnitOfWork {
   registerCreate(record: RecordForCreate): ReferenceId;
   registerUpdate(record: RecordForUpdate): ReferenceId;
   registerDelete(type: string, id: string): ReferenceId;
+  getRecord(referenceId: ReferenceId): RecordModificationResult;
 }
 
 export interface DataApi {
