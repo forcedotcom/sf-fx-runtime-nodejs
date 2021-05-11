@@ -1,6 +1,6 @@
 import * as yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { loadUserFunctionFromDirectory, UserFunction } from "./user-function";
+import { loadUserFunctionFromDirectory } from "./user-function";
 import startServer from "./server";
 import logger from "./logger";
 

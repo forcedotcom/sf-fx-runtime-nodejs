@@ -1,9 +1,4 @@
-import {
-  RecordCreateResult,
-  RecordUpdateResult,
-  RecordDeleteResult,
-} from "../records";
-import { ReferenceId } from "../types/reference-id";
+import {ReferenceId} from "../../sdk-interface-v1";
 
 export class UnitOfWorkResult {
   private results: {

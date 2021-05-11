@@ -1,4 +1,6 @@
-export class User {
+import { User } from "../sdk-interface-v1";
+
+export class UserImpl implements User {
   readonly id: string;
   readonly username: string;
   readonly onBehalfOfUserId?: string;
