@@ -66,7 +66,7 @@ export interface DataApi {
   newUnitOfWork(): UnitOfWork;
   commitUnitOfWork(
     unitOfWork: UnitOfWork
-  ): Map<ReferenceId, RecordModificationResult>;
+  ): Promise<Map<ReferenceId, RecordModificationResult>>;
 }
 
 export interface User {
