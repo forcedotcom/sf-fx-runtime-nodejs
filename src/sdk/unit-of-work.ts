@@ -42,8 +42,8 @@ export class UnitOfWorkImpl implements UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.POST,
       url,
-      recordCreate,
-      referenceId
+      referenceId,
+      recordCreate
     );
 
     return referenceId;
@@ -63,8 +63,8 @@ export class UnitOfWorkImpl implements UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.PATCH,
       url,
-      recordUpdate,
-      referenceId
+      referenceId,
+      recordUpdate
     );
 
     return referenceId;
@@ -83,7 +83,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     this.compositeRequest.addSubRequest(
       Method.DELETE,
       url,
-      null, // TODO
       referenceId
     );
 

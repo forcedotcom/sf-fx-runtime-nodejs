@@ -9,8 +9,8 @@ export class SubRequest {
   constructor(
     method: string,
     url: string,
-    record: any,
-    referenceId: ReferenceId
+    referenceId: ReferenceId,
+    record?: any,
   ) {
     this.method = method;
     this.url = url;

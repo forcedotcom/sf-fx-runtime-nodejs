@@ -11,10 +11,10 @@ export class CompositeRequest {
   addSubRequest(
     method: string,
     url: string,
-    subReqData: any,
-    referenceId: ReferenceId
+    referenceId: ReferenceId,
+    subReqData?: any,
   ): void {
-    const subReq = new SubRequest(method, url, subReqData, referenceId);
+    const subReq = new SubRequest(method, url, referenceId, subReqData);
     this.subRequests.push(subReq.toJson());
   }
 
