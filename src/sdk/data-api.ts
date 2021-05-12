@@ -66,6 +66,7 @@ export class DataApiImpl implements DataApi {
         done: response.done,
         totalSize: response.totalSize,
         records: response.records,
+        nextRecordsUrl: response.nextRecordsUrl
       };
     });
   }
