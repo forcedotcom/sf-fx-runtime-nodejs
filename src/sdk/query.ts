@@ -4,7 +4,7 @@ export class RecordQueryResultImpl implements RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
   readonly records: any[];
-  readonly _nextRecordsUrl?: string;
+  readonly nextRecordsUrl?: string;
 
   constructor(
     done: boolean,
@@ -14,7 +14,7 @@ export class RecordQueryResultImpl implements RecordQueryResult {
   ) {
     this.done = done;
     this.totalSize = totalSize;
-    this._nextRecordsUrl = nextRecordsUrl;
+    this.nextRecordsUrl = nextRecordsUrl;
     this.records = records;
   }
 }

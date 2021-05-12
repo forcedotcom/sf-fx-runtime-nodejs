@@ -9,7 +9,6 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "../sdk-interface-v1";
-import {RecordQueryResultImpl} from "./query";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -73,10 +72,7 @@ export class DataApiImpl implements DataApi {
 
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const queryResultInstance = this.castQueryObject(queryResult);
-      const response = await conn.queryMore(
-        queryResultInstance._nextRecordsUrl
-      );
+      const response = await conn.queryMore(queryResult.nextRecordsUrl);
 
       return {
         done: response.done,
@@ -84,17 +80,6 @@ export class DataApiImpl implements DataApi {
         records: response.records,
       };
     });
-  }
-
-  private castQueryObject(
-    queryResult: RecordQueryResult
-  ): RecordQueryResultImpl {
-    if (queryResult instanceof RecordQueryResultImpl)
-      return <RecordQueryResultImpl>queryResult;
-    else
-      throw Error(
-        "Incorrect arg. Requires instance of RecordQueryResultImpl to use queryMore()"
-      );
   }
 
   async update(

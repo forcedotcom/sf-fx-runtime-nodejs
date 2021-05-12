@@ -32,6 +32,7 @@ export interface RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
   readonly records: Array<Record<string, unknown>>;
+  readonly nextRecordsUrl?: string;
 }
 
 export interface RecordModificationResult {
