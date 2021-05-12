@@ -208,12 +208,6 @@ describe("DataApi Class", async () => {
       });
 
       describe("single update", async () => {
-        beforeEach(() => {
-          stub(uow, "generateReferenceId").callsFake(() => {
-            return "referenceId0";
-          });
-        });
-
         it("success with valid payload", async () => {
           const rId = uow.registerUpdate({
             type: "Movie__c",
@@ -227,12 +221,6 @@ describe("DataApi Class", async () => {
       });
 
       describe("single delete", async () => {
-        beforeEach(() => {
-          stub(uow, "generateReferenceId").callsFake(() => {
-            return "referenceId0";
-          });
-        });
-
         it("successfully deletes record", async () => {
           const rId = uow.registerDelete("Movie__c", "a00B000000FeYyKIAV");
 
@@ -242,14 +230,6 @@ describe("DataApi Class", async () => {
       });
 
       describe("composite create tree", async () => {
-        beforeEach(() => {
-          let num = -1;
-          stub(uow, "generateReferenceId").callsFake(() => {
-            num++;
-            return `referenceId${num}`;
-          });
-        });
-
         it("creates a composite request", async () => {
           const rId0 = uow.registerCreate({
             type: "Franchise__c",
