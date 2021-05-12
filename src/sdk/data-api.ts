@@ -43,7 +43,7 @@ export class DataApiImpl implements DataApi {
       conn = await this.connect();
       result = callback(conn);
     } catch (e) {
-      Promise.reject(e);
+      return Promise.reject(e);
     }
 
     return Promise.resolve(result);
@@ -105,14 +105,48 @@ export class DataApiImpl implements DataApi {
   }
 
   commitUnitOfWork(
-    unitOfWork: UnitOfWorkImpl
+    unitOfWork: UnitOfWork
   ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const url = `/services/data/v${this.apiVersion}/composite`;
-      const reqBody = unitOfWork._getRequestBody();
-      const reqResult = await conn.requestPost(url, reqBody);
+      const subrequests = (unitOfWork as UnitOfWorkImpl).subrequests;
+      const requestBody = {
+        allOrNone: true,
+        compositeRequest: subrequests.map(({ referenceId, subrequest }) => {
+          return {
+            referenceId,
+            method: subrequest.httpMethod,
+            url: subrequest.buildUri(this.apiVersion),
+            body: subrequest.body,
+          };
+        }),
+      };
 
-      return unitOfWork._commit(reqResult);
+      const requestResult = await conn.requestPost(
+        `/services/data/v${this.apiVersion}/composite`,
+        requestBody
+      );
+
+      const result = new Map<ReferenceId, RecordModificationResult>();
+      requestResult.compositeResponse.forEach(
+        ({ referenceId, body, httpStatusCode, httpHeaders }) => {
+          const subrequest = subrequests.find(
+            (tuple) => tuple.referenceId === referenceId
+          );
+
+          if (subrequest) {
+            result.set(
+              referenceId,
+              subrequest.subrequest.processResponse(
+                httpStatusCode,
+                httpHeaders,
+                body
+              )
+            );
+          }
+        }
+      );
+
+      return result;
     });
   }
 }

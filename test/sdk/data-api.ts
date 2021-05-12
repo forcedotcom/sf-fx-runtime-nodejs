@@ -202,10 +202,8 @@ describe("DataApi Class", async () => {
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
-          const createdRecord = uow.getRecord(rId);
 
-          expect(result[rId].id).equal("a00B000000FSkgxIAD");
-          expect(createdRecord.id).equal("a00B000000FSkgxIAD");
+          expect(result.get(rId).id).equal("a00B000000FSkgxIAD");
         });
       });
 
@@ -223,10 +221,8 @@ describe("DataApi Class", async () => {
             ReleaseDate__c: "1980-05-21",
           });
           const result = await dataApi.commitUnitOfWork(uow);
-          const updatedRecord = uow.getRecord(rId);
 
-          expect(result[rId].id).equal("a00B000000FSjVUIA1");
-          expect(updatedRecord.id).equal("a00B000000FSjVUIA1");
+          expect(result.get(rId).id).equal("a00B000000FSjVUIA1");
         });
       });
 
@@ -238,16 +234,10 @@ describe("DataApi Class", async () => {
         });
 
         it("successfully deletes record", async () => {
-          const rId = uow.registerDelete(
-            "Movie__c",
-            "a00B000000FeYyKIAV"
-          );
+          const rId = uow.registerDelete("Movie__c", "a00B000000FeYyKIAV");
 
           const result = await dataApi.commitUnitOfWork(uow);
-          const deletedRecord = uow.getRecord(rId);
-
-          expect(result[rId].id).equal("a00B000000FeYyKIAV");
-          expect(deletedRecord.id).equal("a00B000000FeYyKIAV");
+          expect(result.get(rId).id).equal("a00B000000FeYyKIAV");
         });
       });
 
@@ -285,17 +275,10 @@ describe("DataApi Class", async () => {
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
-          const resultRecord0 = result[rId0];
-          const createdRecord0 = uow.getRecord(rId0);
-          const createdRecord1 = uow.getRecord(rId1);
-          const createdRecord2 = uow.getRecord(rId2);
-          const createdRecord3 = uow.getRecord(rId3);
-
-          expect(resultRecord0.id).equal("a03B0000007BhQQIA0");
-          expect(createdRecord0.id).equal("a03B0000007BhQQIA0");
-          expect(createdRecord1.id).equal("a00B000000FSkioIAD");
-          expect(createdRecord2.id).equal("a00B000000FSkipIAD");
-          expect(createdRecord3.id).equal("a00B000000FSkiqIAD");
+          expect(result.get(rId0).id).equal("a03B0000007BhQQIA0");
+          expect(result.get(rId1).id).equal("a00B000000FSkioIAD");
+          expect(result.get(rId2).id).equal("a00B000000FSkipIAD");
+          expect(result.get(rId3).id).equal("a00B000000FSkiqIAD");
         });
       });
     });
