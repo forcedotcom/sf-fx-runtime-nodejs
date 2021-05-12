@@ -3,10 +3,11 @@ import {
   SalesforceFunctionContext,
   SalesforceUserContext,
 } from "../cloud-event";
-import { DataApi } from "./data-api";
-import { User } from "./user";
+import { UserImpl } from "./user";
+import { Org, User, DataApi } from "../sdk-interface-v1";
+import { DataApiImpl } from "./data-api";
 
-export class Org {
+export class OrgImpl implements Org {
   readonly id: string;
   readonly baseUrl: string;
   readonly domainUrl: string;
@@ -31,7 +32,7 @@ export class Org {
     this.domainUrl = orgDomainUrl;
     this.apiVersion = apiVersion;
 
-    this.dataApi = new DataApi(this.baseUrl, this.apiVersion, accessToken);
-    this.user = new User(userId, username, onBehalfOfUserId);
+    this.dataApi = new DataApiImpl(this.baseUrl, this.apiVersion, accessToken);
+    this.user = new UserImpl(userId, username, onBehalfOfUserId);
   }
 }

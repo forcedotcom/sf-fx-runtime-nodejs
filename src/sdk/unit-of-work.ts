@@ -1,131 +1,66 @@
-import * as crypto from "crypto";
 import {
-  RecordCreate,
-  RecordUpdate,
-  RecordDelete,
-  RecordCreateResult,
-  RecordUpdateResult,
-  RecordDeleteResult,
-  RecordQueryResult,
-} from "./records";
-import { ReferenceId } from "./types/reference-id";
-import { CompositeRequest } from "./unit-of-work/composite-request";
-import { UnitOfWorkResult } from "./unit-of-work/result";
-import { JsonMap } from "@salesforce/ts-types";
+  UnitOfWork,
+  ReferenceId,
+  RecordForCreate,
+  RecordForUpdate,
+  RecordModificationResult,
+} from "../sdk-interface-v1";
+import {
+  CompositeSubRequest,
+  CreateRecordSubRequest,
+  DeleteRecordSubRequest,
+  UpdateRecordSubRequest,
+} from "./sub-request";
 
-export { UnitOfWorkResult };
-
-enum Method {
-  POST = "POST",
-  PATCH = "PATCH",
-  DELETE = "DELETE",
-}
-
-export class UnitOfWork {
-  private apiVersion: string;
-  private compositeRequest: CompositeRequest;
+export class UnitOfWorkImpl implements UnitOfWork {
+  private readonly apiVersion: string;
+  private readonly _subrequests: ReferenceIdSubrequestTuple[] = [];
+  private referenceIdCounter = 0;
 
   constructor(apiVersion: string) {
-    this.compositeRequest = new CompositeRequest();
     this.apiVersion = apiVersion;
   }
 
-  private generateReferenceId() {
-    return crypto.randomBytes(16).toString("hex");
-  }
-
-  /**
-   * Registers a record create with this UnitOfWork.
-   * @param recordCreate
-   */
-  addRecordCreate(recordCreate: RecordCreate): ReferenceId {
+  registerCreate(record: RecordForCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
-
-    this[referenceId] = new RecordCreateResult(referenceId);
-
-    this.compositeRequest.addSubRequest(
-      Method.POST,
-      url,
-      recordCreate,
-      referenceId
-    );
-
-    return referenceId;
-  }
-
-  /**
-   * Registers a record update with this UnitOfWork.
-   * @param recordUpdate
-   */
-  addRecordUpdate(recordUpdate: RecordUpdate): ReferenceId {
-    const referenceId = this.generateReferenceId();
-    const rowId = recordUpdate.id;
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${rowId}`;
-
-    this[referenceId] = new RecordUpdateResult(referenceId, recordUpdate.id);
-
-    this.compositeRequest.addSubRequest(
-      Method.PATCH,
-      url,
-      recordUpdate,
-      referenceId
-    );
-
-    return referenceId;
-  }
-
-  /**
-   * Registers a record delete with this UnitOfWork.
-   * @param recordDelete
-   */
-  addRecordDelete(recordDelete: RecordDelete): ReferenceId {
-    const referenceId = this.generateReferenceId();
-    const rowId = recordDelete.id;
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordDelete.type}/${rowId}`;
-
-    this[referenceId] = new RecordDeleteResult(referenceId);
-
-    this.compositeRequest.addSubRequest(
-      Method.DELETE,
-      url,
-      recordDelete,
-      referenceId
-    );
-
-    return referenceId;
-  }
-
-  /**
-   * Retrieves a record corresponding to the ReferenceID.
-   * @param referenceId
-   */
-  getRecord(
-    referenceId: ReferenceId
-  ):
-    | RecordCreateResult
-    | RecordUpdateResult
-    | RecordQueryResult
-    | RecordDeleteResult {
-    return this[referenceId];
-  }
-
-  _getRequestBody(): JsonMap {
-    const compositeRequest = this.compositeRequest.getSubRequests();
-
-    return {
-      allOrNone: true,
-      compositeRequest,
-    };
-  }
-
-  _commit({ compositeResponse }: any): any {
-    compositeResponse.forEach(({ referenceId, body }) => {
-      if (body) {
-        const recordResult = this[referenceId];
-        recordResult.id = body.id;
-      }
+    this._subrequests.push({
+      referenceId,
+      subrequest: new CreateRecordSubRequest(record),
     });
-    return this;
+    return referenceId;
+  }
+
+  registerDelete(type: string, id: string): ReferenceId {
+    const referenceId = this.generateReferenceId();
+    this._subrequests.push({
+      referenceId,
+      subrequest: new DeleteRecordSubRequest(type, id),
+    });
+    return referenceId;
+  }
+
+  registerUpdate(record: RecordForUpdate): ReferenceId {
+    const referenceId = this.generateReferenceId();
+    this._subrequests.push({
+      referenceId,
+      subrequest: new UpdateRecordSubRequest(record),
+    });
+    return referenceId;
+  }
+
+  get subrequests(): ReferenceIdSubrequestTuple[] {
+    return this._subrequests;
+  }
+
+  private generateReferenceId() {
+    const referenceId = "referenceId" + this.referenceIdCounter;
+    this.referenceIdCounter = this.referenceIdCounter + 1;
+
+    return referenceId;
   }
 }
+
+export type ReferenceIdSubrequestTuple = {
+  referenceId: ReferenceId;
+  subrequest: CompositeSubRequest<RecordModificationResult>;
+};

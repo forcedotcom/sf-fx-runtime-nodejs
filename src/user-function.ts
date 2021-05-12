@@ -1,11 +1,9 @@
-import { InvocationEvent } from "./sdk/invocation-event";
-import { Context } from "./sdk/context";
-import { Logger } from "./user-function-logger";
 import * as path from "path";
+import { SalesforceFunction } from "./sdk-interface-v1";
 
 export function loadUserFunctionFromDirectory(
   directory: string
-): UserFunction<any> {
+): SalesforceFunction<unknown, unknown> {
   const packageJsonPath = path.join(directory, "package.json");
 
   // Load package.json
@@ -14,7 +12,9 @@ export function loadUserFunctionFromDirectory(
     packageJson = require(packageJsonPath);
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
-      throw new Error("Could not load 'package.json' from project directory: " + error.message);
+      throw new Error(
+        "Could not load 'package.json' from project directory: " + error.message
+      );
     }
   }
 
@@ -32,7 +32,8 @@ export function loadUserFunctionFromDirectory(
   } catch (error) {
     if (error.code === "MODULE_NOT_FOUND") {
       throw new Error(
-        "Could not load module referenced in 'main' field of 'package.json': " + error.message
+        "Could not load module referenced in 'main' field of 'package.json': " +
+          error.message
       );
     }
   }
@@ -46,9 +47,3 @@ export function loadUserFunctionFromDirectory(
 
   return defaultExport;
 }
-
-export type UserFunction<A> = (
-  event: InvocationEvent,
-  context: Context,
-  logger: Logger
-) => Promise<A> | A;

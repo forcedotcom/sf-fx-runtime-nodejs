@@ -1,13 +1,13 @@
 import * as fastify from "fastify";
 import { FastifyReply } from "fastify";
-import { InvocationEvent } from "./sdk/invocation-event";
-import { Context } from "./sdk/context";
-import { Logger } from "./user-function-logger";
-import { UserFunction } from "./user-function";
+import { LoggerImpl } from "./user-function-logger";
 import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace";
 import * as mimetype from "whatwg-mimetype";
+import { SalesforceFunction } from "./sdk-interface-v1";
+import { InvocationEventImpl } from "./sdk/invocation-event";
+import { ContextImpl } from "./sdk/context";
 
 const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
@@ -17,7 +17,7 @@ const SERVICE_UNAVAILABLE_STATUS = 503;
 export default function startServer<A>(
   host: string,
   port: number,
-  userFunction: UserFunction<A>
+  userFunction: SalesforceFunction<any, any>
 ): void {
   const server = fastify.fastify({ logger: false });
 
@@ -73,9 +73,11 @@ export default function startServer<A>(
       return;
     }
 
-    const invocationEvent = new InvocationEvent(salesforceFunctionsCloudEvent);
-    const context = new Context(salesforceFunctionsCloudEvent);
-    const logger = new Logger(salesforceFunctionsCloudEvent);
+    const invocationEvent = new InvocationEventImpl(
+      salesforceFunctionsCloudEvent
+    );
+    const context = new ContextImpl(salesforceFunctionsCloudEvent);
+    const logger = new LoggerImpl(salesforceFunctionsCloudEvent);
 
     try {
       const userFunctionStart = performance.now();

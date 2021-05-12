@@ -1,21 +1,20 @@
 import { Connection } from "jsforce";
+import { UnitOfWorkImpl } from "./unit-of-work";
 import {
-  RecordCreate,
-  RecordUpdate,
-  RecordDelete,
-  RecordResult,
-  RecordCreateResult,
+  DataApi,
+  RecordForCreate,
+  RecordForUpdate,
+  RecordModificationResult,
   RecordQueryResult,
-  RecordUpdateResult,
-  RecordDeleteResult,
-} from "./records";
-import { UnitOfWork, UnitOfWorkResult } from "./unit-of-work";
+  ReferenceId,
+  UnitOfWork,
+} from "../sdk-interface-v1";
 
-export class DataApi {
-  private baseUrl: string;
-  private apiVersion: string;
-  readonly accessToken: string;
+export class DataApiImpl implements DataApi {
+  private readonly baseUrl: string;
+  private readonly apiVersion: string;
   private conn: Connection;
+  readonly accessToken: string;
 
   constructor(baseUrl: string, apiVersion: string, accessToken: string) {
     this.baseUrl = baseUrl;
@@ -39,117 +38,116 @@ export class DataApi {
     callback: (conn: Connection) => any
   ): Promise<any> {
     let conn: Connection;
-    let result: RecordResult;
+    let result;
     try {
       conn = await this.connect();
       result = callback(conn);
     } catch (e) {
-      Promise.reject(e);
+      return Promise.reject(e);
     }
 
     return Promise.resolve(result);
   }
 
-  /**
-   * Creates a record, based on the given {@link RecordCreate}.
-   * @param recordCreate.
-   */
-  async create(recordCreate: RecordCreate): Promise<RecordCreateResult> {
+  async create(
+    recordCreate: RecordForCreate
+  ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.insert(recordCreate.type, recordCreate);
-      const result = new RecordCreateResult(response.id);
-
-      return result;
+      return { id: response.id };
     });
   }
 
-  /**
-   * Queries for records with a given SOQL string.
-   * @param soql The SOQL string.
-   */
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.query(soql);
-      const recordQueryResult = new RecordQueryResult(
-        response.done,
-        response.totalSize,
-        response.nextRecordsUrl,
-        response.records
-      );
 
-      return recordQueryResult;
+      return {
+        done: response.done,
+        totalSize: response.totalSize,
+        records: response.records,
+        nextRecordsUrl: response.nextRecordsUrl
+      };
     });
   }
 
-  /**
-   * Queries for more records, based on the given {@link RecordQueryResult}.
-   * @param queryResult
-   */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.queryMore(queryResult._nextRecordsUrl);
-      const recordQueryResult = new RecordQueryResult(
-        response.done,
-        response.totalSize,
-        response.nextRecordsUrl,
-        response.records
-      );
+      const response = await conn.queryMore(queryResult.nextRecordsUrl);
 
-      return recordQueryResult;
+      return {
+        done: response.done,
+        totalSize: response.totalSize,
+        records: response.records,
+      };
     });
   }
 
-  /**
-   * Updates an existing record described by the given {@link RecordUpdate}.
-   * @param recordUpdate The record update description.
-   */
-  async update(recordUpdate: RecordUpdate): Promise<RecordUpdateResult> {
+  async update(
+    recordUpdate: RecordForUpdate
+  ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const params = Object.assign({}, recordUpdate, { Id: recordUpdate.id });
       const response: any = await conn.update(recordUpdate.type, params);
-      const result = new RecordUpdateResult(response.id);
-
-      return result;
+      return { id: response.id };
     });
   }
 
-  /**
-   * Deletes a record, based on the given {@link RecordDelete}.
-   * @param recordDelete
-   */
-  async delete(recordDelete: RecordDelete): Promise<RecordDeleteResult> {
+  async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.delete(
-        recordDelete.type,
-        recordDelete.id
-      );
-      const result = new RecordDeleteResult(response.id);
+      const response: any = await conn.delete(type, id);
 
-      return result;
+      return { id: response.id };
     });
   }
 
-  /**
-   * Creates a new and empty {@link UnitOfWork}.
-   */
   newUnitOfWork(): UnitOfWork {
-    return new UnitOfWork(this.apiVersion);
+    return new UnitOfWorkImpl(this.apiVersion);
   }
 
-  /**
-   * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
-   * operations fail, the whole unit is rolled back. To examine results for a single operation,
-   * inspect the returned map (which is keyed with {@link ReferenceId} returned from
-   * {@link UnitOfWork#insert} and {@link UnitOfWork#update}).
-   * @param unitOfWork The {@link UnitOfWork} to commit.
-   */
-  commitUnitOfWork(unitOfWork: UnitOfWork): Promise<UnitOfWorkResult> {
+  commitUnitOfWork(
+    unitOfWork: UnitOfWork
+  ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const url = `/services/data/v${this.apiVersion}/composite`;
-      const reqBody = unitOfWork._getRequestBody();
-      const reqResult = await conn.requestPost(url, reqBody);
+      const subrequests = (unitOfWork as UnitOfWorkImpl).subrequests;
+      const requestBody = {
+        allOrNone: true,
+        compositeRequest: subrequests.map(({ referenceId, subrequest }) => {
+          return {
+            referenceId,
+            method: subrequest.httpMethod,
+            url: subrequest.buildUri(this.apiVersion),
+            body: subrequest.body,
+          };
+        }),
+      };
 
-      return unitOfWork._commit(reqResult);
+      const requestResult = await conn.requestPost(
+        `/services/data/v${this.apiVersion}/composite`,
+        requestBody
+      );
+
+      const result = new Map<ReferenceId, RecordModificationResult>();
+      requestResult.compositeResponse.forEach(
+        ({ referenceId, body, httpStatusCode, httpHeaders }) => {
+          const subrequest = subrequests.find(
+            (tuple) => tuple.referenceId === referenceId
+          );
+
+          if (subrequest) {
+            result.set(
+              referenceId,
+              subrequest.subrequest.processResponse(
+                httpStatusCode,
+                httpHeaders,
+                body
+              )
+            );
+          }
+        }
+      );
+
+      return result;
     });
   }
 }

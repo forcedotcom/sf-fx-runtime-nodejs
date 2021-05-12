@@ -1,8 +1,9 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event";
 import pino from "pino";
 import logger from "./logger";
+import { Logger } from "./sdk-interface-v1";
 
-export class Logger {
+export class LoggerImpl implements Logger {
   private readonly properties: Record<string, unknown>;
 
   constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
@@ -11,42 +12,22 @@ export class Logger {
     };
   }
 
-  /**
-   * Logs the given message at the 'error' level.
-   * @param message The message to log.
-   */
   error(message: string): void {
     underlyingFunctionLogger.error(this.properties, message);
   }
 
-  /**
-   * Logs the given message at the 'warn' level.
-   * @param message The message to log.
-   */
   warn(message: string): void {
     underlyingFunctionLogger.warn(this.properties, message);
   }
 
-  /**
-   * Logs the given message at the 'info' level.
-   * @param message The message to log.
-   */
   info(message: string): void {
     underlyingFunctionLogger.info(this.properties, message);
   }
 
-  /**
-   * Logs the given message at the 'debug' level.
-   * @param message The message to log.
-   */
   debug(message: string): void {
     underlyingFunctionLogger.debug(this.properties, message);
   }
 
-  /**
-   * Logs the given message at the 'trace' level.
-   * @param message The message to log.
-   */
   trace(message: string): void {
     underlyingFunctionLogger.trace(this.properties, message);
   }
