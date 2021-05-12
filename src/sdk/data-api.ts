@@ -1,6 +1,5 @@
 import { Connection } from "jsforce";
 import { UnitOfWorkImpl } from "./unit-of-work";
-import { RecordQueryResultImpl } from "./record/result/query";
 import {
   DataApi,
   RecordForCreate,
@@ -10,6 +9,7 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "../sdk-interface-v1";
+import {RecordQueryResultImpl} from "./query";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;

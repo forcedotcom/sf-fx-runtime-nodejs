@@ -1,8 +1,10 @@
-export class RecordQueryResultImpl {
+import {RecordQueryResult} from "../sdk-interface-v1";
+
+export class RecordQueryResultImpl implements RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
-  readonly _nextRecordsUrl?: string;
   readonly records: any[];
+  readonly _nextRecordsUrl?: string;
 
   constructor(
     done: boolean,
