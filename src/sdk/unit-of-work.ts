@@ -31,10 +31,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return crypto.randomBytes(16).toString("hex");
   }
 
-  /**
-   * Registers a record create with this UnitOfWork.
-   * @param recordCreate
-   */
   registerCreate(recordCreate: RecordForCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
@@ -49,10 +45,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return referenceId;
   }
 
-  /**
-   * Registers a record update with this UnitOfWork.
-   * @param recordUpdate
-   */
   registerUpdate(recordUpdate: RecordForUpdate): ReferenceId {
     const referenceId = this.generateReferenceId();
     const id = recordUpdate.id;
@@ -70,10 +62,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return referenceId;
   }
 
-  /**
-   * Registers a record delete with this UnitOfWork.
-   * @param recordDelete
-   */
   registerDelete(type: string, id: string): ReferenceId {
     const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
@@ -89,10 +77,6 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return referenceId;
   }
 
-  /**
-   * Retrieves a record corresponding to the ReferenceID.
-   * @param referenceId
-   */
   getRecord(referenceId: ReferenceId): RecordModificationResult {
     return this.records[referenceId];
   }

@@ -50,10 +50,6 @@ export class DataApiImpl implements DataApi {
     return Promise.resolve(result);
   }
 
-  /**
-   * Creates a record, based on the given {@link RecordCreate}.
-   * @param recordCreate.
-   */
   async create(
     recordCreate: RecordForCreate
   ): Promise<RecordModificationResult> {
@@ -63,10 +59,6 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  /**
-   * Queries for records with a given SOQL string.
-   * @param soql The SOQL string.
-   */
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.query(soql);
@@ -79,10 +71,6 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  /**
-   * Queries for more records, based on the given {@link RecordQueryResult}.
-   * @param queryResult
-   */
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const queryResultInstance = this.castQueryObject(queryResult);
@@ -109,10 +97,6 @@ export class DataApiImpl implements DataApi {
       );
   }
 
-  /**
-   * Updates an existing record described by the given {@link RecordUpdate}.
-   * @param recordUpdate The record update description.
-   */
   async update(
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
@@ -123,10 +107,6 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  /**
-   * Deletes a record, based on the given {@link RecordDelete}.
-   * @param recordDelete
-   */
   async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.delete(type, id);
@@ -135,9 +115,6 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  /**
-   * Creates a new and empty {@link UnitOfWork}.
-   */
   newUnitOfWork(): UnitOfWork {
     return new UnitOfWorkImpl(this.apiVersion);
   }
