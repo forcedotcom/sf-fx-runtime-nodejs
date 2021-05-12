@@ -28,7 +28,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   }
 
   registerCreate(record: RecordForCreate): ReferenceId {
-    const referenceId = UnitOfWorkImpl.generateReferenceId();
+    const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${record.type}`;
 
     this.compositeRequest.addSubRequest(
@@ -42,7 +42,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   }
 
   registerUpdate(record: RecordForUpdate): ReferenceId {
-    const referenceId = UnitOfWorkImpl.generateReferenceId();
+    const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${record.type}/${record.id}`;
 
     this.records[referenceId] = { id: record.id };
@@ -58,7 +58,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   }
 
   registerDelete(type: string, id: string): ReferenceId {
-    const referenceId = UnitOfWorkImpl.generateReferenceId();
+    const referenceId = this.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
 
     this.records[referenceId] = { id };
@@ -93,7 +93,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return this.records;
   }
 
-  private static generateReferenceId() {
+  private generateReferenceId() {
     return crypto.randomBytes(16).toString("hex");
   }
 }
