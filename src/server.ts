@@ -1,6 +1,6 @@
 import * as fastify from "fastify";
 import { FastifyReply } from "fastify";
-import { Logger } from "./user-function-logger";
+import { LoggerImpl } from "./user-function-logger";
 import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace";
@@ -77,7 +77,7 @@ export default function startServer<A>(
       salesforceFunctionsCloudEvent
     );
     const context = new ContextImpl(salesforceFunctionsCloudEvent);
-    const logger = new Logger(salesforceFunctionsCloudEvent);
+    const logger = new LoggerImpl(salesforceFunctionsCloudEvent);
 
     try {
       const userFunctionStart = performance.now();
