@@ -1,10 +1,10 @@
 import { ReferenceId } from "../../sdk-interface-v1";
 
 export class SubRequest {
-  private method: string;
-  private url: string;
-  private referenceId: ReferenceId;
-  private body: any;
+  private readonly method: string;
+  private readonly url: string;
+  private readonly referenceId: ReferenceId;
+  private readonly body: any;
 
   constructor(
     method: string,
