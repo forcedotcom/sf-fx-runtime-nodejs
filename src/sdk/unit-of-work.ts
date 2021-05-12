@@ -16,7 +16,7 @@ enum Method {
 }
 
 export class UnitOfWorkImpl implements UnitOfWork {
-  private apiVersion: string;
+  private readonly apiVersion: string;
   private compositeRequest: CompositeRequest;
 
   readonly records: Map<ReferenceId, RecordModificationResult>;
@@ -27,43 +27,38 @@ export class UnitOfWorkImpl implements UnitOfWork {
     this.records = new Map<ReferenceId, RecordModificationResult>();
   }
 
-  private generateReferenceId() {
-    return crypto.randomBytes(16).toString("hex");
-  }
-
-  registerCreate(recordCreate: RecordForCreate): ReferenceId {
-    const referenceId = this.generateReferenceId();
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordCreate.type}`;
+  registerCreate(record: RecordForCreate): ReferenceId {
+    const referenceId = UnitOfWorkImpl.generateReferenceId();
+    const url = `services/data/v${this.apiVersion}/sobjects/${record.type}`;
 
     this.compositeRequest.addSubRequest(
       Method.POST,
       url,
       referenceId,
-      recordCreate
+      record
     );
 
     return referenceId;
   }
 
-  registerUpdate(recordUpdate: RecordForUpdate): ReferenceId {
-    const referenceId = this.generateReferenceId();
-    const id = recordUpdate.id;
-    const url = `services/data/v${this.apiVersion}/sobjects/${recordUpdate.type}/${id}`;
+  registerUpdate(record: RecordForUpdate): ReferenceId {
+    const referenceId = UnitOfWorkImpl.generateReferenceId();
+    const url = `services/data/v${this.apiVersion}/sobjects/${record.type}/${record.id}`;
 
-    this.records[referenceId] = { id };
+    this.records[referenceId] = { id: record.id };
 
     this.compositeRequest.addSubRequest(
       Method.PATCH,
       url,
       referenceId,
-      recordUpdate
+      record
     );
 
     return referenceId;
   }
 
   registerDelete(type: string, id: string): ReferenceId {
-    const referenceId = this.generateReferenceId();
+    const referenceId = UnitOfWorkImpl.generateReferenceId();
     const url = `services/data/v${this.apiVersion}/sobjects/${type}/${id}`;
 
     this.records[referenceId] = { id };
@@ -96,5 +91,9 @@ export class UnitOfWorkImpl implements UnitOfWork {
       if (body && body.id) this.records[referenceId].id = body.id;
     });
     return this.records;
+  }
+
+  private static generateReferenceId() {
+    return crypto.randomBytes(16).toString("hex");
   }
 }
