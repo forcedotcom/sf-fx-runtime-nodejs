@@ -44,19 +44,6 @@ export default function startServer<A>(
       return;
     }
 
-    if (
-      salesforceFunctionsCloudEvent.cloudEvent.type !==
-      "com.salesforce.function.invoke.sync"
-    ) {
-      makeResponse(
-        reply,
-        BAD_REQUEST_STATUS,
-        "CloudEvent must be of type 'com.salesforce.function.invoke.sync'!",
-        emptyExtraInfo
-      );
-      return;
-    }
-
     const parsedMimeType = mimetype.parse(
       salesforceFunctionsCloudEvent.cloudEvent.datacontenttype
     );
