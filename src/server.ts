@@ -135,7 +135,7 @@ function makeResponse(
     .status(status)
     .header("x-extra-info", encodeURI(JSON.stringify(extraInfo)))
     .header("content-type", "application/json")
-    .send(JSON.stringify(data));
+    .send(data); // we don't JSON.stringify, as Fastify will do this for us (even for strings, because of content-type)
 }
 
 interface ExtraInfo {
