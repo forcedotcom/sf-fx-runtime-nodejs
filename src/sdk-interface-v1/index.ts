@@ -160,21 +160,21 @@ export interface DataApi {
   queryMore(recordQueryResult: RecordQueryResult): Promise<RecordQueryResult>;
 
   /**
-   * Creates a new record described by the given {@link RecordCreate}.
+   * Creates a new record described by the given {@link RecordForCreate}.
    * @param record The record create description.
    * @returns A {@link RecordModificationResult} that contains the created data wrapped in a Promise.
    */
   create(record: RecordForCreate): Promise<RecordModificationResult>;
 
   /**
-   * Updates an existing record described by the given {@link RecordUpdate}.
+   * Updates an existing record described by the given {@link RecordForUpdate}.
    * @param update The record update description.
    * @returns A {@link RecordModificationResult} that contains the updated data wrapped in a Promise.
    */
   update(update: RecordForUpdate): Promise<RecordModificationResult>;
 
   /**
-   * Deletes a record, based on the given {@link RecordDelete}.
+   * Deletes a record, based on the given type and id.
    * @param type The object type of the record to delete.
    * @param id The id of the record to delete.
    * @returns A {@link RecordModificationResult} that contains the deleted data wrapped in a Promise.
