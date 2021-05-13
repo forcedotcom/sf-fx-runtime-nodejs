@@ -2,7 +2,7 @@
 
 ## Building
 ```
-$ npm install && npm run build && npm link
+$ npm ci && npm run build && npm link
 ```
 
 ## Using
