@@ -9,6 +9,7 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "../sdk-interface-v1";
+import { version as ClientVersion } from "../../package.json";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -28,6 +29,9 @@ export class DataApiImpl implements DataApi {
         accessToken: this.accessToken,
         instanceUrl: this.baseUrl,
         version: this.apiVersion,
+        callOptions: {
+          client: `sf-fx-runtime-nodejs-sdk-impl-v1:${ClientVersion}`,
+        },
       });
     }
 
