@@ -14,7 +14,7 @@ const BAD_REQUEST_STATUS = 400;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 const SERVICE_UNAVAILABLE_STATUS = 503;
 
-export default function startServer<A>(
+export default function startServer(
   host: string,
   port: number,
   userFunction: SalesforceFunction<any, any>

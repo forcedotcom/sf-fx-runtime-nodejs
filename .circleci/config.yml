@@ -1,0 +1,29 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.1
+
+jobs:
+  check-and-build:
+    docker:
+      - image: cimg/node:14.17.0
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Run format check
+          command: npm run format:check
+      - run:
+          name: Run linter
+          command: npm run lint
+      - run:
+          name: Run docs build
+          command: npm run docs
+      - run:
+          name: Run build
+          command: npm run build
+
+workflows:
+  check-and-build:
+    jobs:
+      - check-and-build
