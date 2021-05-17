@@ -17,7 +17,7 @@
     "noImplicitReturns": true,
     "pretty": true,
     "removeComments": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "test"]
 }
