@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@4.1
 
 jobs:
-  check-and-build:  
+  check-and-build:
     docker:
       - image: cimg/node:14.17.0
     steps:
