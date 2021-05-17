@@ -9,6 +9,12 @@ const token =
 const dataApi = new DataApiImpl(uri, apiVersion, token);
 
 describe("DataApi Class", async () => {
+  describe("public class attributes", async () => {
+    it("exposes accessToken", async () => {
+      expect(dataApi.accessToken).equal(token);
+    });
+  });
+
   describe("create()", async () => {
     describe("valid request", async () => {
       it("returns the reference id", async () => {
@@ -89,18 +95,39 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("record type missing", async () => {
+      it("throws no SObject Type defined error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await dataApi.create({
+            Name: "Ace of Spades",
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("No SObject Type defined in record");
+          expect(e.errorCode).undefined;
+        }
+      });
+    });
   });
 
   describe("query()", async () => {
     describe("valid query", async () => {
       it("returns a simple query from DataApi", async () => {
-        const { done, totalSize, records } = await dataApi.query(
-          "SELECT Name FROM Account"
-        );
+        const {
+          done,
+          totalSize,
+          records,
+          nextRecordsUrl,
+        } = await dataApi.query("SELECT Name FROM Account");
 
         expect(done).equal(true);
         expect(totalSize).equal(5);
         expect(records.length).equal(5);
+        expect(nextRecordsUrl).undefined;
 
         expect(records[0]).to.deep.equal({
           Name: "An awesome test account",
@@ -144,6 +171,26 @@ describe("DataApi Class", async () => {
       });
     });
 
+    describe("when there are additional pages of results", async () => {
+      it("returns nextRecordsUrl", async () => {
+        const {
+          done,
+          totalSize,
+          records,
+          nextRecordsUrl,
+        } = await dataApi.query(
+          "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
+        );
+
+        expect(done).equal(false);
+        expect(totalSize).equal(10000);
+        expect(records.length).equal(2000);
+        expect(nextRecordsUrl).equal(
+          "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
+        );
+      });
+    });
+
     describe("with unknown column", async () => {
       it("returns invalid field error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
@@ -166,7 +213,22 @@ describe("DataApi Class", async () => {
           await dataApi.query("SELEKT Name FROM Account");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
+          expect(e.message).equal("unexpected token: SELEKT");
           expect(e.errorCode).equal("MALFORMED_QUERY");
+        }
+      });
+    });
+
+    // TODO: W-9281117 - This test fails since the raised exception is the entire body
+    // of the API response rather than a graceful error message.
+    describe.skip("with an unexpected response", async () => {
+      it("returns a malformed query error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          await dataApi.query("SELECT Name FROM FruitVendor__c");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).match(/^Could not parse API response as JSON!/);
         }
       });
     });
@@ -175,17 +237,152 @@ describe("DataApi Class", async () => {
   describe("queryMore()", async () => {
     describe("valid query with next results", async () => {
       it("returns the next query from DataApi", async () => {
-        let result = await dataApi.query(
+        const result = await dataApi.query(
           "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
         );
-
         expect(result.done).equal(false);
         expect(result.totalSize).equal(10000);
         expect(result.records.length).equal(2000);
+        expect(result.nextRecordsUrl).equal(
+          "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
+        );
 
-        result = await dataApi.queryMore(result);
+        const result2 = await dataApi.queryMore(result);
+        expect(result2.done).equal(false);
+        expect(result2.totalSize).equal(result.totalSize);
+        expect(result2.records.length).equal(2000);
+        expect(result2.nextRecordsUrl).equal(
+          "/services/data/v51.0/query/01gB000003OCxSPIA1-4000"
+        );
+      });
+    });
 
-        expect(result.done).equal(false);
+    // This test currently fails due to jsforce making an unmocked request to:
+    // `/services/data/v51.0/sobjects//describe`
+    // TODO: W-9281153 - Make queryMore() return early if nextRecordsUrl is not defined.
+    describe.skip("with done results", async () => {
+      it("returns zero results", async () => {
+        const result = await dataApi.query("SELECT Name FROM Account");
+        expect(result.done).equal(true);
+        expect(result.totalSize).equal(5);
+        expect(result.records.length).equal(5);
+        expect(result.nextRecordsUrl).undefined;
+
+        const result2 = await dataApi.queryMore(result);
+        expect(result2.done).equal(true);
+        expect(result2.totalSize).equal(result.totalSize);
+        expect(result2.records.length).equal(0);
+        expect(result2.nextRecordsUrl).undefined;
+      });
+    });
+  });
+
+  describe("update()", async () => {
+    describe("valid update", async () => {
+      it("returns the updated record id", async () => {
+        const { id } = await dataApi.update({
+          type: "Movie__c",
+          id: "a00B000000FSjVUIA1",
+          ReleaseDate__c: "1980-05-21",
+        });
+
+        expect(id).equal("a00B000000FSjVUIA1");
+      });
+    });
+
+    describe("malformed id", async () => {
+      it("throws malformed id error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          await dataApi.update({
+            type: "Movie__c",
+            id: "a00B000000FSjVUIB1",
+            ReleaseDate__c: "1980-05-21",
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal(
+            "Record ID: id value of incorrect type: a00B000000FSjVUIB1"
+          );
+          expect(e.errorCode).equal("MALFORMED_ID");
+        }
+      });
+    });
+
+    describe("invalid field", async () => {
+      it("throws invalid field error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          await dataApi.update({
+            type: "Movie__c",
+            id: "a00B000000FSjVUIB1",
+            Color__c: "Red",
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal(
+            "No such column 'Color__c' on sobject of type Movie__c"
+          );
+          expect(e.errorCode).equal("INVALID_FIELD");
+        }
+      });
+    });
+
+    describe("id field missing", async () => {
+      it("throws id not found in record error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await dataApi.update({
+            type: "Movie__c",
+            ReleaseDate__c: "1980-05-21",
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("Record id is not found in record.");
+          expect(e.errorCode).undefined;
+        }
+      });
+    });
+
+    describe("record type missing", async () => {
+      it("throws no SObject Type defined error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await dataApi.update({
+            id: "a00B000000FSjVUIA1",
+            ReleaseDate__c: "1980-05-21",
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("No SObject Type defined in record");
+          expect(e.errorCode).undefined;
+        }
+      });
+    });
+  });
+
+  describe("delete()", async () => {
+    describe("valid delete", async () => {
+      it("returns the deleted record id", async () => {
+        const { id } = await dataApi.delete("Account", "001B000001Lp1FxIAJ");
+        expect(id).equal("001B000001Lp1FxIAJ");
+      });
+    });
+
+    describe("already deleted record", async () => {
+      it("throws entity is deleted error", async () => {
+        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+        try {
+          await dataApi.delete("Account", "001B000001Lp1G2IAJ");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("entity is deleted");
+          expect(e.errorCode).equal("ENTITY_IS_DELETED");
+        }
       });
     });
   });
@@ -266,6 +463,7 @@ describe("DataApi Class", async () => {
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
+          expect(result.size).equal(4);
           expect(result.get(rId0).id).equal("a03B0000007BhQQIA0");
           expect(result.get(rId1).id).equal("a00B000000FSkioIAD");
           expect(result.get(rId2).id).equal("a00B000000FSkipIAD");
