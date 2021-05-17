@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",
     "test": "mocha",
     "format": "npm run format:write && npm run format:check",
     "format:check": "prettier --check .",
