@@ -108,7 +108,6 @@ export type RecordForUpdate = {
  * Represents a UnitOfWork.
  */
 export interface UnitOfWork {
-
   /**
    * Registers a record creation for the {@link UnitOfWork} and returns a {@link ReferenceId} that
    * can be used to refer to the created record in subsequent operations in this UnitOfWork.

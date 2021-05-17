@@ -31,7 +31,7 @@ describe("DataApi Class", async () => {
             Name: "Star Wars Episode VIII: The Last Jedi",
             Rating__c: "Terrible",
           });
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal(
             "Rating: bad value for restricted picklist field: Terrible"
@@ -49,7 +49,7 @@ describe("DataApi Class", async () => {
             type: "PlayingCard__c",
             Name: "Ace of Spades",
           });
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal("The requested resource does not exist");
           expect(e.errorCode).equal("NOT_FOUND");
@@ -64,7 +64,7 @@ describe("DataApi Class", async () => {
             type: "Account",
             FavoritePet__c: "Dog",
           });
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal(
             "No such column 'FavoritePet__c' on sobject of type Account"
@@ -82,7 +82,7 @@ describe("DataApi Class", async () => {
             type: "Spaceship__c",
             Name: "Falcon 9",
           });
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal("Required fields are missing: [Website__c]");
           expect(e.errorCode).equal("REQUIRED_FIELD_MISSING");
@@ -149,7 +149,7 @@ describe("DataApi Class", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
           await dataApi.query("SELECT Bacon__c FROM Account LIMIT 2");
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal(
             "\nSELECT Bacon__c FROM Account LIMIT 2\n       ^\nERROR at Row:1:Column:8\nNo such column 'Bacon__c' on entity 'Account'. If you are attempting to use a custom field, be sure to append the '__c' after the custom field name. Please reference your WSDL or the describe call for the appropriate names."
@@ -164,7 +164,7 @@ describe("DataApi Class", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
           await dataApi.query("SELEKT Name FROM Account");
-          expect.fail("Promise should have been rejected!")
+          expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.errorCode).equal("MALFORMED_QUERY");
         }
