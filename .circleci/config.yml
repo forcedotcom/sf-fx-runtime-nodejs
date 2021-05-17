@@ -6,16 +6,27 @@ orbs:
 jobs:
   check-and-build:
     docker:
-      - image: cimg/node:14.17.0
+      # We need the JDK in order to run Wiremock.
+      - image: cimg/openjdk:11.0-node
     steps:
       - checkout
       - node/install-packages
+      - run:
+          name: Download Wiremock
+          command: curl -fL https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.28.0/wiremock-jre8-standalone-2.28.0.jar -o ~/wiremock.jar
+      - run:
+          name: Start Wiremock
+          command: java -jar ~/wiremock.jar --root-dir .
+          background: true
       - run:
           name: Run format check
           command: npm run format:check
       - run:
           name: Run linter
           command: npm run lint
+      - run:
+          name: Run unit tests
+          command: npm run test
       - run:
           name: Run docs build
           command: npm run docs
