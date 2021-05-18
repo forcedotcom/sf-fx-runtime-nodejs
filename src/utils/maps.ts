@@ -6,7 +6,6 @@ const mapHandler = {
     return obj[key];
   },
 
-  // TODO: Validate input for white space or other invalid chars
   set(obj: any, prop: string | symbol, value: any): boolean {
     obj[prop.toString().toLowerCase()] = value;
     return true;
