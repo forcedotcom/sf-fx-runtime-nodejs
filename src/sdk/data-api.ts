@@ -108,7 +108,7 @@ export class DataApiImpl implements DataApi {
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const params = Object.assign({}, recordUpdate.fields, {
-        Id: recordUpdate.id,
+        Id: recordUpdate.fields.id,
       });
       const response: any = await conn.update(recordUpdate.type, params);
       return { id: response.id };

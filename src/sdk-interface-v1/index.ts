@@ -124,8 +124,10 @@ export type RecordForCreate = {
  */
 export type RecordForUpdate = {
   type: string;
-  id: string;
-  fields: { [key: string]: unknown };
+  fields: {
+    id: string;
+    [key: string]: unknown;
+  };
 };
 
 /**

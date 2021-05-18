@@ -53,11 +53,11 @@ export class UpdateRecordSubRequest
   }
 
   buildUri(apiVersion: string): string {
-    return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.id}`;
+    return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.fields.id}`;
   }
 
   processResponse(): RecordModificationResult {
-    return { id: this.record.id };
+    return { id: this.record.fields.id };
   }
 }
 

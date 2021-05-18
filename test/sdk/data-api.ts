@@ -292,8 +292,8 @@ describe("DataApi Class", async () => {
       it("returns the updated record id", async () => {
         const { id } = await dataApi.update({
           type: "Movie__c",
-          id: "a00B000000FSjVUIA1",
           fields: {
+            id: "a00B000000FSjVUIA1",
             ReleaseDate__c: "1980-05-21",
           },
         });
@@ -308,8 +308,8 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.update({
             type: "Movie__c",
-            id: "a00B000000FSjVUIB1",
             fields: {
+              id: "a00B000000FSjVUIB1",
               ReleaseDate__c: "1980-05-21",
             },
           });
@@ -329,8 +329,8 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.update({
             type: "Movie__c",
-            id: "a00B000000FSjVUIB1",
             fields: {
+              id: "a00B000000FSjVUIB1",
               Color__c: "Red",
             },
           });
@@ -371,8 +371,8 @@ describe("DataApi Class", async () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           await dataApi.update({
-            id: "a00B000000FSjVUIA1",
             fields: {
+              id: "a00B000000FSjVUIA1",
               ReleaseDate__c: "1980-05-21",
             },
           });
