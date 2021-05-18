@@ -146,7 +146,9 @@ export class DataApiImpl implements DataApi {
       );
 
       if (requestResult.graphs.length != 1) {
-        throw new Error("Composite REST API unexpectedly returned more or less than one graph!");
+        throw new Error(
+          "Composite REST API unexpectedly returned more or less than one graph!"
+        );
       }
 
       const result = new Map<ReferenceId, RecordModificationResult>();
