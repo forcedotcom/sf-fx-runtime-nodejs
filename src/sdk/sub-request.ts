@@ -19,7 +19,7 @@ export interface CompositeSubRequest<T> {
 
 export class DeleteRecordSubRequest
   implements CompositeSubRequest<RecordModificationResult> {
-  readonly body = {};
+  readonly body = undefined;
   readonly httpMethod = "DELETE";
   private readonly type: string;
   private readonly id: string;
@@ -30,7 +30,7 @@ export class DeleteRecordSubRequest
   }
 
   buildUri(apiVersion: string): string {
-    return `services/data/v${apiVersion}/sobjects/${this.type}/${this.id}`;
+    return `/services/data/v${apiVersion}/sobjects/${this.type}/${this.id}`;
   }
 
   processResponse(): RecordModificationResult {
@@ -53,7 +53,7 @@ export class UpdateRecordSubRequest
   }
 
   buildUri(apiVersion: string): string {
-    return `services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.id}`;
+    return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.id}`;
   }
 
   processResponse(): RecordModificationResult {
@@ -75,7 +75,7 @@ export class CreateRecordSubRequest
   }
 
   buildUri(apiVersion: string): string {
-    return `services/data/v${apiVersion}/sobjects/${this.record.type}`;
+    return `/services/data/v${apiVersion}/sobjects/${this.record.type}`;
   }
 
   processResponse(
