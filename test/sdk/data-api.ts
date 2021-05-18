@@ -408,7 +408,7 @@ describe("DataApi Class", async () => {
 
           const result = await dataApi.commitUnitOfWork(uow);
 
-          expect(result.get(rId).id).equal("a00B000000FSkgxIAD");
+          expect(result.get(rId).id).equal("a01B0000009gSoxIAE");
         });
       });
 
@@ -416,21 +416,21 @@ describe("DataApi Class", async () => {
         it("success with valid payload", async () => {
           const rId = uow.registerUpdate({
             type: "Movie__c",
-            id: "a00B000000FSjVUIA1",
+            id: "a01B0000009gSrFIAU",
             ReleaseDate__c: "1980-05-21",
           });
           const result = await dataApi.commitUnitOfWork(uow);
 
-          expect(result.get(rId).id).equal("a00B000000FSjVUIA1");
+          expect(result.get(rId).id).equal("a01B0000009gSrFIAU");
         });
       });
 
       describe("single delete", async () => {
         it("successfully deletes record", async () => {
-          const rId = uow.registerDelete("Movie__c", "a00B000000FeYyKIAV");
+          const rId = uow.registerDelete("Movie__c", "a01B0000009gSr9IAE");
 
           const result = await dataApi.commitUnitOfWork(uow);
-          expect(result.get(rId).id).equal("a00B000000FeYyKIAV");
+          expect(result.get(rId).id).equal("a01B0000009gSr9IAE");
         });
       });
 
