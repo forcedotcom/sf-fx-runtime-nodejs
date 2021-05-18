@@ -47,7 +47,7 @@ export class UpdateRecordSubRequest
   constructor(record: RecordForUpdate) {
     this.record = record;
 
-    this.body = { ...record };
+    this.body = { ...record.fields };
     delete this.body.type;
     delete this.body.id;
   }
@@ -70,7 +70,7 @@ export class CreateRecordSubRequest
   constructor(record: RecordForCreate) {
     this.record = record;
 
-    this.body = { ...record };
+    this.body = { ...record.fields };
     delete this.body.type;
   }
 
