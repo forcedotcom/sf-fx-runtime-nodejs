@@ -66,7 +66,8 @@ export interface Org {
 
 /**
  * Represents the result of a record query.
- * @property done If true, no additional records can be retrieved from the query result. If false, one or more records remain to be retrieved.
+ * @property done If true, no additional records can be retrieved from the query result.
+ * If false, one or more records remain to be retrieved.
  * @property totalSize The total amount of records returned by the query.
  * @property records The records in this query result.
  */
@@ -103,17 +104,28 @@ export interface RecordModificationResult {
 export type ReferenceId = string;
 
 /**
- * Registers a record creation for the {@link UnitOfWork} and returns a {@link ReferenceId} that can be used to refer to the created record in subsequent operations in this UnitOfWork.
+ * Creates a single record for create or registers a record creation for the {@link UnitOfWork}
+ * and returns a {@link ReferenceId}.
+ * @property type The Salesforce Object type
+ * @property fields A JavaScript Object for the fields that the record will be created with. The keys
+ * in the object are case insensitive.
  */
-export type RecordForCreate = { type: string; [key: string]: unknown };
+export type RecordForCreate = {
+  type: string;
+  fields: { [key: string]: unknown };
+};
 
 /**
- * Registers a record update for the {@link UnitOfWork} and returns a {@link ReferenceId} that can be used to refer to the updated record in subsequent operations in this UnitOfWork.
+ * Creates a single record for update or registers a record update for the {@link UnitOfWork}
+ * and returns a {@link ReferenceId}.
+ * @property type The Salesforce Object type
+ * @property fields A JavaScript Object for the fields that the record will be created with. The keys
+ * in the object are case insensitive.
  */
 export type RecordForUpdate = {
   type: string;
   id: string;
-  [key: string]: unknown;
+  fields: { [key: string]: unknown };
 };
 
 /**
@@ -121,7 +133,7 @@ export type RecordForUpdate = {
  */
 export interface UnitOfWork {
   /**
-   * Registers a record creation for the {@link UnitOfWork} and returns a {@link ReferenceId} that
+   * Registers a {@link RecordForCreate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that
    * can be used to refer to the created record in subsequent operations in this UnitOfWork.
    *
    * @param record The record to create.
@@ -130,7 +142,7 @@ export interface UnitOfWork {
   registerCreate(record: RecordForCreate): ReferenceId;
 
   /**
-   * Registers a record update for the {@link UnitOfWork} and returns a {@link ReferenceId} that can
+   * Registers a {@link RecordForUpdate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that can
    * be used to refer to the updated record in subsequent operations in this UnitOfWork.
    *
    * @param record The record to update.
