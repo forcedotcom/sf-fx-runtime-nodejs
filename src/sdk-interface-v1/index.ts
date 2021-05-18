@@ -80,7 +80,9 @@ export interface RecordQueryResult {
 /**
  * Record items from a query or queryMore request
  * @property type The Salesforce Object type
- * @property fields A JavaScript object with all fields from the returned records
+ * @property fields A JavaScript object with all fields from the returned records.
+ * Each key in field is case insensitive, in that, the getters and setters for each key/value
+ * pair will ignore casing when getting and setting fields.
  */
 export type Record = {
   readonly type: string;

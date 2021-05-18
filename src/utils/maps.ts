@@ -13,16 +13,21 @@ const mapHandler = {
   },
 };
 
-export function createCaseInsensitiveMap(record: any): Record {
-  const fields = new Proxy({}, mapHandler);
+export function createCaseInsensitiveRecord(record: any): Record {
+  const fields = createCaseInsensitiveMap(record);
+  const type = record.attributes.type;
 
-  Object.keys(record).forEach((key) => {
-    if (key === "attributes") return;
-    fields[key] = record[key];
-  });
+  delete fields["attributes"];
 
   return {
-    type: record.attributes.type,
+    type,
     fields,
   };
+}
+
+export function createCaseInsensitiveMap(map: any): any {
+  const fields = new Proxy({}, mapHandler);
+  Object.keys(map).forEach((key) => (fields[key] = map[key]));
+
+  return fields;
 }
