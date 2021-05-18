@@ -125,24 +125,32 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       const subrequests = (unitOfWork as UnitOfWorkImpl).subrequests;
       const requestBody = {
-        allOrNone: true,
-        compositeRequest: subrequests.map(({ referenceId, subrequest }) => {
-          return {
-            referenceId,
-            method: subrequest.httpMethod,
-            url: subrequest.buildUri(this.apiVersion),
-            body: subrequest.body,
-          };
-        }),
+        graphs: [
+          {
+            graphId: "graph0",
+            compositeRequest: subrequests.map(({ referenceId, subrequest }) => {
+              return {
+                referenceId,
+                method: subrequest.httpMethod,
+                url: subrequest.buildUri(this.apiVersion),
+                body: subrequest.body,
+              };
+            }),
+          },
+        ],
       };
 
       const requestResult = await conn.requestPost(
-        `/services/data/v${this.apiVersion}/composite`,
+        `/services/data/v${this.apiVersion}/composite/graph`,
         requestBody
       );
 
+      if (requestResult.graphs.length != 1) {
+        throw new Error("Composite REST API unexpectedly returned more or less than one graph!");
+      }
+
       const result = new Map<ReferenceId, RecordModificationResult>();
-      requestResult.compositeResponse.forEach(
+      requestResult.graphs[0].graphResponse.compositeResponse.forEach(
         ({ referenceId, body, httpStatusCode, httpHeaders }) => {
           const subrequest = subrequests.find(
             (tuple) => tuple.referenceId === referenceId
