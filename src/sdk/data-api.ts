@@ -10,6 +10,7 @@ import {
   UnitOfWork,
 } from "../sdk-interface-v1";
 import { version as ClientVersion } from "../../package.json";
+import { createCaseInsensitiveMap } from "../utils/maps";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -65,11 +66,12 @@ export class DataApiImpl implements DataApi {
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.query(soql);
+      const records = response.records.map((r) => createCaseInsensitiveMap(r));
 
       return {
         done: response.done,
         totalSize: response.totalSize,
-        records: response.records,
+        records,
         nextRecordsUrl: response.nextRecordsUrl,
       };
     });
@@ -87,11 +89,12 @@ export class DataApiImpl implements DataApi {
 
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.queryMore(queryResult.nextRecordsUrl);
+      const records = response.records.map((r) => createCaseInsensitiveMap(r));
 
       return {
         done: response.done,
         totalSize: response.totalSize,
-        records: response.records,
+        records,
         nextRecordsUrl: response.nextRecordsUrl,
       };
     });
