@@ -58,7 +58,10 @@ export class DataApiImpl implements DataApi {
     recordCreate: RecordForCreate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.insert(recordCreate.type, recordCreate);
+      const response: any = await conn.insert(
+        recordCreate.type,
+        recordCreate.fields
+      );
       return { id: response.id };
     });
   }
@@ -104,7 +107,9 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const params = Object.assign({}, recordUpdate, { Id: recordUpdate.id });
+      const params = Object.assign({}, recordUpdate.fields, {
+        Id: recordUpdate.id,
+      });
       const response: any = await conn.update(recordUpdate.type, params);
       return { id: response.id };
     });

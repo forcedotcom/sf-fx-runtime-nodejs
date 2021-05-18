@@ -20,8 +20,10 @@ describe("DataApi Class", async () => {
       it("returns the reference id", async () => {
         const { id } = await dataApi.create({
           type: "Movie__c",
-          Name: "Star Wars Episode V: The Empire Strikes Back",
-          Rating__c: "Excellent",
+          fields: {
+            Name: "Star Wars Episode V: The Empire Strikes Back",
+            Rating__c: "Excellent",
+          },
         });
 
         expect(id).equal("a00B000000FSkcvIAD");
@@ -34,8 +36,10 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Movie__c",
-            Name: "Star Wars Episode VIII: The Last Jedi",
-            Rating__c: "Terrible",
+            fields: {
+              Name: "Star Wars Episode VIII: The Last Jedi",
+              Rating__c: "Terrible",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -53,7 +57,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "PlayingCard__c",
-            Name: "Ace of Spades",
+            fields: {
+              Name: "Ace of Spades",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -68,7 +74,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Account",
-            FavoritePet__c: "Dog",
+            fields: {
+              FavoritePet__c: "Dog",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -86,7 +94,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Spaceship__c",
-            Name: "Falcon 9",
+            fields: {
+              Name: "Falcon 9",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -103,7 +113,9 @@ describe("DataApi Class", async () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           await dataApi.create({
-            Name: "Ace of Spades",
+            fields: {
+              Name: "Ace of Spades",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -281,7 +293,9 @@ describe("DataApi Class", async () => {
         const { id } = await dataApi.update({
           type: "Movie__c",
           id: "a00B000000FSjVUIA1",
-          ReleaseDate__c: "1980-05-21",
+          fields: {
+            ReleaseDate__c: "1980-05-21",
+          },
         });
 
         expect(id).equal("a00B000000FSjVUIA1");
@@ -295,7 +309,9 @@ describe("DataApi Class", async () => {
           await dataApi.update({
             type: "Movie__c",
             id: "a00B000000FSjVUIB1",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -314,7 +330,9 @@ describe("DataApi Class", async () => {
           await dataApi.update({
             type: "Movie__c",
             id: "a00B000000FSjVUIB1",
-            Color__c: "Red",
+            fields: {
+              Color__c: "Red",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -334,7 +352,9 @@ describe("DataApi Class", async () => {
           // @ts-ignore
           await dataApi.update({
             type: "Movie__c",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -352,7 +372,9 @@ describe("DataApi Class", async () => {
           // @ts-ignore
           await dataApi.update({
             id: "a00B000000FSjVUIA1",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
