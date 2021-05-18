@@ -19,7 +19,7 @@ export interface CompositeSubRequest<T> {
 
 export class DeleteRecordSubRequest
   implements CompositeSubRequest<RecordModificationResult> {
-  readonly body = {};
+  readonly body = undefined;
   readonly httpMethod = "DELETE";
   private readonly type: string;
   private readonly id: string;
