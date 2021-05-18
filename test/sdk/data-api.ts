@@ -407,8 +407,29 @@ describe("DataApi Class", async () => {
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
-
+          expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSoxIAE");
+        });
+
+        // TODO: W-9286866
+        it.skip("errors with bad value for picklist", async () => {
+          uow.registerCreate({
+            type: "Movie__c",
+            Name: "Star Wars Episode IV - A New Hope",
+            Rating__c: "Amazing",
+          });
+          // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+          try {
+            await dataApi.commitUnitOfWork(uow);
+            expect.fail("Promise should have been rejected!");
+          } catch (e) {
+            expect(e.message).equal(
+              "Rating: bad value for restricted picklist field: Amazing"
+            );
+            expect(e.errorCode).equal(
+              "INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST"
+            );
+          }
         });
       });
 
@@ -421,6 +442,7 @@ describe("DataApi Class", async () => {
           });
           const result = await dataApi.commitUnitOfWork(uow);
 
+          expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSrFIAU");
         });
       });
@@ -430,6 +452,7 @@ describe("DataApi Class", async () => {
           const rId = uow.registerDelete("Movie__c", "a01B0000009gSr9IAE");
 
           const result = await dataApi.commitUnitOfWork(uow);
+          expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSr9IAE");
         });
       });
@@ -465,6 +488,19 @@ describe("DataApi Class", async () => {
           expect(result.get(rId1).id).equal("a00B000000FSkioIAD");
           expect(result.get(rId2).id).equal("a00B000000FSkipIAD");
           expect(result.get(rId3).id).equal("a00B000000FSkiqIAD");
+        });
+      });
+
+      // TODO: W-9286874
+      describe.skip("commitUnitOfWork with no registered operations", async () => {
+        it("throws a <to be determined> error", async () => {
+          // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
+          try {
+            await dataApi.commitUnitOfWork(uow);
+            expect.fail("Promise should have been rejected!");
+          } catch (e) {
+            expect(e.message).equal("TODO");
+          }
         });
       });
     });
