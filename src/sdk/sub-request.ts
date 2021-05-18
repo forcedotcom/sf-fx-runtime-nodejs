@@ -47,17 +47,17 @@ export class UpdateRecordSubRequest
   constructor(record: RecordForUpdate) {
     this.record = record;
 
-    this.body = { ...record };
+    this.body = { ...record.fields };
     delete this.body.type;
     delete this.body.id;
   }
 
   buildUri(apiVersion: string): string {
-    return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.id}`;
+    return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.fields.id}`;
   }
 
   processResponse(): RecordModificationResult {
-    return { id: this.record.id };
+    return { id: this.record.fields.id };
   }
 }
 
@@ -70,7 +70,7 @@ export class CreateRecordSubRequest
   constructor(record: RecordForCreate) {
     this.record = record;
 
-    this.body = { ...record };
+    this.body = { ...record.fields };
     delete this.body.type;
   }
 

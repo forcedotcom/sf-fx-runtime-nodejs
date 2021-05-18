@@ -20,8 +20,10 @@ describe("DataApi Class", async () => {
       it("returns the reference id", async () => {
         const { id } = await dataApi.create({
           type: "Movie__c",
-          Name: "Star Wars Episode V: The Empire Strikes Back",
-          Rating__c: "Excellent",
+          fields: {
+            Name: "Star Wars Episode V: The Empire Strikes Back",
+            Rating__c: "Excellent",
+          },
         });
 
         expect(id).equal("a00B000000FSkcvIAD");
@@ -34,8 +36,10 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Movie__c",
-            Name: "Star Wars Episode VIII: The Last Jedi",
-            Rating__c: "Terrible",
+            fields: {
+              Name: "Star Wars Episode VIII: The Last Jedi",
+              Rating__c: "Terrible",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -53,7 +57,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "PlayingCard__c",
-            Name: "Ace of Spades",
+            fields: {
+              Name: "Ace of Spades",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -68,7 +74,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Account",
-            FavoritePet__c: "Dog",
+            fields: {
+              FavoritePet__c: "Dog",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -86,7 +94,9 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.create({
             type: "Spaceship__c",
-            Name: "Falcon 9",
+            fields: {
+              Name: "Falcon 9",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -103,7 +113,9 @@ describe("DataApi Class", async () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           await dataApi.create({
-            Name: "Ace of Spades",
+            fields: {
+              Name: "Ace of Spades",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -280,8 +292,10 @@ describe("DataApi Class", async () => {
       it("returns the updated record id", async () => {
         const { id } = await dataApi.update({
           type: "Movie__c",
-          id: "a00B000000FSjVUIA1",
-          ReleaseDate__c: "1980-05-21",
+          fields: {
+            id: "a00B000000FSjVUIA1",
+            ReleaseDate__c: "1980-05-21",
+          },
         });
 
         expect(id).equal("a00B000000FSjVUIA1");
@@ -294,8 +308,10 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.update({
             type: "Movie__c",
-            id: "a00B000000FSjVUIB1",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              id: "a00B000000FSjVUIB1",
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -313,8 +329,10 @@ describe("DataApi Class", async () => {
         try {
           await dataApi.update({
             type: "Movie__c",
-            id: "a00B000000FSjVUIB1",
-            Color__c: "Red",
+            fields: {
+              id: "a00B000000FSjVUIB1",
+              Color__c: "Red",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -330,11 +348,13 @@ describe("DataApi Class", async () => {
       it("throws id not found in record error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           await dataApi.update({
             type: "Movie__c",
-            ReleaseDate__c: "1980-05-21",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            fields: {
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -351,8 +371,10 @@ describe("DataApi Class", async () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           await dataApi.update({
-            id: "a00B000000FSjVUIA1",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              id: "a00B000000FSjVUIA1",
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
@@ -403,8 +425,10 @@ describe("DataApi Class", async () => {
         it("success with valid payload", async () => {
           const rId = uow.registerCreate({
             type: "Movie__c",
-            Name: "Star Wars Episode IV - A New Hope",
-            Rating__c: "Excellent",
+            fields: {
+              Name: "Star Wars Episode IV - A New Hope",
+              Rating__c: "Excellent",
+            },
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
@@ -438,8 +462,10 @@ describe("DataApi Class", async () => {
         it("success with valid payload", async () => {
           const rId = uow.registerUpdate({
             type: "Movie__c",
-            id: "a01B0000009gSrFIAU",
-            ReleaseDate__c: "1980-05-21",
+            fields: {
+              id: "a01B0000009gSrFIAU",
+              ReleaseDate__c: "1980-05-21",
+            },
           });
           const result = await dataApi.commitUnitOfWork(uow);
 
@@ -462,25 +488,33 @@ describe("DataApi Class", async () => {
         it("creates a composite request", async () => {
           const rId0 = uow.registerCreate({
             type: "Franchise__c",
-            Name: "Star Wars",
+            fields: {
+              Name: "Star Wars",
+            },
           });
 
           const rId1 = uow.registerCreate({
             type: "Movie__c",
-            Name: "Star Wars Episode I - A Phantom Menace",
-            Franchise__c: "@{referenceId0.id}",
+            fields: {
+              Name: "Star Wars Episode I - A Phantom Menace",
+              Franchise__c: "@{referenceId0.id}",
+            },
           });
 
           const rId2 = uow.registerCreate({
             type: "Movie__c",
-            Name: "Star Wars Episode II - Attack Of The Clones",
-            Franchise__c: "@{referenceId0.id}",
+            fields: {
+              Name: "Star Wars Episode II - Attack Of The Clones",
+              Franchise__c: "@{referenceId0.id}",
+            },
           });
 
           const rId3 = uow.registerCreate({
             type: "Movie__c",
-            Name: "Star Wars Episode III - Revenge Of The Sith",
-            Franchise__c: "@{referenceId0.id}",
+            fields: {
+              Name: "Star Wars Episode III - Revenge Of The Sith",
+              Franchise__c: "@{referenceId0.id}",
+            },
           });
 
           const result = await dataApi.commitUnitOfWork(uow);
