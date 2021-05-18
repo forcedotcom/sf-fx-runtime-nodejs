@@ -130,42 +130,43 @@ describe("DataApi Class", async () => {
         expect(nextRecordsUrl).undefined;
 
         expect(records[0]).to.deep.equal({
-          Name: "An awesome test account",
-          attributes: {
-            type: "Account",
-            url: "/services/data/v51.0/sobjects/Account/001B000001LntWlIAJ",
+          type: "Account",
+          fields: {
+            name: "An awesome test account",
           },
         });
+
+        expect(records[0].fields["Name"]).to.equal("An awesome test account");
 
         expect(records[1]).to.deep.equal({
-          Name: "Global Media",
-          attributes: {
-            type: "Account",
-            url: "/services/data/v51.0/sobjects/Account/001B000001LwihtIAB",
+          type: "Account",
+          fields: {
+            name: "Global Media",
           },
         });
+
+        expect(records[1].fields.NAME).to.equal("Global Media");
 
         expect(records[2]).to.deep.equal({
-          Name: "Acme",
-          attributes: {
-            type: "Account",
-            url: "/services/data/v51.0/sobjects/Account/001B000001LwihuIAB",
+          type: "Account",
+          fields: {
+            name: "Acme",
           },
         });
 
+        expect(records[2].fields["namE"]).to.equal("Acme");
+
         expect(records[3]).to.deep.equal({
-          Name: "salesforce.com",
-          attributes: {
-            type: "Account",
-            url: "/services/data/v51.0/sobjects/Account/001B000001LwihvIAB",
+          type: "Account",
+          fields: {
+            name: "salesforce.com",
           },
         });
 
         expect(records[4]).to.deep.equal({
-          Name: "Sample Account for Entitlements",
-          attributes: {
-            type: "Account",
-            url: "/services/data/v51.0/sobjects/Account/001B000001LnobCIAR",
+          type: "Account",
+          fields: {
+            name: "Sample Account for Entitlements",
           },
         });
       });
