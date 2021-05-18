@@ -76,6 +76,15 @@ export class DataApiImpl implements DataApi {
   }
 
   async queryMore(queryResult: RecordQueryResult): Promise<RecordQueryResult> {
+    if (!queryResult.nextRecordsUrl) {
+      return Promise.resolve({
+        done: queryResult.done,
+        totalSize: queryResult.totalSize,
+        records: [],
+        nextRecordsUrl: queryResult.nextRecordsUrl,
+      });
+    }
+
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.queryMore(queryResult.nextRecordsUrl);
 

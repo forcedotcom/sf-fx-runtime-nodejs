@@ -257,11 +257,8 @@ describe("DataApi Class", async () => {
       });
     });
 
-    // This test currently fails due to jsforce making an unmocked request to:
-    // `/services/data/v51.0/sobjects//describe`
-    // TODO: W-9281153 - Make queryMore() return early if nextRecordsUrl is not defined.
-    describe.skip("with done results", async () => {
-      it("returns zero results", async () => {
+    describe("with done results", async () => {
+      it("returns zero records", async () => {
         const result = await dataApi.query("SELECT Name FROM Account");
         expect(result.done).equal(true);
         expect(result.totalSize).equal(5);
