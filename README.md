@@ -7,7 +7,7 @@ $ npm ci && npm run build && npm link
 
 ## Using
 ```
-$ sf-fx-runtime-nodejs ~/project/nodejs-function
+$ sf-fx-runtime-nodejs serve ~/project/nodejs-function
 ```
 
 ## Invoke
