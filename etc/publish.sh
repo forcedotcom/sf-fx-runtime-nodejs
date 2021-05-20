@@ -27,11 +27,18 @@ if aws s3api head-object --bucket "${bucket_name}" --key "${package_filename}" -
 	esac
 fi
 
+echo "Building package..."
+npm run build
+
 echo "Running npm pack..."
 npm pack
 
 echo "Pushing packaged tarball to s3 bucket:"
 aws s3 cp "${package_filename}" "s3://${bucket_name}" --profile "${aws_cli_profile}"
+
+echo "Creating git tag..."
+git tag "v${version}"
+git push --tags
 
 echo "Cleaning up..."
 rm "${package_filename}"
