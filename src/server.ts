@@ -84,7 +84,7 @@ export default function startServer(
       return;
     } catch (error) {
       let stacktrace;
-      let message;
+      let message: string;
 
       if (error instanceof Error) {
         message = error.message;
@@ -127,13 +127,16 @@ export default function startServer(
 
 function makeResponse(
   reply: FastifyReply,
-  status: number,
+  statusCode: number,
   data: any,
   extraInfo: ExtraInfo
 ) {
   return reply
-    .status(status)
-    .header("x-extra-info", encodeURI(JSON.stringify(extraInfo)))
+    .status(statusCode)
+    .header(
+      "x-extra-info",
+      encodeURI(JSON.stringify({ ...extraInfo, statusCode }))
+    )
     .header("content-type", "application/json")
     .send(data); // we don't JSON.stringify, as Fastify will do this for us (even for strings, because of content-type)
 }
