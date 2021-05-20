@@ -15,6 +15,23 @@ $ sf-fx-runtime-nodejs serve ~/project/nodejs-function
 $ ./invoke.sh "localhost:8080" "{}"
 ```
 
+## Release
+### Bumping versions
+
+In order to bump a version, update the `CHANGELOG.md` and the `package.json`. You will also need to tag the release. Run the following script:
+
+```
+$ npm run bump -- $VERSION
+```
+
+Create a pull request with the created changes. In the subject, name it `Release vx.y.z` with the version release.
+
+Once the pull request is merged, update your local `main` branch, and run the following:
+
+```
+$ npm run release
+```
+
 ## Example Function
 ### package.json
 ```json
