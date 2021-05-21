@@ -24,13 +24,22 @@ In order to bump a version, update the `CHANGELOG.md` and the `package.json`. Yo
 $ npm run bump -- $VERSION
 ```
 
-Create a pull request with the created changes. In the subject, name it `Release vx.y.z` with the version release.
+*Note: the format should be `x.y.z-ext`. There is no need to include the `v` in the version number.*
 
-Once the pull request is merged, update your local `main` branch, and run the following:
+Create a pull request with the created changes. The branch can be named `release-vx.y.z`. In the PR subject, name it `Release vx.y.z` with the version release.
+
+### Creating a release
+Once the release's pull request is merged, update your local `main` branch. Before releasing, you'll need to get S3 access on your local machine.
+
+Then, run the following:
 
 ```
 $ npm run release
 ```
+
+The script will build the relase, push it up to S3, create a git tag, and push up the release to GitHub.
+
+After the package has been pushed, you'll need to release a new version of the buildpack in github.com/heroku/buildpacks-nodejs.
 
 ## Example Function
 ### package.json
