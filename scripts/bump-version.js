@@ -30,10 +30,4 @@ const today = new Date();
 changelog.splice(1, 0, `## [Unreleased]\n\n## [${version}] - ${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
 writeFileSync("./CHANGELOG.md", changelog.join(""));
 
-// tag version
-console.log(`Tagging release as v${version}...`);
-
-exec(`git tag v${version}`);
-exec(`git push --tags`);
-
 console.log("Completed version bumping.");
