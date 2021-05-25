@@ -7,8 +7,8 @@ describe("loadDefaultExport", async () => {
   describe("export from JavaScript sfdx template", async () => {
     const jsTemplate = "js-template.js";
 
-    it("exports the user function from module.exports", async() => {
-      let defaultExport = loadDefaultExport(dir, jsTemplate);
+    it("exports the user function from module.exports", async () => {
+      const defaultExport = loadDefaultExport(dir, jsTemplate);
 
       expect(defaultExport).to.be.a("function");
     });
@@ -18,7 +18,7 @@ describe("loadDefaultExport", async () => {
     const tsTemplate = "ts-template.js";
 
     it("exports the user function from exports", async () => {
-      let defaultExport = loadDefaultExport(dir, tsTemplate);
+      const defaultExport = loadDefaultExport(dir, tsTemplate);
 
       expect(defaultExport).to.be.a("function");
     });
