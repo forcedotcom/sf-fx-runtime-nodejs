@@ -15,6 +15,32 @@ $ sf-fx-runtime-nodejs serve ~/project/nodejs-function
 $ ./invoke.sh "localhost:8080" "{}"
 ```
 
+## Release
+### Bumping versions
+
+In order to bump a version, update the `CHANGELOG.md` and the `package.json`. You will also need to tag the release. Run the following script:
+
+```
+$ npm run bump -- $VERSION
+```
+
+*Note: the format should be `x.y.z-ext`. There is no need to include the `v` in the version number.*
+
+Create a pull request with the created changes. The branch can be named `release-vx.y.z`. In the PR subject, name it `Release vx.y.z` with the version release.
+
+### Creating a release
+Once the release's pull request is merged, update your local `main` branch. Before releasing, you'll need to get S3 access on your local machine.
+
+Then, run the following:
+
+```
+$ npm run release
+```
+
+The script will build the relase, push it up to S3, create a git tag, and push up the release to GitHub.
+
+After the package has been pushed, you'll need to release a new version of the buildpack in github.com/heroku/buildpacks-nodejs.
+
 ## Example Function
 ### package.json
 ```json
