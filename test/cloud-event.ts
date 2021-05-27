@@ -1,8 +1,5 @@
 import { expect } from "chai";
-import {
-  parseCloudEvent,
-  SalesforceFunctionsCloudEvent,
-} from "../src/cloud-event";
+import { parseCloudEvent } from "../src/cloud-event";
 import * as CloudEvents from "cloudevents";
 
 describe("parseCloudEvent", () => {
@@ -24,18 +21,18 @@ describe("parseCloudEvent", () => {
   });
 
   it("calls CloudEvents.HTTP.toEvent", () => {
-    function Spy(obj, method) {
-      let spy = {
+    function Spy(obj, method, ...args) {
+      const spy = {
         args: [],
         count: 0,
       };
 
-      let original = obj[method];
+      const original = obj[method];
       obj[method] = function () {
-        let args = [].slice.apply(arguments);
+        const allargs = [].slice.apply(args);
         spy.count = spy.count + 1;
-        spy.args.push(args);
-        return original.call(obj, args);
+        spy.args.push(allargs);
+        return original.call(obj, allargs);
       };
 
       return Object.freeze(spy);
