@@ -436,12 +436,13 @@ describe("DataApi Class", async () => {
           expect(result.get(rId).id).equal("a01B0000009gSoxIAE");
         });
 
-        // TODO: W-9286866
-        it.skip("errors with bad value for picklist", async () => {
+        it("errors with bad value for picklist", async () => {
           uow.registerCreate({
             type: "Movie__c",
-            Name: "Star Wars Episode IV - A New Hope",
-            Rating__c: "Amazing",
+            fields: {
+              Name: "Star Wars Episode IV - A New Hope",
+              Rating__c: "Amazing",
+            },
           });
           // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
           try {
@@ -449,10 +450,7 @@ describe("DataApi Class", async () => {
             expect.fail("Promise should have been rejected!");
           } catch (e) {
             expect(e.message).equal(
-              "Rating: bad value for restricted picklist field: Amazing"
-            );
-            expect(e.errorCode).equal(
-              "INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST"
+              "INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST: Rating: bad value for restricted picklist field: Amazing"
             );
           }
         });
