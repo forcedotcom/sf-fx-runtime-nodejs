@@ -524,16 +524,12 @@ describe("DataApi Class", async () => {
         });
       });
 
-      // TODO: W-9286874
-      describe.skip("commitUnitOfWork with no registered operations", async () => {
-        it("throws a <to be determined> error", async () => {
-          // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
-          try {
-            await dataApi.commitUnitOfWork(uow);
-            expect.fail("Promise should have been rejected!");
-          } catch (e) {
-            expect(e.message).equal("TODO");
-          }
+      describe("commitUnitOfWork with no registered operations", async () => {
+        it("should not make a composite graph API request and return an empty result", async () => {
+          // This will fail with a rejected promise if a request is being made since there won't be a wiremock mapping
+          // for an empty composite graph API request.
+          const result = await dataApi.commitUnitOfWork(uow);
+          expect(result.size).to.equal(0);
         });
       });
     });
