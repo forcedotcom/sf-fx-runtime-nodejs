@@ -132,6 +132,11 @@ export class DataApiImpl implements DataApi {
   ): Promise<Map<ReferenceId, RecordModificationResult>> {
     return this.promisifyRequests(async (conn: Connection) => {
       const subrequests = (unitOfWork as UnitOfWorkImpl).subrequests;
+
+      if (subrequests.length === 0) {
+        return Promise.resolve(new Map());
+      }
+
       const requestBody = {
         graphs: [
           {
