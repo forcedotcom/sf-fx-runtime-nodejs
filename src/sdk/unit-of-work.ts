@@ -14,7 +14,10 @@ import {
 
 export class UnitOfWorkImpl implements UnitOfWork {
   private readonly apiVersion: string;
-  private readonly _subrequests: ReferenceIdSubrequestTuple[] = [];
+  private readonly _subrequests: [
+    ReferenceId,
+    CompositeSubRequest<RecordModificationResult>
+  ][] = [];
   private referenceIdCounter = 0;
 
   constructor(apiVersion: string) {
@@ -23,32 +26,29 @@ export class UnitOfWorkImpl implements UnitOfWork {
 
   registerCreate(record: RecordForCreate): ReferenceId {
     const referenceId = this.generateReferenceId();
-    this._subrequests.push({
-      referenceId,
-      subrequest: new CreateRecordSubRequest(record),
-    });
+    this._subrequests.push([referenceId, new CreateRecordSubRequest(record)]);
+
     return referenceId;
   }
 
   registerDelete(type: string, id: string): ReferenceId {
     const referenceId = this.generateReferenceId();
-    this._subrequests.push({
-      referenceId,
-      subrequest: new DeleteRecordSubRequest(type, id),
-    });
+    this._subrequests.push([referenceId, new DeleteRecordSubRequest(type, id)]);
+
     return referenceId;
   }
 
   registerUpdate(record: RecordForUpdate): ReferenceId {
     const referenceId = this.generateReferenceId();
-    this._subrequests.push({
-      referenceId,
-      subrequest: new UpdateRecordSubRequest(record),
-    });
+    this._subrequests.push([referenceId, new UpdateRecordSubRequest(record)]);
+
     return referenceId;
   }
 
-  get subrequests(): ReferenceIdSubrequestTuple[] {
+  get subrequests(): [
+    ReferenceId,
+    CompositeSubRequest<RecordModificationResult>
+  ][] {
     return this._subrequests;
   }
 
@@ -59,8 +59,3 @@ export class UnitOfWorkImpl implements UnitOfWork {
     return referenceId;
   }
 }
-
-export type ReferenceIdSubrequestTuple = {
-  referenceId: ReferenceId;
-  subrequest: CompositeSubRequest<RecordModificationResult>;
-};

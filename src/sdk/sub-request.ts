@@ -14,7 +14,7 @@ export interface CompositeSubRequest<T> {
     statusCode: number,
     headers: Map<string, string>,
     body: any
-  ): T;
+  ): Promise<T>;
 }
 
 export class DeleteRecordSubRequest
@@ -33,8 +33,16 @@ export class DeleteRecordSubRequest
     return `/services/data/v${apiVersion}/sobjects/${this.type}/${this.id}`;
   }
 
-  processResponse(): RecordModificationResult {
-    return { id: this.id };
+  processResponse(
+    statusCode,
+    headers,
+    body
+  ): Promise<RecordModificationResult> {
+    if (statusCode === 204) {
+      return Promise.resolve({ id: this.id });
+    }
+
+    return Promise.reject(parseErrorResponse(body));
   }
 }
 
@@ -56,8 +64,16 @@ export class UpdateRecordSubRequest
     return `/services/data/v${apiVersion}/sobjects/${this.record.type}/${this.record.fields.id}`;
   }
 
-  processResponse(): RecordModificationResult {
-    return { id: this.record.fields.id };
+  processResponse(
+    statusCode,
+    headers,
+    body
+  ): Promise<RecordModificationResult> {
+    if (statusCode === 204) {
+      return Promise.resolve({ id: this.record.fields.id });
+    }
+
+    return Promise.reject(parseErrorResponse(body));
   }
 }
 
@@ -82,7 +98,21 @@ export class CreateRecordSubRequest
     statusCode: number,
     headers: Map<string, string>,
     body: any
-  ): RecordModificationResult {
-    return { id: body.id };
+  ): Promise<RecordModificationResult> {
+    if (statusCode === 201) {
+      return Promise.resolve({ id: body.id });
+    }
+
+    return Promise.reject(parseErrorResponse(body));
   }
+}
+
+function parseErrorResponse(errorResponse: [any]): Error {
+  return new Error(
+    errorResponse
+      .map((error) => {
+        return error.errorCode + ": " + error.message;
+      })
+      .join("\n")
+  );
 }

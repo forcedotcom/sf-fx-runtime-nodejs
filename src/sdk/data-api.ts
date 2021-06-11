@@ -136,7 +136,7 @@ export class DataApiImpl implements DataApi {
         graphs: [
           {
             graphId: "graph0",
-            compositeRequest: subrequests.map(({ referenceId, subrequest }) => {
+            compositeRequest: subrequests.map(([referenceId, subrequest]) => {
               return {
                 referenceId,
                 method: subrequest.httpMethod,
@@ -159,27 +159,30 @@ export class DataApiImpl implements DataApi {
         );
       }
 
-      const result = new Map<ReferenceId, RecordModificationResult>();
-      requestResult.graphs[0].graphResponse.compositeResponse.forEach(
-        ({ referenceId, body, httpStatusCode, httpHeaders }) => {
-          const subrequest = subrequests.find(
-            (tuple) => tuple.referenceId === referenceId
-          );
-
-          if (subrequest) {
-            result.set(
-              referenceId,
-              subrequest.subrequest.processResponse(
-                httpStatusCode,
-                httpHeaders,
-                body
+      const subrequestResults: Promise<
+        [ReferenceId, RecordModificationResult][]
+      > = Promise.all(
+        requestResult.graphs[0].graphResponse.compositeResponse.map(
+          (compositeResponse) => {
+            return subrequests
+              .find(
+                ([subrequestReferenceId]) =>
+                  subrequestReferenceId === compositeResponse.referenceId
+              )[1]
+              .processResponse(
+                compositeResponse.httpStatusCode,
+                compositeResponse.httpHeaders,
+                compositeResponse.body
               )
-            );
+              .then((recordModificationResult) => [
+                compositeResponse.referenceId,
+                recordModificationResult,
+              ]);
           }
-        }
+        )
       );
 
-      return result;
+      return subrequestResults.then((keyValues) => new Map(keyValues));
     });
   }
 }
