@@ -134,7 +134,7 @@ export class DataApiImpl implements DataApi {
       const subrequests = (unitOfWork as UnitOfWorkImpl).subrequests;
 
       if (subrequests.length === 0) {
-        return new Map();
+        return Promise.resolve(new Map());
       }
 
       const requestBody = {
