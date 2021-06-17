@@ -23,7 +23,7 @@
     "@salesforce/core": "^2.20.5",
     "cloudevents": "^4.0.1",
     "fastify": "^3.14.2",
-    "jsforce": "^2.0.0-beta.3",
+    "jsforce": "https://github.com/dzuelke/jsforce/tarball/8178554",
     "pino": "^6.11.3",
     "whatwg-mimetype": "^2.3.0",
     "yargs": "^16.2.0"
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@salesforce/ts-sinon": "^1.3.5",
     "@types/chai": "^4.2.16",
-    "@types/jsforce": "^1.9.29",
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.37",
     "@types/pino": "^6.3.8",

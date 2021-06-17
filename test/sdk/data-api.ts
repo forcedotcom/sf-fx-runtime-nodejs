@@ -7,6 +7,11 @@ const apiVersion = "51.0";
 const token =
   "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
 const dataApi = new DataApiImpl(uri, apiVersion, token);
+const dataApiInvalid = new DataApiImpl(
+  "http://thisdoesnotexistalsdkfjalsdkfjasdlkfjasdlkfjalsdkfja.com",
+  apiVersion,
+  token
+);
 
 describe("DataApi Class", async () => {
   describe("public class attributes", async () => {
@@ -129,12 +134,8 @@ describe("DataApi Class", async () => {
   describe("query()", async () => {
     describe("valid query", async () => {
       it("returns a simple query from DataApi", async () => {
-        const {
-          done,
-          totalSize,
-          records,
-          nextRecordsUrl,
-        } = await dataApi.query("SELECT Name FROM Account");
+        const { done, totalSize, records, nextRecordsUrl } =
+          await dataApi.query("SELECT Name FROM Account");
 
         expect(done).equal(true);
         expect(totalSize).equal(5);
@@ -186,14 +187,8 @@ describe("DataApi Class", async () => {
 
     describe("when there are additional pages of results", async () => {
       it("returns nextRecordsUrl", async () => {
-        const {
-          done,
-          totalSize,
-          records,
-          nextRecordsUrl,
-        } = await dataApi.query(
-          "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
-        );
+        const { done, totalSize, records, nextRecordsUrl } =
+          await dataApi.query("SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c");
 
         expect(done).equal(false);
         expect(totalSize).equal(10000);
@@ -531,6 +526,19 @@ describe("DataApi Class", async () => {
           const result = await dataApi.commitUnitOfWork(uow);
           expect(result.size).to.equal(0);
         });
+      });
+    });
+  });
+
+  describe("error handling", async () => {
+    describe("invalid instance URL", async () => {
+      it("logs an exception", async () => {
+        try {
+          await dataApiInvalid.query("SELECT Name FROM Account");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).contains("failed, reason: getaddrinfo ENOTFOUND");
+        }
       });
     });
   });

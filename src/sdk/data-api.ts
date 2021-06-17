@@ -153,7 +153,7 @@ export class DataApiImpl implements DataApi {
         ],
       };
 
-      const requestResult = await conn.requestPost(
+      const requestResult: any = await conn.requestPost(
         `/services/data/v${this.apiVersion}/composite/graph`,
         requestBody
       );
