@@ -103,7 +103,7 @@ export default function startServer(
           source: salesforceFunctionsCloudEvent.cloudEvent.source,
           execTimeMs: 0,
           isFunctionError: true,
-          stacktrace,
+          stack: stacktrace,
         }
       );
       return;
@@ -113,7 +113,7 @@ export default function startServer(
   server.setErrorHandler((error, request, reply) => {
     makeResponse(reply, SERVICE_UNAVAILABLE_STATUS, error.toString(), {
       ...emptyExtraInfo,
-      stacktrace: error.stack,
+      stack: error.stack,
     });
   });
 
@@ -146,7 +146,7 @@ interface ExtraInfo {
   readonly source: string;
   readonly execTimeMs: number;
   readonly isFunctionError: boolean;
-  readonly stacktrace: string;
+  readonly stack: string;
 }
 
 const emptyExtraInfo = {
@@ -154,5 +154,5 @@ const emptyExtraInfo = {
   source: "n/a",
   execTimeMs: 0,
   isFunctionError: false,
-  stacktrace: "",
+  stack: "",
 };
