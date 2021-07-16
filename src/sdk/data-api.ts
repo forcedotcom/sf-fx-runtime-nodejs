@@ -110,6 +110,8 @@ export class DataApiImpl implements DataApi {
       const params = Object.assign({}, recordUpdate.fields, {
         Id: recordUpdate.fields.id,
       });
+
+      delete params.id;
       const response: any = await conn.update(recordUpdate.type, params);
       return { id: response.id };
     });
