@@ -7,8 +7,7 @@
     "bodyPatterns": [
       {
         "equalToJson": "{\n    \"ReleaseDate__c\": \"1980-05-21\"\n}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
+        "ignoreArrayOrder": true
       }
     ],
     "headers": {

@@ -295,6 +295,22 @@ describe("DataApi Class", async () => {
 
         expect(id).equal("a00B000000FSjVUIA1");
       });
+
+      it("accepts any casing of id", async () => {
+        ["Id", "iD", "ID"].forEach(async (idProp) => {
+          const fields = {};
+          fields[idProp] = "a00B000000FSjVUIA1";
+          fields["ReleaseDate__c"] = "1980-05-21";
+          const { id } = await dataApi.update({
+            type: "Movie__c",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            fields: fields,
+          });
+
+          expect(id).equal("a00B000000FSjVUIA1");
+        });
+      });
     });
 
     describe("malformed id", async () => {
