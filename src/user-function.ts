@@ -1,5 +1,5 @@
 import * as path from "path";
-import { SalesforceFunction } from "./sdk-interface-v1";
+import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 
 export function loadDefaultExport(
   directory: string,

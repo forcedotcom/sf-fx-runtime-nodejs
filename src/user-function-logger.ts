@@ -1,7 +1,7 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event";
 import pino from "pino";
 import logger from "./logger";
-import { Logger } from "./sdk-interface-v1";
+import { Logger } from "sf-fx-sdk-nodejs";
 
 export class LoggerImpl implements Logger {
   private readonly properties: Record<string, unknown>;

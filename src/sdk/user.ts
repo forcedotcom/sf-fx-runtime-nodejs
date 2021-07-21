@@ -1,4 +1,4 @@
-import { User } from "../sdk-interface-v1";
+import { User } from "sf-fx-sdk-nodejs";
 
 export class UserImpl implements User {
   readonly id: string;
