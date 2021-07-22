@@ -8,7 +8,7 @@ import {
   RecordQueryResult,
   ReferenceId,
   UnitOfWork,
-} from "../sdk-interface-v1";
+} from "sf-fx-sdk-nodejs";
 import { version as ClientVersion } from "../../package.json";
 import { createCaseInsensitiveRecord } from "../utils/maps";
 import { createCaseInsensitiveIdMap } from "../utils/maps";

@@ -4,7 +4,7 @@ import {
   SalesforceUserContext,
 } from "../cloud-event";
 import { UserImpl } from "./user";
-import { Org, User, DataApi } from "../sdk-interface-v1";
+import { Org, User, DataApi } from "sf-fx-sdk-nodejs";
 import { DataApiImpl } from "./data-api";
 
 export class OrgImpl implements Org {

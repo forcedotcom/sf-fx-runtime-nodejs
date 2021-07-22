@@ -2,7 +2,7 @@ import {
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
-} from "../sdk-interface-v1";
+} from "sf-fx-sdk-nodejs";
 
 export interface CompositeSubRequest<T> {
   readonly httpMethod: string;

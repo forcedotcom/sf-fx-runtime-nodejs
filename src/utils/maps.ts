@@ -1,4 +1,4 @@
-import { Record } from "../sdk-interface-v1";
+import { Record } from "sf-fx-sdk-nodejs";
 
 const mapHandler = {
   get(obj: any, prop: string | symbol): any {

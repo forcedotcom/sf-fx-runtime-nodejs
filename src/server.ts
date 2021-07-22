@@ -5,7 +5,7 @@ import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace";
 import * as mimetype from "whatwg-mimetype";
-import { SalesforceFunction } from "./sdk-interface-v1";
+import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { InvocationEventImpl } from "./sdk/invocation-event";
 import { ContextImpl } from "./sdk/context";
 
