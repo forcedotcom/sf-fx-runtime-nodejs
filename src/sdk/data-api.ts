@@ -11,6 +11,7 @@ import {
 } from "sf-fx-sdk-nodejs";
 import { version as ClientVersion } from "../../package.json";
 import { createCaseInsensitiveRecord } from "../utils/maps";
+import { createCaseInsensitiveIdMap } from "../utils/maps";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -107,9 +108,12 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const params = Object.assign({}, recordUpdate.fields, {
-        Id: recordUpdate.fields.id,
+      const fields = createCaseInsensitiveIdMap(recordUpdate.fields);
+      const params = Object.assign({}, fields, {
+        Id: fields.id,
       });
+
+      delete params.id;
       const response: any = await conn.update(recordUpdate.type, params);
       return { id: response.id };
     });
