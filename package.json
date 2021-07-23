@@ -41,7 +41,7 @@
     "eslint": "^7.22.0",
     "mocha": "^8.3.2",
     "prettier": "^2.2.1",
-    "sf-fx-sdk-nodejs": "^2.1.0",
+    "sf-fx-sdk-nodejs": "^2.1.1",
     "sinon": "^7.5.0",
     "ts-node": "^8.10.2",
     "typedoc": "^0.20.36",
