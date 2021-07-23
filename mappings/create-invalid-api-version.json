@@ -1,0 +1,35 @@
+{
+  "id": "021a5248-cb2a-43a1-aaea-d3d1bf032049",
+  "name": "services_data_viamabadversion_sobjects_account",
+  "request": {
+    "url": "/services/data/viAmABadVersion/sobjects/Account",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"Global Media\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 404,
+    "body": "[{\"errorCode\":\"NOT_FOUND\",\"message\":\"The requested resource does not exist\"}]",
+    "headers": {
+      "Date": "Mon, 26 Jul 2021 22:20:53 GMT",
+      "Set-Cookie": [
+        "CookieConsentPolicy=0:0; domain=force-ability-318-dev-ed.cs45.my.salesforce.com; path=/; expires=Tue, 26-Jul-2022 22:20:53 GMT; Max-Age=31536000",
+        "BrowserId=vaezS-5fEeuy7qETvvOYDQ; domain=.salesforce.com; path=/; expires=Tue, 26-Jul-2022 22:20:53 GMT; Max-Age=31536000"
+      ],
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Robots-Tag": "none",
+      "Cache-Control": "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  },
+  "uuid": "021a5248-cb2a-43a1-aaea-d3d1bf032049",
+  "persistent": true,
+  "insertionIndex": 25
+}

@@ -13,6 +13,9 @@ const dataApiInvalid = new DataApiImpl(
   token
 );
 
+const dataApiInvalidToken = new DataApiImpl(uri, apiVersion, "badToken");
+const dataApiInvalidVersion = new DataApiImpl(uri, "iAmABadVersion", token);
+
 describe("DataApi Class", async () => {
   describe("public class attributes", async () => {
     it("exposes accessToken", async () => {
@@ -64,6 +67,40 @@ describe("DataApi Class", async () => {
             type: "PlayingCard__c",
             fields: {
               Name: "Ace of Spades",
+            },
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("The requested resource does not exist");
+          expect(e.errorCode).equal("NOT_FOUND");
+        }
+      });
+    });
+
+    describe("invalid token", async () => {
+      it("throws an invalid session error", async () => {
+        try {
+          await dataApiInvalidToken.create({
+            type: "Account",
+            fields: {
+              name: "Global Media",
+            },
+          });
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("Session expired or invalid");
+          expect(e.errorCode).equal("INVALID_SESSION_ID");
+        }
+      });
+    });
+
+    describe("invalid version", async () => {
+      it("throws a not found error", async () => {
+        try {
+          await dataApiInvalidVersion.create({
+            type: "Account",
+            fields: {
+              name: "Global Media",
             },
           });
           expect.fail("Promise should have been rejected!");
