@@ -74,16 +74,10 @@ module.exports = (event, context, logger) => {
 
 ### Tests
 
-Install dependencies
-
-```
-$ curl -fL https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.28.0/wiremock-jre8-standalone-2.28.0.jar -o ~/wiremock.jar
-```
-
 Boot wiremock:
 
 ```
-$ java -jar ~/wiremock.jar --root-dir .
+$ bin/wiremock
 ```
 
 You can view mappings on disk at `mappings/` and on the server `http://localhost:8080/__admin`.
