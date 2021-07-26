@@ -1,0 +1,12 @@
+#! /usr/bin/env bash
+
+command="npm run test $@"
+
+if curl --output /dev/null --silent --head --fail "http://localhost:8080/__admin"; then
+  echo "Wiremock already booted"
+  eval $command
+else
+  echo "Booting wiremock and running command '$command'"
+  bin/waitforit 20 "port:                         8080" bin/wiremock | { read && eval $command ; }
+fi
+

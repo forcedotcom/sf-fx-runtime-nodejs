@@ -12,13 +12,6 @@ jobs:
       - checkout
       - node/install-packages
       - run:
-          name: Download Wiremock
-          command: curl -fL https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.28.0/wiremock-jre8-standalone-2.28.0.jar -o ~/wiremock.jar
-      - run:
-          name: Start Wiremock
-          command: java -jar ~/wiremock.jar --root-dir .
-          background: true
-      - run:
           name: Run format check
           command: npm run format:check
       - run:
@@ -26,7 +19,7 @@ jobs:
           command: npm run lint
       - run:
           name: Run unit tests
-          command: npm run test
+          command: bin/test
       - run:
           name: Run build
           command: npm run build

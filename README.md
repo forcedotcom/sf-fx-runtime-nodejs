@@ -74,17 +74,23 @@ module.exports = (event, context, logger) => {
 
 ### Tests
 
-Boot wiremock:
+To execute tests run:
+
+```
+$ bin/test
+```
+
+You can focus tests by file:
+
+```
+$ bin/test test/utils/maps.ts
+```
+
+Tests use wiremock to mock out web requests. You can manually boot wiremock by running:
 
 ```
 $ bin/wiremock
 ```
 
-You can view mappings on disk at `mappings/` and on the server `http://localhost:8080/__admin`.
-
-In another tab run:
-
-```
-$ npm run test
-```
+You can view wiremock's mappings on disk at `mappings/` and on the server `http://localhost:8080/__admin`.
 
