@@ -27,7 +27,9 @@ console.log("Bumping version in CHANGELOG.md...");
 const changelog = readFileSync('./CHANGELOG.md').toString().split("## [Unreleased]");
 const today = new Date();
 
-changelog.splice(1, 0, `## [Unreleased]\n\n## [${version}] - ${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
+month = (today.getMonth() + 1).toString().padStart(2, 0);
+day = today.getDate().toString().padStart(2, 0);
+changelog.splice(1, 0, `## [Unreleased]\n\n## [${version}] - ${today.getFullYear()}-${month}-${day}`);
 writeFileSync("./CHANGELOG.md", changelog.join(""));
 
 console.log("Completed version bumping.");
