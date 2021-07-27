@@ -29,7 +29,15 @@ $ npm run bump -- $VERSION
 Create a pull request with the created changes. The branch can be named `release-vx.y.z`. In the PR subject, name it `Release vx.y.z` with the version release.
 
 ### Creating a release
+
 Once the release's pull request is merged, update your local `main` branch. Before releasing, you'll need to get S3 access on your local machine.
+
+Set up a [sf-fx-ea profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) using credentials in lastpass (sf-fx-nodejs-internal-early-access). Verify that it works:
+
+```
+$ aws sts get-caller-identity --profile sf-fx-ea > /dev/null && echo $?
+0
+```
 
 Then, run the following:
 
