@@ -27,9 +27,11 @@ console.log("Bumping version in CHANGELOG.md...");
 const changelog = readFileSync('./CHANGELOG.md').toString().split("## [Unreleased]");
 const today = new Date();
 
-month = (today.getMonth() + 1).toString().padStart(2, 0);
-day = today.getDate().toString().padStart(2, 0);
-changelog.splice(1, 0, `## [Unreleased]\n\n## [${version}] - ${today.getFullYear()}-${month}-${day}`);
+// JS doesn't support custom date formatting strings such as 'YYYY-MM-DD', so the best we can
+// do is extract the date from the ISO 8601 string (which is YYYY-MM-DDTHH:mm:ss.sssZ).
+// As an added bonus this uses UTC, ensuring consistency regardless of which machine runs this script.
+const date = today.toISOString().split("T")[0]
+changelog.splice(1, 0, `## [Unreleased]\n\n## [${version}] - ${date}`);
 writeFileSync("./CHANGELOG.md", changelog.join(""));
 
 console.log("Completed version bumping.");
