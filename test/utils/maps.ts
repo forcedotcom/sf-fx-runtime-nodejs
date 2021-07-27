@@ -1,28 +1,5 @@
 import { expect } from "chai";
 import { createCaseInsensitiveMap } from "../../src/utils/maps";
-import { createCaseInsensitiveIdMap } from "../../src/utils/maps";
-
-describe("createCaseInsensitiveIdMap", async () => {
-  it("creates case insensitive id properties", async () => {
-    expect(createCaseInsensitiveIdMap({ id: "Cinco" }).id).to.equal("Cinco");
-    expect(createCaseInsensitiveIdMap({ Id: "Cinco" }).id).to.equal("Cinco");
-    expect(createCaseInsensitiveIdMap({ ID: "Cinco" }).id).to.equal("Cinco");
-    expect(createCaseInsensitiveIdMap({ iD: "Cinco" }).id).to.equal("Cinco");
-
-    try {
-      createCaseInsensitiveIdMap({ iD: "Cinco", id: "river" });
-    } catch (e) {
-      expect(e.message).equal("Duplicate id property");
-    }
-
-    expect(createCaseInsensitiveIdMap({ sPecIes: "dog" }).sPecIes).to.equal(
-      "dog"
-    );
-    expect(createCaseInsensitiveIdMap({ sPecIes: "dog" }).species).to.equal(
-      undefined
-    );
-  });
-});
 
 describe("createCaseInsensitiveMap", async () => {
   const object = {

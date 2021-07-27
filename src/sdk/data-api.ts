@@ -11,7 +11,6 @@ import {
 } from "sf-fx-sdk-nodejs";
 import { version as ClientVersion } from "../../package.json";
 import { createCaseInsensitiveRecord } from "../utils/maps";
-import { createCaseInsensitiveIdMap } from "../utils/maps";
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -108,13 +107,18 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const fields = createCaseInsensitiveIdMap(recordUpdate.fields);
-      const params = Object.assign({}, fields, {
-        Id: fields.id,
+      // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
+      // our SDK definition requires customers to provide "id". Customers that are not using TS might also
+      // pass other casings for the "id" field ("iD", "ID"). Any other fields are passed to the Salesforce API untouched.
+      const fields = { Id: null };
+      Object.keys(recordUpdate.fields).forEach((key) => {
+        const value = recordUpdate.fields[key];
+        const targetKey = key.toLowerCase() === "id" ? "Id" : key;
+
+        fields[targetKey] = value;
       });
 
-      delete params.id;
-      const response: any = await conn.update(recordUpdate.type, params);
+      const response: any = await conn.update(recordUpdate.type, fields);
       return { id: response.id };
     });
   }
