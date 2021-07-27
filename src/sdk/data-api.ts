@@ -110,14 +110,12 @@ export class DataApiImpl implements DataApi {
       // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
       // our SDK definition requires customers to provide "id". Customers that are not using TS might also
       // pass other casings for the "id" field ("iD", "ID"). Any other fields are passed to the Salesforce API untouched.
-      const fields = { ...recordUpdate.fields };
-      Object.keys(fields).forEach((key) => {
-        if (key.toLowerCase() === "id") {
-          const value = fields[key];
-          delete fields[key];
+      const fields = { Id: null };
+      Object.keys(recordUpdate.fields).forEach((key) => {
+        const value = recordUpdate.fields[key];
+        const targetKey = key.toLowerCase() === "id" ? "Id" : key;
 
-          fields.Id = value;
-        }
+        fields[targetKey] = value;
       });
 
       const response: any = await conn.update(recordUpdate.type, fields);
