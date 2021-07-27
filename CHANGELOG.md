@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.2-ea] - 2021-7-27
+## [0.1.2-ea] - 2021-07-27
 
 - Fix SDK typescript interface  ([#55](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/55))
 - Fix `context.org.dataApi.update` calls ([#54](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/54), [#56](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/56))
