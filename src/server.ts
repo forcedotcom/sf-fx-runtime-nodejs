@@ -1,5 +1,5 @@
 import * as fastify from "fastify";
-import { FastifyReply } from "fastify";
+import { FastifyReply, FastifyInstance } from "fastify";
 import { LoggerImpl } from "./user-function-logger";
 import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
 import { performance } from "perf_hooks";
@@ -14,11 +14,9 @@ const BAD_REQUEST_STATUS = 400;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 const SERVICE_UNAVAILABLE_STATUS = 503;
 
-export default function startServer(
-  host: string,
-  port: number,
+export function buildServer(
   userFunction: SalesforceFunction<any, any>
-): void {
+): FastifyInstance {
   const server = fastify.fastify({ logger: false });
 
   server.post("/", async (request, reply) => {
@@ -117,6 +115,15 @@ export default function startServer(
     });
   });
 
+  return server;
+}
+
+export default function startServer(
+  host: string,
+  port: number,
+  userFunction: SalesforceFunction<any, any>
+): void {
+  const server = buildServer(userFunction);
   server.listen(port, host, function (err) {
     if (err) {
       server.log.error(err);
