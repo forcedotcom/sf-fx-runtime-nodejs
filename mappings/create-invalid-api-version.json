@@ -7,8 +7,7 @@
     "bodyPatterns": [
       {
         "equalToJson": "{\"name\":\"Global Media\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
+        "ignoreArrayOrder": true
       }
     ]
   },

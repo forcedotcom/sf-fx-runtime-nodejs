@@ -155,7 +155,9 @@ following the [wiremock docs on recording](http://wiremock.org/docs/record-playb
 
 Now write your test as you normally would and point your url at your wiremock port (http://localhost:8080). Any requests made to this port will be forwarded to your salesforce url. The response will be recorded an a "scratch mapping" automatically generated.
 
-You can focus one specific test by passing the `-g` flag into mocha along with the name of the test. For example to run only the "invalid version" test you could run:
+When you've recorded a scratch mapping you want to use, rename it something descriptive before committing it. Also edit the mapping to remove the default `"ignoreExtraElements": true` declaration in `bodyPatterns` as it's been a source of issues where wiremock should have failed, but did not.
+
+Tip: You can focus one specific test by passing the `-g` flag into mocha along with the name of the test. For example to run only the "invalid version" test you could run:
 
 ```
 $ npm run test -- -g "invalid version"
