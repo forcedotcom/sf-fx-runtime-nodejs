@@ -6,13 +6,53 @@ $ npm ci && npm run build && npm link
 ```
 
 ## Using
+
 ```
 $ sf-fx-runtime-nodejs serve ~/project/nodejs-function
 ```
 
-## Invoke
+## Invoke with fake data
+
 ```
 $ ./invoke.sh "localhost:8080" "{}"
+```
+
+## Invoke against a scratch org
+
+Generate a scratch org using a dev hub:
+
+```
+$ sfdx plugins:install @salesforce/plugin-functions
+$ cat > /tmp/project-scratch-def.json << EOF
+{
+  "orgName": "My company",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  }
+}
+EOF
+$ sfdx force:auth:web:login -d -a MyHub
+$ sfdx force:org:create -s -f /tmp/project-scratch-def.json -a MyScratchOrg
+```
+
+Verify the org was created correctly:
+
+```
+$ sfdx force:org:list --all | grep MyScratchOrg
+(U)  MyScratchOrg  test-<uuid>@example.com  <SFDC ID> Active   2021-08-02
+```
+
+Invoke your local function with your scratch org:
+
+```
+$ sfdx run:function -l http://localhost:8080 -p '{}' -o MyScratchOrg
 ```
 
 ## Release
@@ -100,5 +140,39 @@ In another tab run:
 
 ```
 $ npm run test
+```
+
+### Recording test fixtures via wiremock
+
+Get the URL of your salesforce scratch org:
+
+```
+$ sfdx force:org:display -u MyScratchOrg | grep "Instance Url"
+Instance Url     https://<my-url>-dev-ed.cs45.my.salesforce.com/
+```
+
+following the [wiremock docs on recording](http://wiremock.org/docs/record-playback/) boot your wiremock server and navigate to [http://localhost:8080/\__admin/recorder](http://localhost:8080/__admin/recorder). In the browser enter the URL of your salesforce scratch org. Using the above example it would be `https://<my-url>-dev-ed.cs45.my.salesforce.com/`
+
+Now write your test as you normally would and point your url at your wiremock port (http://localhost:8080). Any requests made to this port will be forwarded to your salesforce url. The response will be recorded an a "scratch mapping" automatically generated.
+
+When you've recorded a scratch mapping you want to use, rename it something descriptive before committing it. Also edit the mapping to remove the default `"ignoreExtraElements": true` declaration in `bodyPatterns` as it's been a source of issues where wiremock should have failed, but did not.
+
+Tip: You can focus one specific test by passing the `-g` flag into mocha along with the name of the test. For example to run only the "invalid version" test you could run:
+
+```
+$ npm run test -- -g "invalid version"
+
+> sf-fx-runtime-nodejs@0.1.1-ea test
+> mocha "-g" "invalid version"
+
+
+
+  DataApi Class
+    create()
+      invalid version
+        ✓ throws a not found error
+
+
+  1 passing (50ms)
 ```
 
