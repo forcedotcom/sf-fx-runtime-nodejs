@@ -3,6 +3,7 @@ import { hideBin } from "yargs/helpers";
 import { loadUserFunctionFromDirectory } from "./user-function";
 import startServer from "./server";
 import logger from "./logger";
+import * as path from "path";
 
 yargs(hideBin(process.argv))
   .command(
@@ -30,7 +31,8 @@ yargs(hideBin(process.argv))
     (args) => {
       let userFunction;
       try {
-        userFunction = loadUserFunctionFromDirectory(args.projectPath);
+        const absolutePath = path.resolve(args.projectPath);
+        userFunction = loadUserFunctionFromDirectory(absolutePath);
       } catch (error) {
         logger.error("Could not load function: " + error.message);
         process.exit(1);
