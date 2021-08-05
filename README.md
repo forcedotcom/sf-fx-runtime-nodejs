@@ -5,10 +5,23 @@
 $ npm ci && npm run build && npm link
 ```
 
+## Create a function using a template
+
+- Install the `sfdx` cli [via npm](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
+- Install the [functions plugin](https://github.com/salesforcecli/plugin-functions) `sfdx plugins:install @salesforce/plugin-functions`
+- Generate a project and a function:
+
+```
+$ cd ~/
+$ sfdx generate:project -n myproject
+$ cd myproject
+$ sfdx generate:function --language=javascript --name=nodejsfunction
+```
+
 ## Using
 
 ```
-$ sf-fx-runtime-nodejs serve ~/project/nodejs-function
+$ sf-fx-runtime-nodejs serve ~/myproject/functions/nodejsfunction
 ```
 
 ## Invoke with fake data
