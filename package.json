@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@salesforce/core": "^2.20.5",
+    "@salesforce/core": "^2.27.2",
     "cloudevents": "^4.0.1",
     "fastify": "^3.14.2",
     "jsforce": "^2.0.0-beta.6",
