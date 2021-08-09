@@ -42,7 +42,7 @@
     "mocha": "^8.3.2",
     "prettier": "^2.2.1",
     "sf-fx-sdk-nodejs": "^2.1.1",
-    "sinon": "^7.5.0",
+    "sinon": "^11.1.2",
     "ts-node": "^10.2.0",
     "typedoc": "^0.21.5",
     "typedoc-plugin-markdown": "^3.10.4",
