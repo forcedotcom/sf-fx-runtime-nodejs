@@ -22,7 +22,7 @@
     "@salesforce/core": "^2.27.2",
     "cloudevents": "^4.0.1",
     "fastify": "^3.20.1",
-    "jsforce": "^2.0.0-beta.6",
+    "jsforce": "^2.0.0-beta.8",
     "pino": "^6.11.3",
     "whatwg-mimetype": "^2.3.0",
     "yargs": "^16.2.0"
