@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@salesforce/core": "^2.27.2",
-    "cloudevents": "^4.0.1",
+    "cloudevents": "^4.0.3",
     "fastify": "^3.20.1",
     "jsforce": "^2.0.0-beta.8",
     "pino": "^6.11.3",
