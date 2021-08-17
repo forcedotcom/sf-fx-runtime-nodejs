@@ -2,10 +2,10 @@ import {
   SalesforceContext,
   SalesforceFunctionContext,
   SalesforceUserContext,
-} from "../cloud-event";
-import { UserImpl } from "./user";
+} from "../cloud-event.js";
+import { UserImpl } from "./user.js";
 import { Org, User, DataApi } from "sf-fx-sdk-nodejs";
-import { DataApiImpl } from "./data-api";
+import { DataApiImpl } from "./data-api.js";
 
 export class OrgImpl implements Org {
   readonly id: string;

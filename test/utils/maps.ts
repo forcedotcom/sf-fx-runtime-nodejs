@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { createCaseInsensitiveMap } from "../../src/utils/maps";
+import { createCaseInsensitiveMap } from "../../src/utils/maps.js";
 
 describe("createCaseInsensitiveMap", async () => {
   const object = {

@@ -1,6 +1,6 @@
 {
   "extension": ["ts"],
   "test": "test/**/*.test.ts",
-  "require": "ts-node/register",
+  "loader": "ts-node/esm",
   "recursive": true
 }

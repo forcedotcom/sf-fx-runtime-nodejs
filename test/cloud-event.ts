@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { CloudEvent, HTTP } from "cloudevents";
-import { parseCloudEvent } from "../src/cloud-event";
+import { parseCloudEvent } from "../src/cloud-event.js";
 
 describe("parseCloudEvent", () => {
   it("parses an event with Salesforce extensions", () => {

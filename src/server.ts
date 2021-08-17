@@ -1,13 +1,13 @@
 import * as fastify from "fastify";
 import { FastifyReply, FastifyInstance } from "fastify";
-import { LoggerImpl } from "./user-function-logger";
-import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event";
+import { LoggerImpl } from "./user-function-logger.js";
+import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event.js";
 import { performance } from "perf_hooks";
-import getRebasedStack from "./stacktrace";
-import * as mimetype from "whatwg-mimetype";
+import getRebasedStack from "./stacktrace.js";
+import MimeType from "whatwg-mimetype/lib/mime-type.js";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
-import { InvocationEventImpl } from "./sdk/invocation-event";
-import { ContextImpl } from "./sdk/context";
+import { InvocationEventImpl } from "./sdk/invocation-event.js";
+import { ContextImpl } from "./sdk/context.js";
 
 const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
@@ -42,7 +42,7 @@ export function buildServer(
       return;
     }
 
-    const parsedMimeType = mimetype.parse(
+    const parsedMimeType = MimeType.parse(
       salesforceFunctionsCloudEvent.cloudEvent.datacontenttype
     );
     if (
@@ -86,7 +86,7 @@ export function buildServer(
 
       if (error instanceof Error) {
         message = error.message;
-        stacktrace = getRebasedStack(__filename, error);
+        stacktrace = getRebasedStack(import.meta.url, error);
       } else {
         message = error.toString();
         stacktrace = "";
