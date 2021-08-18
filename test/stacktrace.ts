@@ -3,9 +3,8 @@ import { fileURLToPath } from 'url';
 import getRebasedStack from "../src/stacktrace.js";
 
 describe("getRebasedStack", () => {
-  const filename = fileURLToPath(import.meta.url)
   it("returns the correct amount of lines for a real stack", () => {
-    const result = getRebasedStack(filename, new Error("Test Error"));
+    const result = getRebasedStack(import.meta.url, new Error("Test Error"));
     expect(result.split("\n")).to.be.of.length(1);
   });
 
@@ -29,7 +28,7 @@ describe("getRebasedStack", () => {
   });
 
   it("works with empty stacks", () => {
-    const result = getRebasedStack(filename, {
+    const result = getRebasedStack(import.meta.url, {
       name: "name",
       message: "message",
       stack: "",

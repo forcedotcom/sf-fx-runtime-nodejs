@@ -7,6 +7,10 @@ export default function getRebasedStack(
   let lastRelevantIndex = lines.length;
   for (let i = lines.length; i > 0; i--) {
     const regexResult = lines[i - 1].match(/^\s+at .*? \((.*?):\d+:\d+\)$/);
+    if (regexResult) {
+      console.log("##");
+      console.log(lines[i-1], filename, regexResult[1]);
+    }
     if (regexResult && regexResult[1] === filename) {
       lastRelevantIndex = i - 1;
       break;
