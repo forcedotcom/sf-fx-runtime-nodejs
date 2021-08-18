@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { loadUserFunctionFromDirectory } from "../src/user-function.js";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { InvocationEvent } from "sf-fx-sdk-nodejs";
 
 describe("loadUserFunctionFromDirectory", async () => {
   const fixturesDir = join(

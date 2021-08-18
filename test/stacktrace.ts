@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { fileURLToPath } from "url";
 import getRebasedStack from "../src/stacktrace.js";
 
 describe("getRebasedStack", () => {
