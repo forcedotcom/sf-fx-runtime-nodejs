@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { loadUserFunctionFromDirectory } from "../src/user-function.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { InvocationEvent } from "sf-fx-sdk-nodejs";
 
 describe("loadUserFunctionFromDirectory", async () => {
   const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), "..", "fixtures")
@@ -9,6 +10,15 @@ describe("loadUserFunctionFromDirectory", async () => {
   describe("export from JavaScript CJS sfdx template", async () => {
     it("exports the user function from module.exports", async () => {
       const dir = join(fixturesDir, "js-cjs-template")
+      const defaultExport = await loadUserFunctionFromDirectory(dir);
+
+      expect(defaultExport).to.be.a("function");
+    });
+  });
+
+  describe("export from JavaScript ESM sfdx template", async () => {
+    it("exports the user function from exports", async () => {
+      const dir = join(fixturesDir, "js-esm-template")
       const defaultExport = await loadUserFunctionFromDirectory(dir);
 
       expect(defaultExport).to.be.a("function");
