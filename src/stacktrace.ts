@@ -9,7 +9,7 @@ export default function getRebasedStack(
     const regexResult = lines[i - 1].match(/^\s+at .*? \((.*?):\d+:\d+\)$/);
     if (regexResult) {
       console.log("##");
-      console.log(lines[i-1], filename, regexResult[1]);
+      console.log(lines[i - 1], filename, regexResult[1]);
     }
     if (regexResult && regexResult[1] === filename) {
       lastRelevantIndex = i - 1;

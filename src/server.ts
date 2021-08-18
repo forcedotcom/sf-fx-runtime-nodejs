@@ -1,7 +1,10 @@
 import * as fastify from "fastify";
 import { FastifyReply, FastifyInstance } from "fastify";
 import { LoggerImpl } from "./user-function-logger.js";
-import { parseCloudEvent, SalesforceFunctionsCloudEvent } from "./cloud-event.js";
+import {
+  parseCloudEvent,
+  SalesforceFunctionsCloudEvent,
+} from "./cloud-event.js";
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace.js";
 import MimeType from "whatwg-mimetype/lib/mime-type.js";

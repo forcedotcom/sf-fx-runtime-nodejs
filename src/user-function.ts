@@ -18,7 +18,11 @@ export async function loadDefaultExport(
     );
   }
 
-  if (fExports.default && fExports.default.default && fExports.default.default instanceof Function) {
+  if (
+    fExports.default &&
+    fExports.default.default &&
+    fExports.default.default instanceof Function
+  ) {
     // CJS TypeScript exports
     return fExports.default.default;
   } else if (fExports.default && fExports.default instanceof Function) {
@@ -50,13 +54,12 @@ export async function loadUserFunctionFromDirectory(
 
   let packageJson;
   try {
-    packageJson = JSON.parse(packageFile)
+    packageJson = JSON.parse(packageFile);
   } catch (error) {
     throw new Error(
       "Could not parse 'package.json' from project directory: " + error.message
-    )
+    );
   }
-
 
   // Validate package.json
   if (!packageJson.main) {
@@ -65,15 +68,14 @@ export async function loadUserFunctionFromDirectory(
     );
   }
 
-
-  const functionPath = path.join(directory, packageJson.main)
+  const functionPath = path.join(directory, packageJson.main);
   // Verify existence of 'main' file
   try {
-    await fs.access(functionPath)
-  } catch(err) {
+    await fs.access(functionPath);
+  } catch (err) {
     throw new Error(
       `Could not open function file specified by 'main' field from 'package.json' (${functionPath})!`
-    )
+    );
   }
 
   return await loadDefaultExport(directory, packageJson.main);

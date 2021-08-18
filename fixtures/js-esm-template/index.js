@@ -8,4 +8,4 @@ export default async function (event, context, logger) {
   logger.info(JSON.stringify(results));
 
   return results;
-};
+}

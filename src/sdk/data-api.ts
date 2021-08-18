@@ -1,7 +1,7 @@
 import { Connection } from "jsforce/lib/connection.js";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import { UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
@@ -13,7 +13,13 @@ import {
   UnitOfWork,
 } from "sf-fx-sdk-nodejs";
 import { createCaseInsensitiveRecord } from "../utils/maps.js";
-const pkgPath = join(fileURLToPath(import.meta.url), "..", "..", "..", "package.json");
+const pkgPath = join(
+  fileURLToPath(import.meta.url),
+  "..",
+  "..",
+  "..",
+  "package.json"
+);
 const pkg = readFileSync(pkgPath, "utf8");
 const ClientVersion = JSON.parse(pkg).version;
 
