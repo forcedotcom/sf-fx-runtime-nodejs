@@ -1,8 +1,8 @@
-import * as yargs from "yargs";
+import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { loadUserFunctionFromDirectory } from "./user-function";
-import startServer from "./server";
-import logger from "./logger";
+import { loadUserFunctionFromDirectory } from "./user-function.js";
+import startServer from "./server.js";
+import logger from "./logger.js";
 import * as path from "path";
 
 yargs(hideBin(process.argv))
@@ -28,11 +28,11 @@ yargs(hideBin(process.argv))
           default: "localhost",
         });
     },
-    (args) => {
+    async (args) => {
       let userFunction;
       try {
         const absolutePath = path.resolve(args.projectPath);
-        userFunction = loadUserFunctionFromDirectory(absolutePath);
+        userFunction = await loadUserFunctionFromDirectory(absolutePath);
       } catch (error) {
         logger.error("Could not load function: " + error.message);
         process.exit(1);

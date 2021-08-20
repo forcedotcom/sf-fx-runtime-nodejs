@@ -102,26 +102,59 @@ The script will build the relase, push it up to S3, create a git tag, and push u
 
 After the package has been pushed, you'll need to release a new version of the buildpack in github.com/heroku/buildpacks-nodejs.
 
-## Example Function
-### package.json
+## Example Functions
+
+This library supports functions using both JavaScript Modules / ESM AND 
+CommonJS / Node modules. Salesforce functions is transitioning from 
+CommonJS / Node modules to JavaScript Modules / ESM, where newer functions will
+use the latter, older functions the former. Examples of each follow.
+
+### JavaScript Modules / ESM
+
+#### package.json
 ```json
 {
   "name": "nodejs-example-function",
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "yahoo-stock-prices": "^1.1.0"
   }
 }
 
 ```
-### index.js
+#### index.js
+```javascript
+import yahooStockPrices from "yahoo-stock-prices";
+
+export default function (event, context, logger) => {
+    logger.info("I'm logging stuff!");
+    return yahooStockPrices.getCurrentData("CRM");
+}
+```
+
+### Node Modules / CommonJS
+
+#### package.json
+```json
+{
+  "name": "nodejs-example-function",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "yahoo-stock-prices": "^1.1.0"
+  }
+}
+```
+
+#### index.js
 ```javascript
 const yahooStockPrices = require("yahoo-stock-prices");
 

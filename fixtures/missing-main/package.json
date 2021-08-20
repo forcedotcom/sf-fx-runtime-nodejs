@@ -1,0 +1,8 @@
+{
+  "name": "missing-main-function",
+  "version": "0.0.1",
+  "main": "index.js",
+  "engines": {
+    "node": "^14.0"
+  }
+}

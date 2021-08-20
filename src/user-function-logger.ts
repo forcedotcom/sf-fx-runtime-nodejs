@@ -1,6 +1,6 @@
-import { SalesforceFunctionsCloudEvent } from "./cloud-event";
+import { SalesforceFunctionsCloudEvent } from "./cloud-event.js";
 import pino from "pino";
-import logger from "./logger";
+import logger from "./logger.js";
 import { Logger } from "sf-fx-sdk-nodejs";
 
 export class LoggerImpl implements Logger {

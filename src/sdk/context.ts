@@ -1,6 +1,6 @@
-import { SalesforceFunctionsCloudEvent } from "../cloud-event";
+import { SalesforceFunctionsCloudEvent } from "../cloud-event.js";
 import { Context, Org } from "sf-fx-sdk-nodejs";
-import { OrgImpl } from "./org";
+import { OrgImpl } from "./org.js";
 
 export class ContextImpl implements Context {
   readonly id: string;

@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { DataApiImpl } from "../../src/sdk/data-api";
-import { stub } from "sinon";
+import { DataApiImpl } from "../../src/sdk/data-api.js";
+import stub from "sinon/lib/sinon/stub.js";
 
 const uri = "http://localhost:8080";
 const apiVersion = "51.0";

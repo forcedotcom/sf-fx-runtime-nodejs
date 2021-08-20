@@ -10,7 +10,7 @@ import {
   CreateRecordSubRequest,
   DeleteRecordSubRequest,
   UpdateRecordSubRequest,
-} from "./sub-request";
+} from "./sub-request.js";
 
 export class UnitOfWorkImpl implements UnitOfWork {
   private readonly apiVersion: string;

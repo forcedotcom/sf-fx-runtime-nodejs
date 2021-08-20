@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { buildServer } from "../src/server";
+import { buildServer } from "../src/server.js";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const userFunction = async function (event, context, logger) {
