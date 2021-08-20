@@ -166,29 +166,55 @@ module.exports = (event, context, logger) => {
 
 ## Dev
 
+### Install Dependencies
+
+```
+$ npm install
+```
+
+### Linting and Formatting
+
+You can lint files with eslint like so:
+
+```
+$ npm run lint
+```
+
+We also use `prettier` to auto-format code. You can run that with
+
+```
+$ npm run format:fix
+```
+
 ### Tests
 
-Install dependencies
-
-```
-$ curl -fL https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.28.0/wiremock-jre8-standalone-2.28.0.jar -o ~/wiremock.jar
-```
-
-Boot wiremock:
-
-```
-$ java -jar ~/wiremock.jar --root-dir .
-```
-
-You can view mappings on disk at `mappings/` and on the server `http://localhost:8080/__admin`.
-
-In another tab run:
+This will start our wiremock server and run the mocha tests:
 
 ```
 $ npm run test
 ```
 
-### Recording test fixtures via wiremock
+To run the `mocha` tests without booting wiremock (say you are running your
+own):
+
+```
+$ npm run mocha
+```
+
+### Mocks
+
+We use wiremock to provide a fake salesforce API during test and local dev.
+
+Start the mock server with:
+
+```
+$ npm run wiremock
+```
+
+You can view mappings on disk at `mappings/` and on the server (if it is running)
+at `http://localhost:8080/__admin`.
+
+#### Recording new mocks
 
 Get the URL of your salesforce scratch org:
 
@@ -206,7 +232,7 @@ When you've recorded a scratch mapping you want to use, rename it something desc
 Tip: You can focus one specific test by passing the `-g` flag into mocha along with the name of the test. For example to run only the "invalid version" test you could run:
 
 ```
-$ npm run test -- -g "invalid version"
+$ npm run mocha -- -g "invalid version"
 
 > sf-fx-runtime-nodejs@0.1.1-ea test
 > mocha "-g" "invalid version"
