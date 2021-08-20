@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { readFile, readFileSync, writeFileSync } = require("node:fs");
-const { exec } = require('child_process');
+import { readFile, readFileSync, writeFileSync } from "fs";
+import { exec } from "child_process";
 const version = process.argv[2];
 
 const semver = new RegExp(/^((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)$/);
