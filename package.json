@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",
-    "test": "mocha",
+    "wiremock": "wiremock --port 8080",
+    "mocha": "mocha",
+    "test": "concurrently -k -s first 'npm run wiremock' 'npm run mocha'",
     "format": "npm run format:write && npm run format:check",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
@@ -38,6 +40,7 @@
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
+    "concurrently": "^6.2.1",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "mocha": "^9.1.0",
@@ -47,7 +50,8 @@
     "ts-node": "^10.2.1",
     "typedoc": "^0.21.6",
     "typedoc-plugin-markdown": "^3.10.4",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "wiremock": "^2.29.0"
   },
   "bin": {
     "sf-fx-runtime-nodejs": "bin/invoke.js"
