@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Wiremock Java installation no longer required for testing ([#104](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/104))
 
 ## [0.3.0-ea] - 2021-08-20
 
