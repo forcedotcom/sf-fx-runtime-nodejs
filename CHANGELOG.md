@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0-ea] - 2021-08-20
+## [0.3.0] - 2021-08-20
 
 - Add Support for functions using JavaScript Modules / ESM ([#99](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/99))
 
