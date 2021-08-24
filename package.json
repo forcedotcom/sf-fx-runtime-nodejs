@@ -26,7 +26,7 @@
     "cloudevents": "^4.0.3",
     "fastify": "^3.20.2",
     "jsforce": "^2.0.0-beta.8",
-    "pino": "^6.11.3",
+    "pino": "^6.13.1",
     "whatwg-mimetype": "^2.3.0",
     "yargs": "^17.1.1"
   },
