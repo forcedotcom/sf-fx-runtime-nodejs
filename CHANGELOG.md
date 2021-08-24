@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2021-08-24
+
 - Compiled source files now live in `dist/` rather than `dist/src/`
   ([#114](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/114)
 
