@@ -4,7 +4,7 @@
     "module": "es2020",
     "outDir": "./dist",
     "baseUrl": ".",
-    "rootDir": "./",
+    "rootDir": "./src",
     "target": "es2017",
     "lib": ["es2017", "dom"],
     "allowSyntheticDefaultImports": true,
@@ -14,8 +14,7 @@
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "pretty": true,
-    "removeComments": true,
-    "resolveJsonModule": true
+    "removeComments": true
   },
   "exclude": ["node_modules", "test"]
 }
