@@ -1,6 +1,7 @@
 /dist/
 docs/
 node_modules/
+sf-fx-runtime-nodejs-*.tgz
 tsconfig.tsbuildinfo
 .idea
 .DS_Store
