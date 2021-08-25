@@ -4,6 +4,7 @@ import * as index from "../src/index.js";
 import { expect } from "chai";
 import * as user_function from "../src/user-function.js";
 import * as server from "../src/server.js";
+import startServer from "../src/server.js";
 import * as path from "path";
 import {loadUserFunctionFromDirectory} from "../src/user-function.js";
 
@@ -17,11 +18,12 @@ const args = [
 describe("callIndex", async () => {
 
     it("calls startServer() with correct args", async () => {
-        const startServer_spy = spy(server, "default");
+        const startServer_mock = mock(server);
         const absolutePath = path.resolve('./fixtures/js-esm-template');
         const userFunction = loadUserFunctionFromDirectory(absolutePath);
+        startServer_mock.expects("startServer").withArgs("localhost", 8080, userFunction);
         index.callCommand(args);
-        expect(startServer_spy.calledWith("localhost", 8080, userFunction));
+        startServer_mock.verify();
     });
 
     it("calls loadUserFunctionFromDirectory() with correct args", async () => {
@@ -32,14 +34,5 @@ describe("callIndex", async () => {
         index.callCommand(args);
         loadUserFunctionFromDirectory_mock.verify();
     });
-
-    // it("loads and catches errors from loadUserFunctionFromDirectory()", async () => {
-    //     const result1 = loadUserFunctionFromDirectory("fake/path");
-    //     expect(result1).to.equal("Could not load 'package.json' from project directory: ");
-    //
-    //     const result2 = loadUserFunctionFromDirectory("another/fake/path");
-    //     expect(result2).to.equal("Could not read 'main' field from 'package.json' in project directory!");
-    // });
-
 });
 
