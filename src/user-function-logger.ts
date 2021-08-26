@@ -1,5 +1,4 @@
 import { SalesforceFunctionsCloudEvent } from "./cloud-event.js";
-import pino from "pino";
 import logger from "./logger.js";
 import { Logger } from "sf-fx-sdk-nodejs";
 
@@ -13,44 +12,24 @@ export class LoggerImpl implements Logger {
   }
 
   error(message: string): void {
-    underlyingFunctionLogger.error(this.properties, message);
+    underlyingFunctionLogger.error(Object.assign(this.properties, {message}));
   }
 
   warn(message: string): void {
-    underlyingFunctionLogger.warn(this.properties, message);
+    underlyingFunctionLogger.warn(Object.assign(this.properties, {message}));
   }
 
   info(message: string): void {
-    underlyingFunctionLogger.info(this.properties, message);
+    underlyingFunctionLogger.info(Object.assign(this.properties, {message}));
   }
 
   debug(message: string): void {
-    underlyingFunctionLogger.debug(this.properties, message);
+    underlyingFunctionLogger.debug(Object.assign(this.properties, {message}));
   }
 
   trace(message: string): void {
-    underlyingFunctionLogger.trace(this.properties, message);
+    underlyingFunctionLogger.trace(Object.assign(this.properties, {message}));
   }
 }
 
-const underlyingFunctionLogger = pino({ level: getLogLevelFromEnvironment() });
-
-function getLogLevelFromEnvironment(): pino.Level {
-  const defaultLogLevel = "info";
-  const logLevel = (
-    process.env.SF_FX_LOGLEVEL || defaultLogLevel
-  ).toLowerCase();
-  switch (logLevel) {
-    case "trace":
-    case "debug":
-    case "info":
-    case "warn":
-    case "error":
-      return logLevel;
-    default:
-      logger.warn(
-        `SF_FX_LOGLEVEL environment variable contains unknown log level '${logLevel}'! Effective log level will be '${defaultLogLevel}'!`
-      );
-      return defaultLogLevel;
-  }
-}
+const underlyingFunctionLogger = logger;
