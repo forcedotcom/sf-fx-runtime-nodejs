@@ -2,7 +2,6 @@ import spy from "sinon/lib/sinon/spy.js";
 import { expect } from "chai";
 import * as path from "path";
 import { loadUserFunctionFromDirectory } from "../src/user-function.js";
-import startServer from "../src/server.js";
 import index from "../src/index.js";
 import { parseArgs } from "../src/index.js";
 
@@ -24,8 +23,9 @@ describe("index.ts", async () => {
 
   it("calls loadUserFunctionFromDirectory() with correct args", async () => {
     const loadUserFunctionFromDirectory_spy = spy();
+    const startServer_spy = spy();
     const absolutePath = path.resolve("./fixtures/js-esm-template");
-    index(args, loadUserFunctionFromDirectory_spy, startServer);
+    index(args, loadUserFunctionFromDirectory_spy, startServer_spy);
     expect(loadUserFunctionFromDirectory_spy.calledWith(absolutePath));
   });
 
