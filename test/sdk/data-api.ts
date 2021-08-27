@@ -161,7 +161,9 @@ describe("DataApi Class", async () => {
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).equal("Cannot read property \'attributes\' of undefined");
+          expect(e.message).equal(
+            "Cannot read property 'attributes' of undefined"
+          );
           expect(e.errorCode).undefined;
         }
       });
@@ -428,7 +430,7 @@ describe("DataApi Class", async () => {
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).equal("Cannot read property \'Id\' of undefined");
+          expect(e.message).equal("Cannot read property 'Id' of undefined");
           expect(e.errorCode).undefined;
         }
       });

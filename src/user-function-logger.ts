@@ -12,23 +12,23 @@ export class LoggerImpl implements Logger {
   }
 
   error(message: string): void {
-    underlyingFunctionLogger.error(Object.assign(this.properties, {message}));
+    underlyingFunctionLogger.error(Object.assign(this.properties, { message }));
   }
 
   warn(message: string): void {
-    underlyingFunctionLogger.warn(Object.assign(this.properties, {message}));
+    underlyingFunctionLogger.warn(Object.assign(this.properties, { message }));
   }
 
   info(message: string): void {
-    underlyingFunctionLogger.info(Object.assign(this.properties, {message}));
+    underlyingFunctionLogger.info(Object.assign(this.properties, { message }));
   }
 
   debug(message: string): void {
-    underlyingFunctionLogger.debug(Object.assign(this.properties, {message}));
+    underlyingFunctionLogger.debug(Object.assign(this.properties, { message }));
   }
 
   trace(message: string): void {
-    underlyingFunctionLogger.trace(Object.assign(this.properties, {message}));
+    underlyingFunctionLogger.trace(Object.assign(this.properties, { message }));
   }
 }
 
