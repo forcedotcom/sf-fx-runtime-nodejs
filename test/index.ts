@@ -31,9 +31,7 @@ describe("index.ts", async () => {
 
   it("correctly parses args with yargs", async () => {
     const parsed = parseArgs(args);
-    expect(parsed.projectPath).to.include(
-      "sf-fx-runtime-nodejs/fixtures/js-esm-template"
-    );
+    expect(parsed.projectPath).to.include("/fixtures/js-esm-template");
     expect(parsed.host).to.equal("localhost");
     expect(parsed.port).to.equal(8080);
   });

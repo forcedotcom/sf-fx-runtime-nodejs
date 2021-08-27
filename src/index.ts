@@ -49,8 +49,7 @@ export default function (
   let userFunction;
 
   try {
-    const absolutePath = path.resolve(args.projectPath);
-    userFunction = loadUserFunctionFromDirectory_(absolutePath);
+    userFunction = loadUserFunctionFromDirectory_(args.projectPath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
