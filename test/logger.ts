@@ -1,9 +1,6 @@
-import { assert, expect } from "chai";
-import { CloudEvent, HTTP } from "cloudevents";
-import { LoggerImpl } from "../src/user-function-logger.js";
-import { LoggerLevel } from "@salesforce/core/lib/logger.js";
+import { LoggerLevel } from "@salesforce/core";
+import { expect } from "chai";
 import logger from "../src/logger.js";
-import { testSetup } from "@salesforce/core/lib/testSetup";
 
 describe("Logger", () => {
   describe("Basic logger functionality", () => {
@@ -21,7 +18,6 @@ describe("Logger", () => {
       ).useMemoryLogging();
       testescapelogger.info('Checking escaping: "test" \\o/ foo=bar');
       const logRecords = testescapelogger.getBufferedRecords();
-      console.log(logRecords[0]);
       expect(logRecords[0]).to.have.property(
         "msg",
         'Checking escaping: "test" \\o/ foo=bar'
@@ -29,30 +25,33 @@ describe("Logger", () => {
     });
   });
   describe("Logger levels", () => {
-    it("should set the log level to a number: 50 for Error", () => {
-      const errorlogger = logger.useMemoryLogging();
-      errorlogger.setLevel(50);
-      expect(errorlogger.getLevel()).to.equal(LoggerLevel.ERROR);
+    it("should set the log level to a number: 50 for Error", async () => {
+      const errorlogger = (await logger.child("testLogger")).useMemoryLogging();
+      errorlogger.error("test Error");
+      const logRecords = errorlogger.getBufferedRecords();
+      expect(logRecords[0]).to.have.property("level", 50);
     });
-    it("should set the log level to a number: 40 for Warn", () => {
-      const warnLogger = logger.useMemoryLogging();
-      warnLogger.setLevel(40);
-      expect(warnLogger.getLevel()).to.equal(LoggerLevel.WARN);
+    it("should set the log level to a number: 40 for Warn", async () => {
+      const warnlogger = (await logger.child("testLogger")).useMemoryLogging();
+      warnlogger.warn("test warn");
+      const logRecords = warnlogger.getBufferedRecords();
+      expect(logRecords[0]).to.have.property("level", 40);
     });
-    it("should set the log level to a number: 30 for Info", () => {
-      const infoLogger = logger.useMemoryLogging();
-      infoLogger.setLevel(30);
-      expect(infoLogger.getLevel()).to.equal(LoggerLevel.INFO);
+    it("should set the log level to a number: 30 for Info", async () => {
+      const infologger = (await logger.child("testLogger")).useMemoryLogging();
+      infologger.info("test info");
+      const logRecords = infologger.getBufferedRecords();
+      expect(logRecords[0]).to.have.property("level", 30);
     });
-    it("should set the log level to a number: 20 for Debug", () => {
-      const debugLogger = logger.useMemoryLogging();
-      debugLogger.setLevel(20);
-      expect(debugLogger.getLevel()).to.equal(LoggerLevel.DEBUG);
+    it("should set the log level to a number: 20 for Debug", async () => {
+      const debuglogger = (await logger.child("testLogger")).useMemoryLogging();
+      debuglogger.setLevel(20);
+      expect(debuglogger.getLevel()).to.equal(LoggerLevel.DEBUG);
     });
-    it("should set the log level to a number: 10 for Trace", () => {
-      const traceLogger = logger.useMemoryLogging();
-      traceLogger.setLevel(10);
-      expect(traceLogger.getLevel()).to.equal(LoggerLevel.TRACE);
+    it("should set the log level to a number: 10 for Trace", async () => {
+      const tracelogger = (await logger.child("testLogger")).useMemoryLogging();
+      tracelogger.setLevel(10);
+      expect(tracelogger.getLevel()).to.equal(LoggerLevel.TRACE);
     });
   });
 });
