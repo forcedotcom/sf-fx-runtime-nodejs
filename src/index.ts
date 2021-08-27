@@ -5,7 +5,7 @@ import startServer from "./server.js";
 import logger from "./logger.js";
 import * as path from "path";
 
-export function parseArgs(params: Array<string>): any {
+function parseArgs(params: Array<string>): any {
   return yargs(hideBin(params))
       .command(
           "serve <projectPath>",
@@ -38,19 +38,18 @@ export function parseArgs(params: Array<string>): any {
       .parse();
 }
 
-export function callCommand(params: Array<string>): any {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export default function(params: Array<string>, loadUserFunctionFromDirectory_: Function=loadUserFunctionFromDirectory, startServer_: Function=startServer): any {
   const args = parseArgs(params);
   let userFunction;
 
   try {
     const absolutePath = path.resolve(args.projectPath);
-    console.log("hiiiiiiiiii");
-    console.log(absolutePath);
-    userFunction = loadUserFunctionFromDirectory(absolutePath);
+    userFunction = loadUserFunctionFromDirectory_(absolutePath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
   }
 
-  startServer(args.host, args.port, userFunction);
+  startServer_(args.host, args.port, userFunction);
 }

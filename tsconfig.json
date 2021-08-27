@@ -11,6 +11,7 @@
     "alwaysStrict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "pretty": true,
