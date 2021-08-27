@@ -161,7 +161,7 @@ describe("DataApi Class", async () => {
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).equal("No SObject Type defined in record");
+          expect(e.message).equal("Cannot read property \'attributes\' of undefined");
           expect(e.errorCode).undefined;
         }
       });
@@ -428,7 +428,7 @@ describe("DataApi Class", async () => {
           });
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).equal("No SObject Type defined in record");
+          expect(e.message).equal("Cannot read property \'Id\' of undefined");
           expect(e.errorCode).undefined;
         }
       });
@@ -592,7 +592,7 @@ describe("DataApi Class", async () => {
           await dataApiInvalid.query("SELECT Name FROM Account");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).contains("failed, reason: getaddrinfo ENOTFOUND");
+          expect(e.message).contains("getaddrinfo ENOTFOUND");
         }
       });
     });
