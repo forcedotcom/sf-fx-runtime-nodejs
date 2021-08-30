@@ -44,7 +44,7 @@ export default async function (
   loadUserFunctionFromDirectory_: Function = loadUserFunctionFromDirectory,
   // eslint-disable-next-line @typescript-eslint/ban-types
   startServer_: Function = startServer
-): Promise<any> {
+): Promise<void> {
   const args = parseArgs(params);
   let userFunction;
 
