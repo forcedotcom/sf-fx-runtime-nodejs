@@ -1,4 +1,4 @@
-import { Connection } from "jsforce/lib/connection.js";
+import { Connection } from "jsforce2/lib/connection.js";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
