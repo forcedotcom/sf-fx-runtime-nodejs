@@ -1,3 +1,6 @@
 #!/usr/bin/env node
 
-import("../dist/index.js");
+import index from "../src/index.js";
+
+// eslint-disable-next-line no-undef
+await index(process.argv);
