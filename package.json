@@ -26,7 +26,6 @@
     "cloudevents": "^4.0.3",
     "fastify": "^3.20.2",
     "jsforce2": "npm:jsforce@^2.0.0-beta.8",
-    "logfmt": "^1.3.2",
     "whatwg-mimetype": "^2.3.0",
     "yargs": "^17.1.1"
   },
