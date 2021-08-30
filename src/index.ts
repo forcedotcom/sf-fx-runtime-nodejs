@@ -38,18 +38,18 @@ export function parseArgs(params: Array<string>): any {
     .parse();
 }
 
-export default function (
+export default async function (
   params: Array<string>,
   // eslint-disable-next-line @typescript-eslint/ban-types
   loadUserFunctionFromDirectory_: Function = loadUserFunctionFromDirectory,
   // eslint-disable-next-line @typescript-eslint/ban-types
   startServer_: Function = startServer
-): any {
+): Promise<any> {
   const args = parseArgs(params);
   let userFunction;
 
   try {
-    userFunction = loadUserFunctionFromDirectory_(args.projectPath);
+    userFunction = await loadUserFunctionFromDirectory_(args.projectPath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
