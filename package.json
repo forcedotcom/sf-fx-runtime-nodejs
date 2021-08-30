@@ -22,7 +22,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@salesforce/bunyan": "^2.0.0",
     "@salesforce/core": "^3.4.2",
     "cloudevents": "^4.0.3",
     "fastify": "^3.20.2",
