@@ -46,7 +46,7 @@
     "sf-fx-sdk-nodejs": "^2.1.1",
     "sinon": "^11.1.2",
     "ts-node": "^10.2.1",
-    "typedoc": "^0.21.7",
+    "typedoc": "^0.21.9",
     "typedoc-plugin-markdown": "^3.10.4",
     "typescript": "^4.4.2",
     "wiremock": "^2.29.0"
