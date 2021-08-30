@@ -2,10 +2,7 @@ import { Logger } from "@salesforce/core";
 import { LoggerFormat } from "@salesforce/core/lib/logger.js";
 
 function getloglevel() {
-  const defaultLogLevel = "30";
-  const logLevel = (
-    process.env.SF_FX_LOGLEVEL || defaultLogLevel
-  ).toLowerCase();
+  const logLevel = process.env.SF_FX_LOGLEVEL || "info";
   switch (logLevel) {
     case "trace":
       return 10;
@@ -19,7 +16,7 @@ function getloglevel() {
       return 50;
     default:
       console.warn(
-        `SF_FX_LOGLEVEL environment variable contains unknown log level '${logLevel}'! Effective log level will be '${defaultLogLevel}'!`
+        `SF_FX_LOGLEVEL environment variable contains unknown log level '${logLevel}'! Effective log level will be 'info'!`
       );
       return 30;
   }
