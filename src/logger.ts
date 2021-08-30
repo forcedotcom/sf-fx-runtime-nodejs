@@ -2,7 +2,7 @@ import { Logger } from "@salesforce/core";
 import { LoggerFormat } from "@salesforce/core/lib/logger.js";
 
 function getloglevel() {
-  const logLevel = process.env.SF_FX_LOGLEVEL || "info";
+  const logLevel = (process.env.SF_FX_LOGLEVEL || "info").toLowerCase();
   switch (logLevel) {
     case "trace":
       return 10;
