@@ -6,3 +6,4 @@ dist/
 docs/
 node_modules/
 scripts/
+resources/license-header.js
