@@ -73,7 +73,9 @@ export class UnitOfWorkImpl implements UnitOfWork {
   }
 
   private generateReferenceId() {
-    const referenceId = new ReferenceIdImpl("referenceId" + this.referenceIdCounter);
+    const referenceId = new ReferenceIdImpl(
+      "referenceId" + this.referenceIdCounter
+    );
     this.referenceIdCounter = this.referenceIdCounter + 1;
 
     return referenceId;

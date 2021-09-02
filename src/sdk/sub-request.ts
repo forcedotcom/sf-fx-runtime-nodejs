@@ -9,6 +9,7 @@ import {
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
+  ReferenceId,
 } from "sf-fx-sdk-nodejs";
 
 export interface CompositeSubRequest<T> {
@@ -64,7 +65,7 @@ export class UpdateRecordSubRequest
   constructor(record: RecordForUpdate) {
     this.record = record;
 
-    this.body = { ...record.fields };
+    this.body = expandReferenceIds(record.fields);
     delete this.body.type;
     delete this.body.id;
   }
@@ -96,7 +97,7 @@ export class CreateRecordSubRequest
   constructor(record: RecordForCreate) {
     this.record = record;
 
-    this.body = { ...record.fields };
+    this.body = expandReferenceIds(record.fields);
     delete this.body.type;
   }
 
@@ -125,4 +126,20 @@ function parseErrorResponse(errorResponse: [any]): Error {
       })
       .join("\n")
   );
+}
+
+function expandReferenceIds(fields: { [key: string]: unknown }): {
+  [key: string]: unknown;
+} {
+  const newFields = { ...fields };
+  for (const [k, v] of Object.entries(newFields)) {
+    if (isReferenceId(v)) {
+      newFields[k] = v.toApiString();
+    }
+  }
+  return newFields;
+}
+
+function isReferenceId(val: any): val is ReferenceId {
+  return (val as ReferenceId).toApiString !== undefined;
 }

@@ -552,7 +552,7 @@ describe("DataApi Class", async () => {
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode I - A Phantom Menace",
-              Franchise__c: rId0.toApiString(),
+              Franchise__c: rId0,
             },
           });
 
@@ -560,7 +560,7 @@ describe("DataApi Class", async () => {
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode II - Attack Of The Clones",
-              Franchise__c: rId0.toApiString(),
+              Franchise__c: rId0,
             },
           });
 

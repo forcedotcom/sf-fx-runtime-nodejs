@@ -9,7 +9,7 @@ import { Connection } from "jsforce2/lib/connection.js";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
-import { ReferenceIdImpl, UnitOfWorkImpl } from "./unit-of-work.js";
+import { UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
   RecordForCreate,
@@ -195,17 +195,21 @@ export class DataApiImpl implements DataApi {
       > = Promise.all(
         requestResult.graphs[0].graphResponse.compositeResponse.map(
           (compositeResponse) => {
-            const subrequest = subrequests.find(([subrequestReferenceId]) =>
-                subrequestReferenceId.toString() === compositeResponse.referenceId
+            const subrequest = subrequests.find(
+              ([subrequestReferenceId]) =>
+                subrequestReferenceId.toString() ===
+                compositeResponse.referenceId
             );
-            return subrequest[1].processResponse(
-              compositeResponse.httpStatusCode,
-              compositeResponse.httpHeaders,
-              compositeResponse.body
-            ).then((recordModificationResult) => [
-              subrequest[0],
-              recordModificationResult,
-            ]);
+            return subrequest[1]
+              .processResponse(
+                compositeResponse.httpStatusCode,
+                compositeResponse.httpHeaders,
+                compositeResponse.body
+              )
+              .then((recordModificationResult) => [
+                subrequest[0],
+                recordModificationResult,
+              ]);
           }
         )
       );
