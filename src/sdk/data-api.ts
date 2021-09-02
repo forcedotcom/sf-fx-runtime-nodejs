@@ -9,7 +9,7 @@ import { Connection } from "jsforce2/lib/connection.js";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
-import { UnitOfWorkImpl } from "./unit-of-work.js";
+import { ReferenceIdImpl, UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
   RecordForCreate,
@@ -169,7 +169,7 @@ export class DataApiImpl implements DataApi {
             graphId: "graph0",
             compositeRequest: subrequests.map(([referenceId, subrequest]) => {
               return {
-                referenceId,
+                referenceId: referenceId.toString(),
                 method: subrequest.httpMethod,
                 url: subrequest.buildUri(this.apiVersion),
                 body: subrequest.body,
@@ -195,20 +195,17 @@ export class DataApiImpl implements DataApi {
       > = Promise.all(
         requestResult.graphs[0].graphResponse.compositeResponse.map(
           (compositeResponse) => {
-            return subrequests
-              .find(
-                ([subrequestReferenceId]) =>
-                  subrequestReferenceId === compositeResponse.referenceId
-              )[1]
-              .processResponse(
-                compositeResponse.httpStatusCode,
-                compositeResponse.httpHeaders,
-                compositeResponse.body
-              )
-              .then((recordModificationResult) => [
-                compositeResponse.referenceId,
-                recordModificationResult,
-              ]);
+            const subrequest = subrequests.find(([subrequestReferenceId]) =>
+                subrequestReferenceId.toString() === compositeResponse.referenceId
+            );
+            return subrequest[1].processResponse(
+              compositeResponse.httpStatusCode,
+              compositeResponse.httpHeaders,
+              compositeResponse.body
+            ).then((recordModificationResult) => [
+              subrequest[0],
+              recordModificationResult,
+            ]);
           }
         )
       );

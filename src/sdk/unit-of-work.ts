@@ -19,6 +19,19 @@ import {
   UpdateRecordSubRequest,
 } from "./sub-request.js";
 
+export class ReferenceIdImpl implements ReferenceId {
+  readonly id: string;
+  constructor(id: string) {
+    this.id = id;
+  }
+  toString() {
+    return this.id;
+  }
+  toApiString() {
+    return `@{${this.id}.id}`;
+  }
+}
+
 export class UnitOfWorkImpl implements UnitOfWork {
   private readonly apiVersion: string;
   private readonly _subrequests: [
@@ -60,7 +73,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   }
 
   private generateReferenceId() {
-    const referenceId = "referenceId" + this.referenceIdCounter;
+    const referenceId = new ReferenceIdImpl("referenceId" + this.referenceIdCounter);
     this.referenceIdCounter = this.referenceIdCounter + 1;
 
     return referenceId;
