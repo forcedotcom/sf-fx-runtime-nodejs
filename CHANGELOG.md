@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Automatically expand ReferenceIDs with `.toApiString()` ([#133](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/133))
 - Add unit testing for src/index.ts ([#118](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/118))
 - Utilize @salesforce/core for logging with logfmt ([#119](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/119))
 
