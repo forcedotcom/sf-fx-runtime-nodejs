@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.1] - 2021-09-07
 
-- Update package name to @heroku/sf-fx-runtime-nodejs
+- Update package name to @heroku/sf-fx-runtime-nodejs ([#139](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/139))
 
 ## [0.5.0] - 2021-09-07
 
