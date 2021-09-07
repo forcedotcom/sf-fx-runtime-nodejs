@@ -6,11 +6,16 @@ export function parseCloudEvent(
   body: string | unknown
 ): SalesforceFunctionsCloudEvent {
   const cloudEvent = CloudEvents.HTTP.toEvent({ headers, body });
-
   return {
     cloudEvent,
-    sfContext: parseBase64Json(cloudEvent.sfcontext.toString()),
-    sfFunctionContext: parseBase64Json(cloudEvent.sffncontext.toString()),
+    sfContext:
+      cloudEvent.sfcontext == undefined
+        ? null
+        : parseBase64Json(cloudEvent.sfcontext.toString()),
+    sfFunctionContext:
+      cloudEvent.sffncontext == undefined
+        ? null
+        : parseBase64Json(cloudEvent.sffncontext.toString()),
   };
 }
 
@@ -46,5 +51,9 @@ export interface SalesforceFunctionContext {
 }
 
 function parseBase64Json<A>(data: string): A {
-  return JSON.parse(Buffer.from(data, "base64").toString("utf-8"));
+  try {
+    return JSON.parse(Buffer.from(data, "base64").toString("utf-8"));
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
