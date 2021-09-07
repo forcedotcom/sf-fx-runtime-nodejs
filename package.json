@@ -1,6 +1,6 @@
 {
   "name": "@heroku/sf-fx-runtime-nodejs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "description": "A web server that takes in function source code and provides the Salesforce FX SDK to the invoked source code.",
   "scripts": {
