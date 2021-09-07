@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+
 import { Connection } from "jsforce2/lib/connection.js";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -162,7 +169,7 @@ export class DataApiImpl implements DataApi {
             graphId: "graph0",
             compositeRequest: subrequests.map(([referenceId, subrequest]) => {
               return {
-                referenceId,
+                referenceId: referenceId.toString(),
                 method: subrequest.httpMethod,
                 url: subrequest.buildUri(this.apiVersion),
                 body: subrequest.body,
@@ -188,18 +195,19 @@ export class DataApiImpl implements DataApi {
       > = Promise.all(
         requestResult.graphs[0].graphResponse.compositeResponse.map(
           (compositeResponse) => {
-            return subrequests
-              .find(
-                ([subrequestReferenceId]) =>
-                  subrequestReferenceId === compositeResponse.referenceId
-              )[1]
+            const subrequest = subrequests.find(
+              ([subrequestReferenceId]) =>
+                subrequestReferenceId.toString() ===
+                compositeResponse.referenceId
+            );
+            return subrequest[1]
               .processResponse(
                 compositeResponse.httpStatusCode,
                 compositeResponse.httpHeaders,
                 compositeResponse.body
               )
               .then((recordModificationResult) => [
-                compositeResponse.referenceId,
+                subrequest[0],
                 recordModificationResult,
               ]);
           }
