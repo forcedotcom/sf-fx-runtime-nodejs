@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Handle malformed/missing cloud event salesforce extension ([#141](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/141))
+
 ## [0.5.1] - 2021-09-07
 
 - Update package name to @heroku/sf-fx-runtime-nodejs ([#139](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/139))

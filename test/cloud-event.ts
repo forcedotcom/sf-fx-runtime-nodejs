@@ -54,12 +54,7 @@ describe("parseCloudEvent", () => {
     });
   });
 
-  // TODO W-9654393: This currently fails with: `TypeError: Cannot read property 'toString' of undefined`,
-  // which server.js displays as: "Could not parse CloudEvent: Cannot read property 'toString' of undefined".
-  // The Java equivalent returns an `Optional.empty()`, however it's not clear what the expected
-  // behaviour should be here. Should it throw with a clearer message instead given that much of
-  // the rest of the invoker depends on the extension payload?
-  it.skip("parses an event with no Salesforce extensions", () => {
+  it("parses an event with no Salesforce extensions", async () => {
     const inputEvent = new CloudEvent({
       id: "fe9da89b-1eed-471c-a04c-0b3c664b63af",
       source: "urn:sf-fx-runtime-nodejs:testing",
@@ -72,15 +67,11 @@ describe("parseCloudEvent", () => {
     );
 
     expect(cloudEvent.id).to.equal(inputEvent.id);
-    // Should this even be `null`, or something else?
     expect(sfContext).to.equal(null);
     expect(sfFunctionContext).to.equal(null);
   });
 
-  // TODO W-9654393: This currently fails with: `SyntaxError: Unexpected end of JSON input`
-  // The Java equivalent returns an `Optional.empty()`, however like the test above,
-  // it's not clear what the expected behaviour should be.
-  it.skip("parses an event with invalid JSON in the Salesforce extensions", () => {
+  it("parses an event with invalid JSON in the Salesforce extensions", () => {
     const inputEvent = new CloudEvent({
       id: "fe9da89b-1eed-471c-a04c-0b3c664b63af",
       source: "urn:sf-fx-runtime-nodejs:testing",
@@ -89,21 +80,17 @@ describe("parseCloudEvent", () => {
       sffncontext: Buffer.from("{", "utf-8").toString("base64"),
     });
     const { headers, body } = HTTP.binary(inputEvent);
-    const { cloudEvent, sfContext, sfFunctionContext } = parseCloudEvent(
-      headers,
-      body
-    );
 
-    expect(cloudEvent.id).to.equal(inputEvent.id);
-    // Should this even be `null`, or something else?
-    expect(sfContext).to.equal(null);
-    expect(sfFunctionContext).to.equal(null);
+    try {
+      parseCloudEvent(headers, body);
+    } catch (error) {
+      expect(error.toString()).to.include(
+        "Function arguments could not be determined due to invalid JSON"
+      );
+    }
   });
 
-  // TODO W-9654393: This currently fails with: `TypeError: Cannot read property 'toString' of undefined`
-  // The Java equivalent returns an `Optional.empty()`, however like the test above,
-  // it's not clear what the expected behaviour should be.
-  it.skip("parses an event with empty string Salesforce extensions", () => {
+  it("parses an event with empty string Salesforce extensions", () => {
     const inputEvent = new CloudEvent({
       id: "fe9da89b-1eed-471c-a04c-0b3c664b63af",
       source: "urn:sf-fx-runtime-nodejs:testing",
@@ -118,7 +105,6 @@ describe("parseCloudEvent", () => {
     );
 
     expect(cloudEvent.id).to.equal(inputEvent.id);
-    // Should this even be `null`, or something else?
     expect(sfContext).to.equal(null);
     expect(sfFunctionContext).to.equal(null);
   });
