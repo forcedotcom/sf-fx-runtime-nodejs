@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+
 import { expect } from "chai";
 import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
@@ -545,7 +552,7 @@ describe("DataApi Class", async () => {
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode I - A Phantom Menace",
-              Franchise__c: "@{referenceId0.id}",
+              Franchise__c: rId0,
             },
           });
 
@@ -553,7 +560,7 @@ describe("DataApi Class", async () => {
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode II - Attack Of The Clones",
-              Franchise__c: "@{referenceId0.id}",
+              Franchise__c: rId0,
             },
           });
 
@@ -561,7 +568,7 @@ describe("DataApi Class", async () => {
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode III - Revenge Of The Sith",
-              Franchise__c: "@{referenceId0.id}",
+              Franchise__c: rId0.toApiString(),
             },
           });
 
