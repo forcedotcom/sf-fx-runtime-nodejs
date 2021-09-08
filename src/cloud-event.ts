@@ -54,6 +54,9 @@ function parseBase64Json<A>(data: string): A {
   try {
     return JSON.parse(Buffer.from(data, "base64").toString("utf-8"));
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(
+      "Could not execute function. Function arguments could not be determined due to invalid JSON body: " +
+        error.message
+    );
   }
 }
