@@ -6,7 +6,7 @@ aws_cli_profile=${2:-"sf-fx-ea"}
 
 # The package filename cannot be customized for npm pack.
 # We need to figure out the file it will write to on our own:
-name=$(jq -r .name package.json)
+name=$(jq -r '.name | gsub("@";"") | gsub("/";"-")' package.json)
 version=$(jq -r .version package.json)
 package_filename="${name}-${version}.tgz"
 
@@ -35,6 +35,9 @@ npm pack
 
 echo "Pushing packaged tarball to s3 bucket:"
 aws s3 cp "${package_filename}" "s3://${bucket_name}" --profile "${aws_cli_profile}"
+
+echo "Running npm publish..."
+npm publish
 
 echo "Creating git tag..."
 git tag "v${version}"
