@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2021-09-08
+
 - Handle malformed/missing cloud event salesforce extension ([#141](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/141))
 
 ## [0.5.1] - 2021-09-07
