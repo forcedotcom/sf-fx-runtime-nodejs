@@ -84,7 +84,7 @@ describe("parseCloudEvent", () => {
     try {
       parseCloudEvent(headers, body);
     } catch (error) {
-      expect(error.toString()).to.include("Unexpected end of JSON input");
+      expect(error.toString()).to.include("Function arguments could not be determined due to invalid JSON");
     }
   });
 
