@@ -35,6 +35,20 @@ export function parseArgs(params: Array<string>): any {
             type: "string",
             description: "The host the webserver should bind to.",
             default: "localhost",
+          })
+          .option("workers", {
+            alias: "w",
+            type: "number",
+            description: "The number of Node.js cluster workers the webserver should use",
+            default: 1,
+          })
+          .middleware(function(...opts) {
+            // Use WEB_CONCURRENCY if set and -w was not provided.
+            const yarg: any = opts[opts.length - 1];
+            if (yarg.parsed.defaulted.workers && process.env.WEB_CONCURRENCY) {
+              opts[0].workers = parseInt(process.env.WEB_CONCURRENCY);
+            }
+            return opts[0];
           });
       },
       (args) => {
@@ -78,6 +92,6 @@ export default async function (
 
     return startServer_(args.host, args.port, userFunction);
   };
-  return await throng({ worker: startWorker, count: process.env.WEB_CONCURRENCY || 1});
+  return await throng({ worker: startWorker, count: args.workers });
 }
 
