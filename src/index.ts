@@ -8,6 +8,7 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import throng from "throng";
+import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
 import startServer from "./server.js";
 import logger from "./logger.js";
@@ -64,15 +65,15 @@ export function parseArgs(params: Array<string>): any {
 export default async function (
   params: Array<string>,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  loadUserFunctionFromDirectory_: Function = loadUserFunctionFromDirectory,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  startServer_: Function = startServer
+  loadUserFunction: Function = loadUserFunctionFromDirectory,
+  server: (h: string, p: number, c: SalesforceFunction<any, any>) => Promise<void> = startServer,
+  manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng,
 ): Promise<void> {
   const args = parseArgs(params);
   let userFunction;
 
   try {
-    userFunction = await loadUserFunctionFromDirectory_(args.projectPath);
+    userFunction = await loadUserFunction(args.projectPath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
@@ -82,16 +83,16 @@ export default async function (
     console.log(`Started worker ${ id }`);
 
     process.on('SIGTERM', () => {
-      console.log(`Worker ${id} exiting; received SIGTERM`);
+      logger.warn(`Worker ${id} exiting; received SIGTERM`);
       disconnect();
     });
     process.on('SIGINT', () => {
-      console.log(`Worker ${id} exiting; received SIGINT`);
+      logger.warn(`Worker ${id} exiting; received SIGINT`);
       disconnect();
     });
 
-    return startServer_(args.host, args.port, userFunction);
+    return await server(args.host, args.port, userFunction);
   };
-  return await throng({ worker: startWorker, count: args.workers });
+  return await manager({ worker: startWorker, count: args.workers });
 }
 

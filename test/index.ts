@@ -19,21 +19,25 @@ const args = [
   "./fixtures/js-esm-template",
 ];
 
+const fakeThrong = async function(...processes: Array<any>) {
+  return await processes[0].worker("worker 1", function() { return null; });
+};
+
 describe("index.ts", async () => {
   it("calls startServer() with correct args", async () => {
-    const startServer_spy = spy();
+    const startServerSpy = spy();
     const absolutePath = path.resolve("./fixtures/js-esm-template");
     const userFunction = loadUserFunctionFromDirectory(absolutePath);
-    index(args, loadUserFunctionFromDirectory, startServer_spy);
-    expect(startServer_spy.calledWith("localhost", 8080, userFunction));
+    index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    expect(startServerSpy.calledWith("localhost", 8080, userFunction));
   });
 
   it("calls loadUserFunctionFromDirectory() with correct args", async () => {
-    const loadUserFunctionFromDirectory_spy = spy();
-    const startServer_spy = spy();
+    const loadUserFunctionFromDirectorySpy = spy();
+    const startServerSpy = spy();
     const absolutePath = path.resolve("./fixtures/js-esm-template");
-    index(args, loadUserFunctionFromDirectory_spy, startServer_spy);
-    expect(loadUserFunctionFromDirectory_spy.calledWith(absolutePath));
+    index(args, loadUserFunctionFromDirectorySpy, startServerSpy, fakeThrong);
+    expect(loadUserFunctionFromDirectorySpy.calledWith(absolutePath));
   });
 
   it("correctly parses args with yargs", async () => {
