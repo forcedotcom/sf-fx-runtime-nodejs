@@ -7,6 +7,7 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import throng from "throng";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
 import startServer from "./server.js";
 import logger from "./logger.js";
@@ -45,6 +46,7 @@ export function parseArgs(params: Array<string>): any {
     .parse();
 }
 
+
 export default async function (
   params: Array<string>,
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -62,5 +64,20 @@ export default async function (
     process.exit(1);
   }
 
-  startServer_(args.host, args.port, userFunction);
+  const startWorker = async function(id: string, disconnect: () => void): Promise<void> {
+    console.log(`Started worker ${ id }`);
+
+    process.on('SIGTERM', () => {
+      console.log(`Worker ${id} exiting; received SIGTERM`);
+      disconnect();
+    });
+    process.on('SIGINT', () => {
+      console.log(`Worker ${id} exiting; received SIGINT`);
+      disconnect();
+    });
+
+    return startServer_(args.host, args.port, userFunction);
+  };
+  return await throng({ worker: startWorker, count: process.env.WEB_CONCURRENCY || 1});
 }
+

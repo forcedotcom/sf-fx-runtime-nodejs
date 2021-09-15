@@ -128,18 +128,18 @@ export function buildServer(
   return server;
 }
 
-export default function startServer(
+export default async function startServer(
   host: string,
   port: number,
   userFunction: SalesforceFunction<any, any>
-): void {
+): Promise<void> {
   const server = buildServer(userFunction);
-  server.listen(port, host, function (err) {
-    if (err) {
-      server.log.error(err);
-      process.exit(1);
-    }
-  });
+  try {
+    await server.listen(port, host);
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
 }
 
 function makeResponse(
