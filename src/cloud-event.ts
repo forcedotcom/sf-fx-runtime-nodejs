@@ -52,8 +52,8 @@ export interface SalesforceFunctionContext {
   readonly requestId: string;
   readonly functionInvocationId?: string;
   readonly functionName?: string;
-  readonly apexClassId?: string;
-  readonly apexClassFQN?: string;
+  readonly apexId?: string;
+  readonly apexFQN?: string;
   readonly resource?: string;
 }
 
