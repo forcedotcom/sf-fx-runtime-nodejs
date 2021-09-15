@@ -80,14 +80,14 @@ export default async function (
   }
 
   const startWorker = async function(id: string, disconnect: () => void): Promise<void> {
-    console.log(`Started worker ${ id }`);
+    logger.info(`Started worker ${ id }`);
 
     process.on('SIGTERM', () => {
-      logger.warn(`Worker ${id} exiting; received SIGTERM`);
+      logger.info(`Worker ${id} exiting; received SIGTERM`);
       disconnect();
     });
     process.on('SIGINT', () => {
-      logger.warn(`Worker ${id} exiting; received SIGINT`);
+      logger.info(`Worker ${id} exiting; received SIGINT`);
       disconnect();
     });
 
