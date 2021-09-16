@@ -44,8 +44,8 @@ describe("parseCloudEvent", () => {
     expect(sfFunctionContext).to.deep.equal({
       accessToken:
         "00Dxx0000006IYJ!AQEAQNRac5a1hRhhf02HRegw4sSZvKh9oY.ohdQ_a_K4x5dwAdGegWemXV6pNUVKhZ_uY29FxIEFLOZu0Gf9ofMGW0HFLZp8",
-      apexClassFQN: null,
-      apexClassId: null,
+      apexFQN: null,
+      apexId: null,
       functionInvocationId: null,
       functionName: "MyFunction",
       requestId:
