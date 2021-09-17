@@ -8,6 +8,7 @@
 import * as fastify from "fastify";
 import { FastifyReply, FastifyInstance } from "fastify";
 import { LoggerImpl } from "./user-function-logger.js";
+import logger from "./logger.js";
 import {
   parseCloudEvent,
   SalesforceFunctionsCloudEvent,
@@ -131,13 +132,27 @@ export function buildServer(
 export default async function startServer(
   host: string,
   port: number,
-  userFunction: SalesforceFunction<any, any>
+  userFunction: SalesforceFunction<any, any>,
+  workerId = 0,
+  disconnect: () => void = () => { return; },
 ): Promise<void> {
+  logger.addField('worker', workerId);
   const server = buildServer(userFunction);
+  process.on('SIGTERM', () => {
+    logger.info(`function worker exiting; received SIGTERM`);
+    server.close();
+    disconnect();
+  });
+  process.on('SIGINT', () => {
+    logger.info(`function worker exiting; received SIGINT`);
+    server.close();
+    disconnect();
+  });
   try {
+    logger.info(`starting function worker ${workerId}`);
     await server.listen(port, host);
   } catch (err) {
-    server.log.error(err);
+    logger.error(err);
     process.exit(1);
   }
 }

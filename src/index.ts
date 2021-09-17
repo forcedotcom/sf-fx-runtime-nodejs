@@ -66,7 +66,7 @@ export default async function (
   params: Array<string>,
   // eslint-disable-next-line @typescript-eslint/ban-types
   loadUserFunction: Function = loadUserFunctionFromDirectory,
-  server: (h: string, p: number, c: SalesforceFunction<any, any>) => Promise<void> = startServer,
+  server: (h: string, p: number, f: SalesforceFunction<any, any>, w: number, d: () => void) => Promise<void> = startServer,
   manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng,
 ): Promise<void> {
   const args = parseArgs(params);
@@ -79,20 +79,9 @@ export default async function (
     process.exit(1);
   }
 
-  const startWorker = async function(id: string, disconnect: () => void): Promise<void> {
-    logger.info(`Started worker ${ id }`);
-
-    process.on('SIGTERM', () => {
-      logger.info(`Worker ${id} exiting; received SIGTERM`);
-      disconnect();
-    });
-    process.on('SIGINT', () => {
-      logger.info(`Worker ${id} exiting; received SIGINT`);
-      disconnect();
-    });
-
-    return await server(args.host, args.port, userFunction);
+  const worker = async function(id: number, disconnect: () => void): Promise<void> {
+    return await server(args.host, args.port, userFunction, id, disconnect);
   };
-  return await manager({ worker: startWorker, count: args.workers });
+  return await manager({ worker, count: args.workers });
 }
 
