@@ -64,8 +64,7 @@ export function parseArgs(params: Array<string>): any {
 
 export default async function (
   params: Array<string>,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  loadUserFunction: Function = loadUserFunctionFromDirectory,
+  loadUserFunction: (p: string) => Promise<SalesforceFunction<any, any>> = loadUserFunctionFromDirectory,
   server: (h: string, p: number, f: SalesforceFunction<any, any>, w: number, d: () => void) => Promise<void> = startServer,
   manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng,
 ): Promise<void> {

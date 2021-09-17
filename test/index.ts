@@ -12,24 +12,60 @@ import { loadUserFunctionFromDirectory } from "../src/user-function.js";
 import index from "../src/index.js";
 import { parseArgs } from "../src/index.js";
 
-const args = [
-  "/usr/local/Cellar/node/16.5.0/bin/node",
-  "../bin/invoke.js",
+let workers = 0;
+const fakeThrong = async function(...processes: Array<any>) {
+  console.log("workers", workers);
+  workers = processes[0].count;
+  console.log("workers", workers);
+  return await processes[0].worker("worker 1", function() { return null; });
+};
+
+let args = [
+  "/some/path/to/node",
+  "/some/path/to/cli-binary.js",
   "serve",
   "./fixtures/js-esm-template",
 ];
 
-const fakeThrong = async function(...processes: Array<any>) {
-  return await processes[0].worker("worker 1", function() { return null; });
-};
-
 describe("index.ts", async () => {
-  it("calls startServer() with correct args", async () => {
-    const startServerSpy = spy();
+  it("calls startServer with localhost:8080 when given default arguments", async () => {
     const absolutePath = path.resolve("./fixtures/js-esm-template");
     const userFunction = loadUserFunctionFromDirectory(absolutePath);
+    const startServerSpy = spy();
     index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     expect(startServerSpy.calledWith("localhost", 8080, userFunction));
+  });
+
+  it("calls startServer with non-default arguments", async () => {
+    args = [
+      "/some/path/to/node",
+      "/some/path/to/cli-binary.js",
+      "serve",
+      "./fixtures/js-esm-template",
+      "-h",
+      "notlocalhost",
+      "-p",
+      "3000",
+    ];
+    const absolutePath = path.resolve("./fixtures/js-esm-template");
+    const userFunction = loadUserFunctionFromDirectory(absolutePath);
+    const startServerSpy = spy();
+    index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    expect(startServerSpy.calledWith("notlocalhost", 3000, userFunction));
+  });
+
+  it("starts with multiple workers", async () => {
+    args = [
+      "/some/path/to/node",
+      "/some/path/to/cli-binary.js",
+      "serve",
+      "./fixtures/js-esm-template",
+      "-w",
+      "3",
+    ];
+    const startServerSpy = spy();
+    await index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    expect(workers).to.eq(3);
   });
 
   it("calls loadUserFunctionFromDirectory() with correct args", async () => {
