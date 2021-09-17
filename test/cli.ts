@@ -12,11 +12,13 @@ import { loadUserFunctionFromDirectory } from "../src/user-function.js";
 import cli, { parseArgs } from "../src/cli.js";
 
 let workers = 0;
-const fakeThrong = async function(...processes: Array<any>) {
+const fakeThrong = async function (...processes: Array<any>) {
   console.log("workers", workers);
   workers = processes[0].count;
   console.log("workers", workers);
-  return await processes[0].worker("worker 1", function() { return null; });
+  return await processes[0].worker("worker 1", function () {
+    return null;
+  });
 };
 
 let args = [

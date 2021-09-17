@@ -40,10 +40,11 @@ export function parseArgs(params: Array<string>): any {
           .option("workers", {
             alias: "w",
             type: "number",
-            description: "The number of Node.js cluster workers the webserver should use",
+            description:
+              "The number of Node.js cluster workers the webserver should use",
             default: 1,
           })
-          .middleware(function(...opts) {
+          .middleware(function (...opts) {
             // Use WEB_CONCURRENCY if set and -w was not provided.
             const yarg: any = opts[opts.length - 1];
             if (yarg.parsed.defaulted.workers && process.env.WEB_CONCURRENCY) {
@@ -61,12 +62,19 @@ export function parseArgs(params: Array<string>): any {
     .parse();
 }
 
-
 export default async function (
   params: Array<string>,
-  loadUserFunction: (p: string) => Promise<SalesforceFunction<any, any>> = loadUserFunctionFromDirectory,
-  server: (h: string, p: number, f: SalesforceFunction<any, any>, w: number, d: () => void) => Promise<void> = startServer,
-  manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng,
+  loadUserFunction: (
+    p: string
+  ) => Promise<SalesforceFunction<any, any>> = loadUserFunctionFromDirectory,
+  server: (
+    h: string,
+    p: number,
+    f: SalesforceFunction<any, any>,
+    w: number,
+    d: () => void
+  ) => Promise<void> = startServer,
+  manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng
 ): Promise<void> {
   const args = parseArgs(params);
   let userFunction;
@@ -78,9 +86,11 @@ export default async function (
     process.exit(1);
   }
 
-  const worker = async function(id: number, disconnect: () => void): Promise<void> {
+  const worker = async function (
+    id: number,
+    disconnect: () => void
+  ): Promise<void> {
     return await server(args.host, args.port, userFunction, id, disconnect);
   };
   return await manager({ worker, count: args.workers });
 }
-

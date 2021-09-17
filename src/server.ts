@@ -134,15 +134,15 @@ export default async function startServer(
   port: number,
   userFunction: SalesforceFunction<any, any>,
   workerId = 0,
-  shutdown: (e?: number) => void = process.exit,
+  shutdown: (e?: number) => void = process.exit
 ): Promise<void> {
-  logger.addField('worker', workerId);
+  logger.addField("worker", workerId);
   const server = buildServer(userFunction);
-  process.on('SIGTERM', () => {
+  process.on("SIGTERM", () => {
     logger.info(`function worker exiting; received SIGTERM`);
     server.close(shutdown);
   });
-  process.on('SIGINT', () => {
+  process.on("SIGINT", () => {
     logger.info(`function worker exiting; received SIGINT`);
     server.close(shutdown);
   });
