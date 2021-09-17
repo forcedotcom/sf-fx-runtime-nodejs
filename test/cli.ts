@@ -9,8 +9,7 @@ import spy from "sinon/lib/sinon/spy.js";
 import { expect } from "chai";
 import * as path from "path";
 import { loadUserFunctionFromDirectory } from "../src/user-function.js";
-import index from "../src/index.js";
-import { parseArgs } from "../src/index.js";
+import cli, { parseArgs } from "../src/cli.js";
 
 let workers = 0;
 const fakeThrong = async function(...processes: Array<any>) {
@@ -27,12 +26,12 @@ let args = [
   "./fixtures/js-esm-template",
 ];
 
-describe("index.ts", async () => {
+describe("cli.ts", async () => {
   it("calls startServer with localhost:8080 when given default arguments", async () => {
     const absolutePath = path.resolve("./fixtures/js-esm-template");
     const userFunction = loadUserFunctionFromDirectory(absolutePath);
     const startServerSpy = spy();
-    index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     expect(startServerSpy.calledWith("localhost", 8080, userFunction));
   });
 
@@ -50,7 +49,7 @@ describe("index.ts", async () => {
     const absolutePath = path.resolve("./fixtures/js-esm-template");
     const userFunction = loadUserFunctionFromDirectory(absolutePath);
     const startServerSpy = spy();
-    index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     expect(startServerSpy.calledWith("notlocalhost", 3000, userFunction));
   });
 
@@ -64,7 +63,7 @@ describe("index.ts", async () => {
       "3",
     ];
     const startServerSpy = spy();
-    await index(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     expect(workers).to.eq(3);
   });
 
@@ -72,7 +71,7 @@ describe("index.ts", async () => {
     const loadUserFunctionFromDirectorySpy = spy();
     const startServerSpy = spy();
     const absolutePath = path.resolve("./fixtures/js-esm-template");
-    index(args, loadUserFunctionFromDirectorySpy, startServerSpy, fakeThrong);
+    cli(args, loadUserFunctionFromDirectorySpy, startServerSpy, fakeThrong);
     expect(loadUserFunctionFromDirectorySpy.calledWith(absolutePath));
   });
 

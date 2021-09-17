@@ -62,6 +62,6 @@
     "wiremock": "^2.29.0"
   },
   "bin": {
-    "sf-fx-runtime-nodejs": "bin/invoke.js"
+    "sf-fx-runtime-nodejs": "bin/cli.js"
   }
 }
