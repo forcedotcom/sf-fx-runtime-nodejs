@@ -18,7 +18,7 @@ describe("parseCloudEvent", () => {
       sfcontext:
         "eyJhcGlWZXJzaW9uIjoiNTAuMCIsInBheWxvYWRWZXJzaW9uIjoiMC4xIiwidXNlckNvbnRleHQiOnsib3JnSWQiOiIwMER4eDAwMDAwMDZJWUoiLCJ1c2VySWQiOiIwMDV4eDAwMDAwMVg4VXoiLCJvbkJlaGFsZk9mVXNlcklkIjpudWxsLCJ1c2VybmFtZSI6InRlc3QtenFpc25mNnl0bHF2QGV4YW1wbGUuY29tIiwic2FsZXNmb3JjZUJhc2VVcmwiOiJodHRwOi8vcGlzdGFjaGlvLXZpcmdvLTEwNjMtZGV2LWVkLmxvY2FsaG9zdC5pbnRlcm5hbC5zYWxlc2ZvcmNlLmNvbTo2MTA5Iiwib3JnRG9tYWluVXJsIjoiaHR0cDovL3Bpc3RhY2hpby12aXJnby0xMDYzLWRldi1lZC5sb2NhbGhvc3QuaW50ZXJuYWwuc2FsZXNmb3JjZS5jb206NjEwOSJ9fQ==",
       sffncontext:
-        "eyJhY2Nlc3NUb2tlbiI6IjAwRHh4MDAwMDAwNklZSiFBUUVBUU5SYWM1YTFoUmhoZjAySFJlZ3c0c1NadktoOW9ZLm9oZFFfYV9LNHg1ZHdBZEdlZ1dlbVhWNnBOVVZLaFpfdVkyOUZ4SUVGTE9adTBHZjlvZk1HVzBIRkxacDgiLCJmdW5jdGlvbkludm9jYXRpb25JZCI6bnVsbCwiZnVuY3Rpb25OYW1lIjoiTXlGdW5jdGlvbiIsImFwZXhDbGFzc0lkIjpudWxsLCJhcGV4Q2xhc3NGUU4iOm51bGwsInJlcXVlc3RJZCI6IjAwRHh4MDAwMDAwNklZSkVBMi00WTRXM0x3X0xrb3NrY0hkRWFaemUtLU15RnVuY3Rpb24tMjAyMC0wOS0wM1QyMDo1NjoyNy42MDg0NDRaIiwicmVzb3VyY2UiOiJodHRwOi8vZGhhZ2Jlcmctd3NsMTo4MDgwIn0",
+        "ewogICJhY2Nlc3NUb2tlbiI6ICIwMER4eDAwMDAwMDZJWUohQVFFQVFOUmFjNWExaFJoaGYwMkhSZWd3NHNTWnZLaDlvWS5vaGRRX2FfSzR4NWR3QWRHZWdXZW1YVjZwTlVWS2haX3VZMjlGeElFRkxPWnUwR2Y5b2ZNR1cwSEZMWnA4IiwKICAiZnVuY3Rpb25JbnZvY2F0aW9uSWQiOiBudWxsLAogICJmdW5jdGlvbk5hbWUiOiAiTXlGdW5jdGlvbiIsCiAgInJlcXVlc3RJZCI6ICIwMER4eDAwMDAwMDZJWUpFQTItNFk0VzNMd19Ma29za2NIZEVhWnplLS1NeUZ1bmN0aW9uLTIwMjAtMDktMDNUMjA6NTY6MjcuNjA4NDQ0WiIsCiAgInJlc291cmNlIjogImh0dHA6Ly9kaGFnYmVyZy13c2wxOjgwODAiLAogICJhcGV4SWQiOiBudWxsLAogICJhcGV4RlFOIjogbnVsbAp9Cg==",
     });
     const { headers, body } = HTTP.binary(inputEvent);
     const { cloudEvent, sfContext, sfFunctionContext } = parseCloudEvent(
@@ -44,8 +44,8 @@ describe("parseCloudEvent", () => {
     expect(sfFunctionContext).to.deep.equal({
       accessToken:
         "00Dxx0000006IYJ!AQEAQNRac5a1hRhhf02HRegw4sSZvKh9oY.ohdQ_a_K4x5dwAdGegWemXV6pNUVKhZ_uY29FxIEFLOZu0Gf9ofMGW0HFLZp8",
-      apexClassFQN: null,
-      apexClassId: null,
+      apexFQN: null,
+      apexId: null,
       functionInvocationId: null,
       functionName: "MyFunction",
       requestId:
