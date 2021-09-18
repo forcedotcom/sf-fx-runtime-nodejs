@@ -41,7 +41,7 @@ export function parseArgs(params: Array<string>): any {
             alias: "w",
             type: "number",
             description:
-              "The number of Node.js cluster workers the webserver should use",
+              "The number of Node.js cluster workers the invoker should use",
             default: 1,
           })
           .middleware(function (...opts) {
