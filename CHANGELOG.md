@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Convert package-lock.json to npm-shrinkwrap.json for deterministic dependencies ([#165](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/165))
 - Rename apexClassId -> apexId and apexClassFQN -> apexFQN to support Apex classes and triggers.
+- Introduce NodeJS clustering, manage workers via throng ([#157](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/157))
 
 ## [0.5.2] - 2021-09-08
 
