@@ -147,10 +147,10 @@ export default async function startServer(
     server.close(shutdown);
   });
   try {
-    logger.info(`starting function worker ${workerId}`);
     await server.listen(port, host);
+    logger.info(`started function worker ${workerId}`);
   } catch (err) {
-    logger.error(err);
+    logger.error(`error starting function worker ${workerId}: ${err}`);
     shutdown(1);
   }
 }
