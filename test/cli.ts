@@ -53,7 +53,7 @@ describe("cli.ts", async () => {
     expect(startServerSpy.calledWith("notlocalhost", 3000, userFunction));
   });
 
-  it("starts with multiple workers", async () => {
+  it("starts multiple workers with -w", async () => {
     args = [
       "/some/path/to/node",
       "/some/path/to/cli-binary.js",
@@ -65,6 +65,36 @@ describe("cli.ts", async () => {
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     expect(workers).to.eq(3);
+  });
+
+  it("starts multiple workers with WEB_CONCURRENCY", async () => {
+    args = [
+      "/some/path/to/node",
+      "/some/path/to/cli-binary.js",
+      "serve",
+      "./fixtures/js-esm-template",
+    ];
+    process.env.WEB_CONCURRENCY = "2";
+    const startServerSpy = spy();
+    await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    delete process.env.WEB_CONCURRENCY;
+    expect(workers).to.eq(2);
+  });
+
+  it("prefers --workers over WEB_CONCURRENCY", async () => {
+    args = [
+      "/some/path/to/node",
+      "/some/path/to/cli-binary.js",
+      "serve",
+      "./fixtures/js-esm-template",
+      "--workers",
+      "4",
+    ];
+    process.env.WEB_CONCURRENCY = "2";
+    const startServerSpy = spy();
+    await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
+    delete process.env.WEB_CONCURRENCY;
+    expect(workers).to.eq(4);
   });
 
   it("calls loadUserFunctionFromDirectory() with correct args", async () => {
