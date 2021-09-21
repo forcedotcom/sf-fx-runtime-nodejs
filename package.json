@@ -17,7 +17,15 @@
     "release": "./etc/publish.sh"
   },
   "files": [
-    "dist/**/*"
+    "package.json",
+    "npm-shrinkwrap.json",
+    "README.md",
+    "LICENSE.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "TERMS_OF_USE.md",
+    "bin/**/*.js",
+    "dist/**/*.js"
   ],
   "author": "",
   "license": "ISC",
