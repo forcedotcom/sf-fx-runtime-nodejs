@@ -7,6 +7,8 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import throng from "throng";
+import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
 import startServer from "./server.js";
 import logger from "./logger.js";
@@ -34,6 +36,21 @@ export function parseArgs(params: Array<string>): any {
             type: "string",
             description: "The host the webserver should bind to.",
             default: "localhost",
+          })
+          .option("workers", {
+            alias: "w",
+            type: "number",
+            description:
+              "The number of Node.js cluster workers the invoker should use",
+            default: 1,
+          })
+          .middleware(function (...opts) {
+            // Use WEB_CONCURRENCY if set and -w was not provided.
+            const yarg: any = opts[opts.length - 1];
+            if (yarg.parsed.defaulted.workers && process.env.WEB_CONCURRENCY) {
+              opts[0].workers = parseInt(process.env.WEB_CONCURRENCY);
+            }
+            return opts[0];
           });
       },
       (args) => {
@@ -47,20 +64,33 @@ export function parseArgs(params: Array<string>): any {
 
 export default async function (
   params: Array<string>,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  loadUserFunctionFromDirectory_: Function = loadUserFunctionFromDirectory,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  startServer_: Function = startServer
+  loadUserFunction: (
+    p: string
+  ) => Promise<SalesforceFunction<any, any>> = loadUserFunctionFromDirectory,
+  server: (
+    h: string,
+    p: number,
+    f: SalesforceFunction<any, any>,
+    w: number,
+    d: () => void
+  ) => Promise<void> = startServer,
+  manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng
 ): Promise<void> {
   const args = parseArgs(params);
   let userFunction;
 
   try {
-    userFunction = await loadUserFunctionFromDirectory_(args.projectPath);
+    userFunction = await loadUserFunction(args.projectPath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
   }
 
-  startServer_(args.host, args.port, userFunction);
+  const worker = async function (
+    id: number,
+    disconnect: () => void
+  ): Promise<void> {
+    return await server(args.host, args.port, userFunction, id, disconnect);
+  };
+  return await manager({ worker, count: args.workers });
 }
