@@ -86,15 +86,25 @@ export class DataApiImpl implements DataApi {
 
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.query(soql);
-      const records = response.records.map(createCaseInsensitiveRecord);
-
-      return {
-        done: response.done,
-        totalSize: response.totalSize,
-        records,
-        nextRecordsUrl: response.nextRecordsUrl,
-      };
+      try {
+        const response = await conn.query(soql);
+        const records = response.records.map(createCaseInsensitiveRecord);
+        return {
+          done: response.done,
+          totalSize: response.totalSize,
+          records,
+          nextRecordsUrl: response.nextRecordsUrl,
+        };
+      } catch (e) {
+        if (e.errorCode == "ERROR_HTTP_404") {
+          try {
+            JSON.parse(e.message);
+          } catch (e) {
+            throw new Error("Could not parse API response as JSON!");
+          }
+        }
+        throw e;
+      }
     });
   }
 
