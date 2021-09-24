@@ -271,11 +271,8 @@ describe("DataApi Class", async () => {
       });
     });
 
-    // TODO: W-9281117 - This test fails since the raised exception is the entire body
-    // of the API response rather than a graceful error message.
     describe("with an unexpected response", async () => {
       it("returns a malformed query error", async () => {
-        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
           await dataApi.query("SELECT Name FROM FruitVendor__c");
           expect.fail("Promise should have been rejected!");
