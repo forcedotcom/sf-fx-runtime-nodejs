@@ -89,6 +89,9 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.query(soql);
         const records = response.records.map(createCaseInsensitiveRecord);
+        if (records instanceof String) {
+          throw new Error("Could not parse API response as JSON!");
+        };
         return {
           done: response.done,
           totalSize: response.totalSize,
