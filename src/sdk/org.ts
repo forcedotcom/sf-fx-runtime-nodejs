@@ -41,7 +41,7 @@ export class OrgImpl implements Org {
     // An API version is also available in SalesforceContext. That value differs
     // between orgs and can change seemingly randomly. To avoid surprises at runtime, we
     // intentionally don't use that value and instead fix the version.
-    this.apiVersion = "51.0";
+    this.apiVersion = "53.0";
 
     this.dataApi = new DataApiImpl(this.baseUrl, this.apiVersion, accessToken);
     this.user = new UserImpl(userId, username, onBehalfOfUserId);

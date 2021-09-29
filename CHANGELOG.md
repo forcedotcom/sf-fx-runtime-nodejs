@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-09-29
+
+- Salesforce API version increased from 51 to 53 ([#184](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/184))
+
 ## [0.6.0] - 2021-09-22
 
 - Convert package-lock.json to npm-shrinkwrap.json for deterministic dependencies ([#165](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/165))
