@@ -92,7 +92,14 @@ $ aws sts get-caller-identity --profile sf-fx-ea > /dev/null && echo $?
 0
 ```
 
-Then, run the following:
+Make sure you've got access to release the NPM package:
+
+```
+$ npm access ls-packages @heroku | grep sf-fx-runtime-nodejs
+  "@heroku/sf-fx-runtime-nodejs": "read-write"
+```
+
+You'll be asked for your NPM two-factor authentication code when releasing. To release, run:
 
 ```
 $ npm run release
