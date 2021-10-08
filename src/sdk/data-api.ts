@@ -80,34 +80,22 @@ export class DataApiImpl implements DataApi {
         recordCreate.type,
         recordCreate.fields
       );
+      this.validate_response(response);
       return { id: response.id };
     });
   }
 
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      try {
-        const response = await conn.query(soql);
-        const records = response.records.map(createCaseInsensitiveRecord);
-        if (records instanceof String) {
-          throw new Error("Could not parse API response as JSON!");
-        };
-        return {
-          done: response.done,
-          totalSize: response.totalSize,
-          records,
-          nextRecordsUrl: response.nextRecordsUrl,
-        };
-      } catch (e) {
-        if (e.errorCode == "ERROR_HTTP_404") {
-          try {
-            JSON.parse(e.message);
-          } catch (e) {
-            throw new Error("Could not parse API response as JSON!");
-          }
-        }
-        throw e;
-      }
+      const response = await conn.query(soql);
+      this.validate_response(response);
+      const records = response.records.map(createCaseInsensitiveRecord);
+      return {
+        done: response.done,
+        totalSize: response.totalSize,
+        records,
+        nextRecordsUrl: response.nextRecordsUrl,
+      };
     });
   }
 
@@ -123,6 +111,7 @@ export class DataApiImpl implements DataApi {
 
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.queryMore(queryResult.nextRecordsUrl);
+      this.validate_response(response);
       const records = response.records.map(createCaseInsensitiveRecord);
 
       return {
@@ -150,6 +139,7 @@ export class DataApiImpl implements DataApi {
       });
 
       const response: any = await conn.update(recordUpdate.type, fields);
+      this.validate_response(response);
       return { id: response.id };
     });
   }
@@ -157,6 +147,7 @@ export class DataApiImpl implements DataApi {
   async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.delete(type, id);
+      this.validate_response(response);
 
       return { id: response.id };
     });
@@ -229,5 +220,11 @@ export class DataApiImpl implements DataApi {
 
       return subrequestResults.then((keyValues) => new Map(keyValues));
     });
+  }
+
+  validate_response(response) {
+    if (typeof response === "string") {
+      throw new Error("Could not parse API response as JSON!");
+    }
   }
 }
