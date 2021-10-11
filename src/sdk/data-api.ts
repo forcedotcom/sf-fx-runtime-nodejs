@@ -98,7 +98,6 @@ export class DataApiImpl implements DataApi {
           nextRecordsUrl: response.nextRecordsUrl,
         };
       } catch (e) {
-        console.log(e);
         this.handle_bad_response(e);
       }
       return undefined;
@@ -235,7 +234,6 @@ export class DataApiImpl implements DataApi {
   }
 
   private handle_bad_response(error) {
-    console.log(error.errorCode);
     if (error.errorCode && error.errorCode.includes("ERROR_HTTP_")) {
       throw new Error("Unexpected response with status: " + error.errorCode);
     } else {
