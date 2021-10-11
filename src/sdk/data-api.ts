@@ -80,7 +80,7 @@ export class DataApiImpl implements DataApi {
         recordCreate.type,
         recordCreate.fields
       );
-      this.validate_response(response);
+      this.validate_response(response, function (response) { return (typeof response.id != "undefined");});
       return { id: response.id };
     });
   }
@@ -89,7 +89,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const response = await conn.query(soql);
-        this.validate_response(response);
+        this.validate_response(response, function (response) { return (typeof response.records === "object" && typeof response.records.map === "function");});
         const records = response.records.map(createCaseInsensitiveRecord);
         return {
           done: response.done,
@@ -116,7 +116,7 @@ export class DataApiImpl implements DataApi {
 
     return this.promisifyRequests(async (conn: Connection) => {
       const response = await conn.queryMore(queryResult.nextRecordsUrl);
-      this.validate_response(response);
+      this.validate_response(response, function (response) { return (typeof response.records === "object" && typeof response.records.map === "function");});
       const records = response.records.map(createCaseInsensitiveRecord);
 
       return {
@@ -144,7 +144,7 @@ export class DataApiImpl implements DataApi {
       });
 
       const response: any = await conn.update(recordUpdate.type, fields);
-      this.validate_response(response);
+      this.validate_response(response, function (response) { return (typeof response.id != "undefined");});
       return { id: response.id };
     });
   }
@@ -152,7 +152,7 @@ export class DataApiImpl implements DataApi {
   async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       const response: any = await conn.delete(type, id);
-      this.validate_response(response);
+      this.validate_response(response, function (response) { return (typeof response.id != "undefined");});
 
       return { id: response.id };
     });
@@ -227,17 +227,17 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  private validate_response(response) {
-    if (!(typeof response === "object")) {
+  private validate_response(response, validator) {
+    if ((typeof response !== "object") || (!validator(response))) {
       throw new Error("Could not parse API response as JSON!");
     }
   }
 
   private handle_bad_response(error) {
-    if (error.errorCode && error.errorCode.includes("ERROR_HTTP_")) {
-      throw new Error("Unexpected response with status: " + error.errorCode);
-    } else {
-      throw error;
+    if (error.constructor.name == "HttpApiError" && error.errorCode && error.errorCode.startsWith("ERROR_HTTP_")) {
+      error.content = error.message;
+      error.message = "Unexpected response with status: " + error.errorCode;
     }
+    throw error;
   }
 }
