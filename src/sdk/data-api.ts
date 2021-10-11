@@ -87,15 +87,21 @@ export class DataApiImpl implements DataApi {
 
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.query(soql);
-      this.validate_response(response);
-      const records = response.records.map(createCaseInsensitiveRecord);
-      return {
-        done: response.done,
-        totalSize: response.totalSize,
-        records,
-        nextRecordsUrl: response.nextRecordsUrl,
-      };
+      try {
+        const response = await conn.query(soql);
+        this.validate_response(response);
+        const records = response.records.map(createCaseInsensitiveRecord);
+        return {
+          done: response.done,
+          totalSize: response.totalSize,
+          records,
+          nextRecordsUrl: response.nextRecordsUrl,
+        };
+      } catch (e) {
+        console.log(e);
+        this.handle_bad_response(e);
+      }
+      return undefined;
     });
   }
 
@@ -222,9 +228,18 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  validate_response(response) {
-    if (typeof response === "string") {
+  private validate_response(response) {
+    if (!(typeof response === "object")) {
       throw new Error("Could not parse API response as JSON!");
+    }
+  }
+
+  private handle_bad_response(error) {
+    console.log(error.errorCode);
+    if (error.errorCode && error.errorCode.includes("ERROR_HTTP_")) {
+      throw new Error("Unexpected response with status: " + error.errorCode);
+    } else {
+      throw error;
     }
   }
 }

@@ -277,7 +277,9 @@ describe("DataApi Class", async () => {
           await dataApi.query("SELECT Name FROM FruitVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).match(/^Could not parse API response as JSON!/);
+          expect(e.message).equal(
+            "Unexpected response with status: ERROR_HTTP_404"
+          );
         }
       });
     });
