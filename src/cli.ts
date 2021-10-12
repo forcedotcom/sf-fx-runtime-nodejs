@@ -5,6 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import cluster from "cluster";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import throng from "throng";
@@ -31,6 +32,12 @@ export function parseArgs(params: Array<string>): any {
             description: "The port the webserver should listen on.",
             default: 8080,
           })
+          .option("debug-port", {
+            alias: "d",
+            type: "number",
+            description: "The port attach a debugger/inspector to.",
+            default: null,
+          })
           .option("host", {
             alias: "h",
             type: "string",
@@ -43,18 +50,13 @@ export function parseArgs(params: Array<string>): any {
             description:
               "The number of Node.js cluster workers the invoker should use",
             default: 1,
-          })
-          .middleware(function (...opts) {
-            // Use WEB_CONCURRENCY if set and -w was not provided.
-            const yarg: any = opts[opts.length - 1];
-            if (yarg.parsed.defaulted.workers && process.env.WEB_CONCURRENCY) {
-              opts[0].workers = parseInt(process.env.WEB_CONCURRENCY);
-            }
-            return opts[0];
           });
       },
       (args) => {
         args.projectPath = path.resolve(args.projectPath);
+        if (args.debugPort) {
+          args.workers = 1;
+        }
       }
     )
     .strictCommands()
@@ -86,11 +88,20 @@ export default async function (
     process.exit(1);
   }
 
+  const master = function() {
+    if (args.debugPort) {
+      cluster.setupMaster({
+        execArgv: ["--inspect"],
+        inspectPort: args.debugPort
+      });
+    }
+    console.log(cluster.settings);
+  };
   const worker = async function (
     id: number,
     disconnect: () => void
   ): Promise<void> {
     return await server(args.host, args.port, userFunction, id, disconnect);
   };
-  return await manager({ worker, count: args.workers });
+  return await manager({ master, worker, count: args.workers });
 }
