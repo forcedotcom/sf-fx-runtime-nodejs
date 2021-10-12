@@ -35,7 +35,7 @@ export function parseArgs(params: Array<string>): any {
           .option("debug-port", {
             alias: "d",
             type: "number",
-            description: "The port attach a debugger/inspector to.",
+            description: "The port to attach a debugger/inspector to. Will override --workers to 1.",
             default: null,
           })
           .option("host", {
@@ -51,12 +51,6 @@ export function parseArgs(params: Array<string>): any {
               "The number of Node.js cluster workers the invoker should use",
             default: 1,
           });
-      },
-      (args) => {
-        args.projectPath = path.resolve(args.projectPath);
-        if (args.debugPort) {
-          args.workers = 1;
-        }
       }
     )
     .strictCommands()
@@ -81,27 +75,33 @@ export default async function (
   const args = parseArgs(params);
   let userFunction;
 
+  const projectPath = path.resolve(args.projectPath);
   try {
-    userFunction = await loadUserFunction(args.projectPath);
+    userFunction = await loadUserFunction(projectPath);
   } catch (error) {
     logger.error("Could not load function: " + error.message);
     process.exit(1);
   }
 
+  const { debugPort } = args;
   const master = function() {
-    if (args.debugPort) {
+    if (debugPort) {
+      const { execArgv } = process;
+      execArgv.push("--inspect");
       cluster.setupMaster({
-        execArgv: ["--inspect"],
-        inspectPort: args.debugPort
+        execArgv,
+        inspectPort: debugPort
       });
     }
-    console.log(cluster.settings);
   };
+
   const worker = async function (
     id: number,
     disconnect: () => void
   ): Promise<void> {
     return await server(args.host, args.port, userFunction, id, disconnect);
   };
-  return await manager({ master, worker, count: args.workers });
+
+  const count = debugPort ? 1 : args.workers;
+  return await manager({ master, worker, count });
 }
