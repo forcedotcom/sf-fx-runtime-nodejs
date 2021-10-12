@@ -81,7 +81,6 @@ describe("cli.ts", async () => {
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     const { settings } = cluster;
-    console.dir(settings);
     expect(settings.execArgv).to.include("--inspect");
     expect(settings.inspectPort).to.eq(8888);
   });
