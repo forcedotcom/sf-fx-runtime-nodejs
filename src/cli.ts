@@ -35,7 +35,8 @@ export function parseArgs(params: Array<string>): any {
           .option("debug-port", {
             alias: "d",
             type: "number",
-            description: "The port to attach a debugger/inspector to. Will override --workers to 1.",
+            description:
+              "The port to attach a debugger/inspector to. Will override --workers to 1.",
             default: null,
           })
           .option("host", {
@@ -84,13 +85,13 @@ export default async function (
   }
 
   const { debugPort } = args;
-  const master = function() {
+  const master = function () {
     if (debugPort) {
       const { execArgv } = process;
       execArgv.push("--inspect");
       cluster.setupMaster({
         execArgv,
-        inspectPort: debugPort
+        inspectPort: debugPort,
       });
     }
   };
