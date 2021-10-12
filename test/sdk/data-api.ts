@@ -283,6 +283,17 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("with a unparseable json as body", async () => {
+      it("returns a malformed query error", async () => {
+        try {
+          await dataApi.query("SELECT Name FROM VeggieVendor__c");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).equal("Could not parse API response as JSON!");
+        }
+      });
+    });
   });
 
   describe("queryMore()", async () => {
