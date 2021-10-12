@@ -76,7 +76,7 @@ describe("cli.ts", async () => {
       "serve",
       "./fixtures/js-esm-template",
       "-d",
-      "8888"
+      "8888",
     ];
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
@@ -95,7 +95,7 @@ describe("cli.ts", async () => {
       "--workers",
       "3",
       "--debug-port",
-      "8888"
+      "8888",
     ];
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
