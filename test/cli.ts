@@ -5,6 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import cluster from "cluster";
 import spy from "sinon/lib/sinon/spy.js";
 import { expect } from "chai";
 import * as path from "path";
@@ -14,6 +15,7 @@ import cli, { parseArgs } from "../src/cli.js";
 let workers = 0;
 const fakeThrong = async function (...processes: Array<any>) {
   workers = processes[0].count;
+  await processes[0].master();
   return await processes[0].worker("worker 1", function () {
     return null;
   });
@@ -67,34 +69,37 @@ describe("cli.ts", async () => {
     expect(workers).to.eq(3);
   });
 
-  it("starts multiple workers with WEB_CONCURRENCY", async () => {
+  it("sets up the debugger on workers with --debug-port", async () => {
     args = [
       "/some/path/to/node",
       "/some/path/to/cli-binary.js",
       "serve",
       "./fixtures/js-esm-template",
+      "-d",
+      "8888"
     ];
-    process.env.WEB_CONCURRENCY = "2";
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
-    delete process.env.WEB_CONCURRENCY;
-    expect(workers).to.eq(2);
+    const { settings } = cluster;
+    console.dir(settings);
+    expect(settings.execArgv).to.include("--inspect");
+    expect(settings.inspectPort).to.eq(8888);
   });
 
-  it("prefers --workers over WEB_CONCURRENCY", async () => {
+  it("overrides workers to 1 with --debug-port", async () => {
     args = [
       "/some/path/to/node",
       "/some/path/to/cli-binary.js",
       "serve",
       "./fixtures/js-esm-template",
       "--workers",
-      "4",
+      "3",
+      "--debug-port",
+      "8888"
     ];
-    process.env.WEB_CONCURRENCY = "2";
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
-    delete process.env.WEB_CONCURRENCY;
-    expect(workers).to.eq(4);
+    expect(workers).to.eq(1);
   });
 
   it("calls loadUserFunctionFromDirectory() with correct args", async () => {
