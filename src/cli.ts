@@ -88,7 +88,7 @@ export default async function (
   const master = function () {
     if (debugPort) {
       const { execArgv } = process;
-      execArgv.push("--inspect");
+      execArgv.push(`--inspect=${args.host}`);
       cluster.setupMaster({
         execArgv,
         inspectPort: debugPort,
