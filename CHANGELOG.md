@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Bind debugger to --host ([#207](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/207))
+
 ## [0.9.0] - 2021-10-13
 
 - Reintroduce NodeJS clustering, worker management via throng ([#203](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/203))
