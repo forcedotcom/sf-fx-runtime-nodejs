@@ -75,13 +75,15 @@ describe("cli.ts", async () => {
       "/some/path/to/cli-binary.js",
       "serve",
       "./fixtures/js-esm-template",
+      "-h",
+      "0.0.0.0",
       "-d",
       "8888",
     ];
     const startServerSpy = spy();
     await cli(args, loadUserFunctionFromDirectory, startServerSpy, fakeThrong);
     const { settings } = cluster;
-    expect(settings.execArgv).to.include("--inspect");
+    expect(settings.execArgv).to.include("--inspect=0.0.0.0");
     expect(settings.inspectPort).to.eq(8888);
   });
 
