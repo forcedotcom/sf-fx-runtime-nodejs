@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Reintroduce NodeJS clustering, worker management via throng ([#203](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/203))
+
 ## [0.8.0] - 2021-10-01
 
- - Revert NodeJS clustering, manage workers via throng ([#192](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/192))
+- Revert NodeJS clustering, manage workers via throng ([#192](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/192))
 
 ## [0.7.0] - 2021-09-29
 
