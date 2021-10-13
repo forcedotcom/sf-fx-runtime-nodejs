@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2021-10-13
+
 - Bind debugger to --host ([#207](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/207))
 
 ## [0.9.0] - 2021-10-13

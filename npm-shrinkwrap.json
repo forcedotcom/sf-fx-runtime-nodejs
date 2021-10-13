@@ -1,18 +1,19 @@
 {
   "name": "@heroku/sf-fx-runtime-nodejs",
-  "version": "0.8.0",
+  "version": "0.9.1",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@heroku/sf-fx-runtime-nodejs",
-      "version": "0.8.0",
+      "version": "0.9.1",
       "license": "ISC",
       "dependencies": {
         "@salesforce/core": "^2.27.2",
         "cloudevents": "^4.0.3",
         "fastify": "^3.21.0",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
+        "throng": "^5.0.0",
         "whatwg-mimetype": "^3.0.0",
         "yargs": "^17.1.1"
       },
