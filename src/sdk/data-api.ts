@@ -86,9 +86,8 @@ export class DataApiImpl implements DataApi {
         });
         return { id: response.id };
       } catch (e) {
-        this.handle_bad_response(e);
+        return this.handle_bad_response(e);
       }
-      return undefined;
     });
   }
 
@@ -110,9 +109,8 @@ export class DataApiImpl implements DataApi {
           nextRecordsUrl: response.nextRecordsUrl,
         };
       } catch (e) {
-        this.handle_bad_response(e);
+        return this.handle_bad_response(e);
       }
-      return undefined;
     });
   }
 
@@ -144,9 +142,8 @@ export class DataApiImpl implements DataApi {
           nextRecordsUrl: response.nextRecordsUrl,
         };
       } catch (e) {
-        this.handle_bad_response(e);
+        return this.handle_bad_response(e);
       }
-      return undefined;
     });
   }
 
@@ -172,9 +169,8 @@ export class DataApiImpl implements DataApi {
         });
         return { id: response.id };
       } catch (e) {
-        this.handle_bad_response(e);
+        return this.handle_bad_response(e);
       }
-      return undefined;
     });
   }
 
@@ -187,9 +183,8 @@ export class DataApiImpl implements DataApi {
         });
         return { id: response.id };
       } catch (e) {
-        this.handle_bad_response(e);
+        return this.handle_bad_response(e);
       }
-      return undefined;
     });
   }
 
