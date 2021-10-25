@@ -290,7 +290,9 @@ describe("DataApi Class", async () => {
           await dataApi.query("SELECT Name FROM VeggieVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).equal("Could not parse API response as JSON!");
+          expect(e.message).to.includes(
+            "Could not parse API response as JSON: "
+          );
         }
       });
     });

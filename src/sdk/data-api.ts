@@ -259,10 +259,11 @@ export class DataApiImpl implements DataApi {
 
   private validate_response(response, validator) {
     if (typeof response !== "object" || !validator(response)) {
-      throw new Error("Could not parse API response as JSON!");
+      throw new Error("Could not parse API response as JSON: " + response);
     }
   }
 
+  // jsforce sets response body into `message` instead of `content`, so the output would not be helpful
   private handle_bad_response(error) {
     if (
       error.constructor.name == "HttpApiError" &&
