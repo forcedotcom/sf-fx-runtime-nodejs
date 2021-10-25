@@ -271,16 +271,28 @@ describe("DataApi Class", async () => {
       });
     });
 
-    // TODO: W-9281117 - This test fails since the raised exception is the entire body
-    // of the API response rather than a graceful error message.
-    describe.skip("with an unexpected response", async () => {
+    describe("with an unexpected response", async () => {
       it("returns a malformed query error", async () => {
-        // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
           await dataApi.query("SELECT Name FROM FruitVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          expect(e.message).match(/^Could not parse API response as JSON!/);
+          expect(e.message).equal(
+            "Unexpected response with status: ERROR_HTTP_404"
+          );
+        }
+      });
+    });
+
+    describe("with a unparseable json as body", async () => {
+      it("returns a malformed query error", async () => {
+        try {
+          await dataApi.query("SELECT Name FROM VeggieVendor__c");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).to.includes(
+            "Could not parse API response as JSON: "
+          );
         }
       });
     });

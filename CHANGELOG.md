@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Error handling for when API response cannot be parsed as JSON ([#174](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/174))
+
 ## [0.9.1] - 2021-10-13
 
 - Bind debugger to --host ([#207](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/207))

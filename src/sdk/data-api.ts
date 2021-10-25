@@ -76,25 +76,41 @@ export class DataApiImpl implements DataApi {
     recordCreate: RecordForCreate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.insert(
-        recordCreate.type,
-        recordCreate.fields
-      );
-      return { id: response.id };
+      try {
+        const response: any = await conn.insert(
+          recordCreate.type,
+          recordCreate.fields
+        );
+        this.validate_response(response, function (response) {
+          return typeof response.id != "undefined";
+        });
+        return { id: response.id };
+      } catch (e) {
+        return this.handle_bad_response(e);
+      }
     });
   }
 
   async query(soql: string): Promise<RecordQueryResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.query(soql);
-      const records = response.records.map(createCaseInsensitiveRecord);
-
-      return {
-        done: response.done,
-        totalSize: response.totalSize,
-        records,
-        nextRecordsUrl: response.nextRecordsUrl,
-      };
+      try {
+        const response = await conn.query(soql);
+        this.validate_response(response, function (response) {
+          return (
+            typeof response.records === "object" &&
+            typeof response.records.map === "function"
+          );
+        });
+        const records = response.records.map(createCaseInsensitiveRecord);
+        return {
+          done: response.done,
+          totalSize: response.totalSize,
+          records,
+          nextRecordsUrl: response.nextRecordsUrl,
+        };
+      } catch (e) {
+        return this.handle_bad_response(e);
+      }
     });
   }
 
@@ -109,15 +125,25 @@ export class DataApiImpl implements DataApi {
     }
 
     return this.promisifyRequests(async (conn: Connection) => {
-      const response = await conn.queryMore(queryResult.nextRecordsUrl);
-      const records = response.records.map(createCaseInsensitiveRecord);
+      try {
+        const response = await conn.queryMore(queryResult.nextRecordsUrl);
+        this.validate_response(response, function (response) {
+          return (
+            typeof response.records === "object" &&
+            typeof response.records.map === "function"
+          );
+        });
+        const records = response.records.map(createCaseInsensitiveRecord);
 
-      return {
-        done: response.done,
-        totalSize: response.totalSize,
-        records,
-        nextRecordsUrl: response.nextRecordsUrl,
-      };
+        return {
+          done: response.done,
+          totalSize: response.totalSize,
+          records,
+          nextRecordsUrl: response.nextRecordsUrl,
+        };
+      } catch (e) {
+        return this.handle_bad_response(e);
+      }
     });
   }
 
@@ -136,16 +162,29 @@ export class DataApiImpl implements DataApi {
         fields[targetKey] = value;
       });
 
-      const response: any = await conn.update(recordUpdate.type, fields);
-      return { id: response.id };
+      try {
+        const response: any = await conn.update(recordUpdate.type, fields);
+        this.validate_response(response, function (response) {
+          return typeof response.id != "undefined";
+        });
+        return { id: response.id };
+      } catch (e) {
+        return this.handle_bad_response(e);
+      }
     });
   }
 
   async delete(type: string, id: string): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const response: any = await conn.delete(type, id);
-
-      return { id: response.id };
+      try {
+        const response: any = await conn.delete(type, id);
+        this.validate_response(response, function (response) {
+          return typeof response.id != "undefined";
+        });
+        return { id: response.id };
+      } catch (e) {
+        return this.handle_bad_response(e);
+      }
     });
   }
 
@@ -216,5 +255,24 @@ export class DataApiImpl implements DataApi {
 
       return subrequestResults.then((keyValues) => new Map(keyValues));
     });
+  }
+
+  private validate_response(response, validator) {
+    if (typeof response !== "object" || !validator(response)) {
+      throw new Error("Could not parse API response as JSON: " + response);
+    }
+  }
+
+  // jsforce sets response body into `message` instead of `content`, so the output would not be helpful
+  private handle_bad_response(error) {
+    if (
+      error.constructor.name == "HttpApiError" &&
+      error.errorCode &&
+      error.errorCode.startsWith("ERROR_HTTP_")
+    ) {
+      error.content = error.message;
+      error.message = "Unexpected response with status: " + error.errorCode;
+    }
+    throw error;
   }
 }
