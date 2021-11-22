@@ -341,16 +341,16 @@
       }
     },
     "node_modules/@salesforce/core": {
-      "version": "2.28.2",
-      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.28.2.tgz",
-      "integrity": "sha512-ohKNx4v1QL5LMESavn9Bs0ZNA4cw3IGL+dOvP601SphKPCOMiDfZYzfqhtET4R4uTAnJKvtUsuyvQUwL2479jg==",
+      "version": "2.29.0",
+      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.29.0.tgz",
+      "integrity": "sha512-b34bR68Mbvm2ASMTItY2HdVmstVFv/Lj4sK1ddhi/aqYNWTF3wfaqGg8nB6+iIVeBQ4iVlw4x5sQvp3GS48Hhg==",
       "dependencies": {
         "@salesforce/bunyan": "^2.0.0",
         "@salesforce/kit": "^1.5.0",
         "@salesforce/schemas": "^1.0.1",
         "@salesforce/ts-types": "^1.5.13",
         "@types/graceful-fs": "^4.1.5",
-        "@types/jsforce": "^1.9.29",
+        "@types/jsforce": "^1.9.35",
         "@types/mkdirp": "^1.0.1",
         "debug": "^3.1.0",
         "graceful-fs": "^4.2.4",
@@ -358,6 +358,7 @@
         "jsforce": "^1.10.1",
         "jsonwebtoken": "8.5.0",
         "mkdirp": "1.0.4",
+        "semver": "^7.3.5",
         "sfdx-faye": "^1.0.9",
         "ts-retry-promise": "^0.6.0"
       }
@@ -621,9 +622,9 @@
       }
     },
     "node_modules/@types/jsforce": {
-      "version": "1.9.33",
-      "resolved": "https://registry.npmjs.org/@types/jsforce/-/jsforce-1.9.33.tgz",
-      "integrity": "sha512-YkFQm11lpo5/780+3qALjVTk3gW/IaUNrkSP1UcO0cR1wX4+hRyfHMBK7JI3JJwZSkNGgJU6O76WOxckpaXWPA==",
+      "version": "1.9.35",
+      "resolved": "https://registry.npmjs.org/@types/jsforce/-/jsforce-1.9.35.tgz",
+      "integrity": "sha512-GEb1iMAK8raElbBbozR7aVEuMl47jrPYLNkeh+3h2vLJIG21uQ/kOk4kPgMiMFwCmgfX4/tPDugnjb7qrMav4A==",
       "dependencies": {
         "@types/node": "*"
       }
@@ -5346,16 +5347,16 @@
       }
     },
     "@salesforce/core": {
-      "version": "2.28.2",
-      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.28.2.tgz",
-      "integrity": "sha512-ohKNx4v1QL5LMESavn9Bs0ZNA4cw3IGL+dOvP601SphKPCOMiDfZYzfqhtET4R4uTAnJKvtUsuyvQUwL2479jg==",
+      "version": "2.29.0",
+      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.29.0.tgz",
+      "integrity": "sha512-b34bR68Mbvm2ASMTItY2HdVmstVFv/Lj4sK1ddhi/aqYNWTF3wfaqGg8nB6+iIVeBQ4iVlw4x5sQvp3GS48Hhg==",
       "requires": {
         "@salesforce/bunyan": "^2.0.0",
         "@salesforce/kit": "^1.5.0",
         "@salesforce/schemas": "^1.0.1",
         "@salesforce/ts-types": "^1.5.13",
         "@types/graceful-fs": "^4.1.5",
-        "@types/jsforce": "^1.9.29",
+        "@types/jsforce": "^1.9.35",
         "@types/mkdirp": "^1.0.1",
         "debug": "^3.1.0",
         "graceful-fs": "^4.2.4",
@@ -5363,6 +5364,7 @@
         "jsforce": "^1.10.1",
         "jsonwebtoken": "8.5.0",
         "mkdirp": "1.0.4",
+        "semver": "^7.3.5",
         "sfdx-faye": "^1.0.9",
         "ts-retry-promise": "^0.6.0"
       },
@@ -5615,9 +5617,9 @@
       }
     },
     "@types/jsforce": {
-      "version": "1.9.33",
-      "resolved": "https://registry.npmjs.org/@types/jsforce/-/jsforce-1.9.33.tgz",
-      "integrity": "sha512-YkFQm11lpo5/780+3qALjVTk3gW/IaUNrkSP1UcO0cR1wX4+hRyfHMBK7JI3JJwZSkNGgJU6O76WOxckpaXWPA==",
+      "version": "1.9.35",
+      "resolved": "https://registry.npmjs.org/@types/jsforce/-/jsforce-1.9.35.tgz",
+      "integrity": "sha512-GEb1iMAK8raElbBbozR7aVEuMl47jrPYLNkeh+3h2vLJIG21uQ/kOk4kPgMiMFwCmgfX4/tPDugnjb7qrMav4A==",
       "requires": {
         "@types/node": "*"
       }
