@@ -4,7 +4,7 @@
   "type": "module",
   "description": "A web server that takes in function source code and provides the Salesforce FX SDK to the invoked source code.",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",
     "wiremock": "wiremock --port 8080",
     "mocha": "mocha",
@@ -12,7 +12,7 @@
     "format": "npm run format:write && npm run format:check",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "prepare": "npm run build",
+    "prepack": "tsc -b --clean && tsc -b --force",
     "bump": "node ./scripts/bump-version.js",
     "release": "./etc/publish.sh"
   },
