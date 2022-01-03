@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fix bug when attempting to load functions on windows with a `c:` prefix ([#262](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/262))
 - Error handling for when API response cannot be parsed as JSON ([#174](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/174))
 
 ## [0.9.1] - 2021-10-13
