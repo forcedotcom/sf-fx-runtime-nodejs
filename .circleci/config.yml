@@ -21,7 +21,8 @@ commands:
           command: |
             apt-get update
             sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
-            apt-get install -y software-properties-common
+            apt-get install -y --no-install-recommends software-properties-common apt-transport-https ca-certificates
+            apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys EB9B1D8886F44E2A
             add-apt-repository -y ppa:openjdk-r/ppa
             apt-get update -y
       - run:
