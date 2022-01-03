@@ -17,30 +17,26 @@ commands:
         default: 1
     steps:
       - run:
-          name: Workaround for running apt behind the scene
-          command: killall -9 apt-get || true
-      - run:
-          name: Switch to US mirror for faster performances
-          command: sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
-      - run:
           name: Add openjdk-r PPA
           command: |
+            killall -9 apt-get || true
+            sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
+            apt-get install -y software-properties-common
             add-apt-repository ppa:openjdk-r/ppa
             apt-get update
       - run:
           name: Generate cache version
           command: |
-            apt-cache policy openjdk-<< parameters.version >>-jdk | grep 'Candidate:' | cut -d' ' -f4 > .openjdk_version
+            apt-cache policy openjdk-<< parameters.version >>-jdk | grep 'Candidate:' | cut -d ' ' -f4 > .openjdk_version
             cat .openjdk_version
       - restore_cache:
           keys:
           - apt-cache-{{ checksum ".openjdk_version" }}-v<< parameters.cache_version >>
       - run:
-          name: Create temp directory if restore cache didn't
-          command: mkdir -p /tmp/archives
-      - run:
           name: Restore apt cache
-          command: rsync -av /tmp/archives/ /var/cache/apt/archives/
+          command: |
+            mkdir -p /tmp/archives
+            rsync -av /tmp/archives/ /var/cache/apt/archives/
       - run:
           name: Install openjdk-<< parameters.version >>-jdk
           command: |
