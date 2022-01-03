@@ -7,17 +7,15 @@
 
 import { promises as fs } from "fs";
 import * as path from "path";
+import { pathToFileURL } from "url";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 
-export async function loadDefaultExport(
-  directory: string,
-  main: string
-): Promise<SalesforceFunction<unknown, unknown>> {
-  // Load default export of module defined in 'main' field of 'package.json'
+export async function loadDefaultExport(fileUrl: string): Promise<SalesforceFunction<unknown, unknown>> {
+  // Attempt to load the default export for a given file.
   let fExports: any;
 
   try {
-    fExports = await import(path.join(directory, main));
+    fExports = await import(fileUrl);
   } catch (error) {
     throw new Error(
       "Could not load module referenced in 'main' field of 'package.json': " +
@@ -75,15 +73,16 @@ export async function loadUserFunctionFromDirectory(
     );
   }
 
-  const functionPath = path.join(directory, packageJson.main);
+  const functionPath = path.resolve(directory, packageJson.main);
   // Verify existence of 'main' file
   try {
     await fs.access(functionPath);
-  } catch (err) {
+  } catch (_err) {
     throw new Error(
       `Could not open function file specified by 'main' field from 'package.json' (${functionPath})!`
     );
   }
+  const functionUrl = pathToFileURL(functionPath);
 
-  return await loadDefaultExport(directory, packageJson.main);
+  return await loadDefaultExport(functionUrl.toString());
 }
