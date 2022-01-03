@@ -18,15 +18,15 @@ commands:
     steps:
       - run:
           name: Workaround for running apt behind the scene
-          command: sudo killall -9 apt-get || true
+          command: killall -9 apt-get || true
       - run:
           name: Switch to US mirror for faster performances
-          command: sudo sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
+          command: sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
       - run:
           name: Add openjdk-r PPA
           command: |
-            sudo add-apt-repository ppa:openjdk-r/ppa
-            sudo apt-get update
+            add-apt-repository ppa:openjdk-r/ppa
+            apt-get update
       - run:
           name: Generate cache version
           command: |
@@ -40,12 +40,12 @@ commands:
           command: mkdir -p /tmp/archives
       - run:
           name: Restore apt cache
-          command: sudo rsync -av /tmp/archives/ /var/cache/apt/archives/
+          command: rsync -av /tmp/archives/ /var/cache/apt/archives/
       - run:
           name: Install openjdk-<< parameters.version >>-jdk
           command: |
-            sudo apt-get install -y openjdk-<< parameters.version >>-jdk
-            sudo update-java-alternatives --set java-1.<< parameters.version >>.0-openjdk-amd64
+            apt-get install -y openjdk-<< parameters.version >>-jdk
+            update-java-alternatives --set java-1.<< parameters.version >>.0-openjdk-amd64
       - run:
           name: Prepare to save apt cache
           command: rsync -av /var/cache/apt/archives/*.deb /tmp/archives/
