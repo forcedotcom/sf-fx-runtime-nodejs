@@ -19,7 +19,7 @@ commands:
       - run:
           name: Add openjdk-r PPA
           command: |
-            killall -9 apt-get || true
+            apt-get update
             sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
             apt-get install -y software-properties-common
             add-apt-repository ppa:openjdk-r/ppa
