@@ -6,58 +6,20 @@ orbs:
   win: circleci/windows@2.2.0
 
 commands:
-  install-openjdk:
-    description: "A command to install the openjdk. See https://circleci.com/developer/orbs/orb/cloudesire/openjdk-install."
-    parameters:
-      version:
-        type: integer
-        default: 8
-      cache_version:
-        type: integer
-        default: 1
+  install-java:
     steps:
       - run:
-          name: Add openjdk-r PPA
+          name: Install default jre
           command: |
             apt-get update
-            sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
-            apt-get install -y --no-install-recommends software-properties-common apt-transport-https ca-certificates
-            apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys EB9B1D8886F44E2A
-            add-apt-repository -y ppa:openjdk-r/ppa
-            apt-get update -y
-      - run:
-          name: Generate cache version
-          command: |
-            apt-cache policy openjdk-<< parameters.version >>-jdk | grep 'Candidate:' | cut -d ' ' -f4 > .openjdk_version
-            cat .openjdk_version
-      - restore_cache:
-          keys:
-          - apt-cache-{{ checksum ".openjdk_version" }}-v<< parameters.cache_version >>
-      - run:
-          name: Restore apt cache
-          command: |
-            mkdir -p /tmp/archives
-            rsync -av /tmp/archives/ /var/cache/apt/archives/
-      - run:
-          name: Install openjdk-<< parameters.version >>-jdk
-          command: |
-            apt-get install -y openjdk-<< parameters.version >>-jdk
-            update-java-alternatives --set java-1.<< parameters.version >>.0-openjdk-amd64
-      - run:
-          name: Prepare to save apt cache
-          command: rsync -av /var/cache/apt/archives/*.deb /tmp/archives/
-      - save_cache:
-          key: apt-cache-{{ checksum ".openjdk_version" }}-v<< parameters.cache_version >>
-          paths:
-          - /tmp/archives
-
+            apt-get install -y --no-install-recommends default-jre
 jobs:
   node-17: &test
     docker:
       - image: node:17
     steps:
-      # openjdk required for testing with wiremock
-      - install-openjdk
+      # java required for testing with wiremock
+      - install-java
       - checkout
       - node/install-packages
       - run:
