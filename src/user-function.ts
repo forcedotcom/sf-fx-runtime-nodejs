@@ -10,7 +10,9 @@ import * as path from "path";
 import { pathToFileURL } from "url";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 
-export async function loadDefaultExport(fileUrl: string): Promise<SalesforceFunction<unknown, unknown>> {
+export async function loadDefaultExport(
+  fileUrl: string
+): Promise<SalesforceFunction<unknown, unknown>> {
   // Attempt to load the default export for a given file.
   let fExports: any;
 
