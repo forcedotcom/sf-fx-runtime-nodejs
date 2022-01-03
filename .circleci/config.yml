@@ -22,8 +22,8 @@ commands:
             apt-get update
             sed -i 's/\/\/archive.ubuntu.com/\/\/us.archive.ubuntu.com/g' /etc/apt/sources.list
             apt-get install -y software-properties-common
-            add-apt-repository ppa:openjdk-r/ppa
-            apt-get update
+            add-apt-repository -y ppa:openjdk-r/ppa
+            apt-get update -y
       - run:
           name: Generate cache version
           command: |
