@@ -10,7 +10,7 @@
       "license": "ISC",
       "dependencies": {
         "@salesforce/core": "^2.27.2",
-        "cloudevents": "^4.0.3",
+        "cloudevents": "^5.2.0",
         "fastify": "^3.21.0",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
         "throng": "^5.0.0",
@@ -1326,9 +1326,9 @@
       }
     },
     "node_modules/cloudevents": {
-      "version": "4.0.3",
-      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-4.0.3.tgz",
-      "integrity": "sha512-FpwsQ0JZzGH1PcJmZTXRQkQSt5YFjwlppUrEUfTU0Ey175IIdYYDCIMeqMIX+qvDUhj8bFDrgU23xWA1JQbR1Q==",
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-5.2.0.tgz",
+      "integrity": "sha512-khYLL5qYImCuVBy9ki8c+twY37lWGu4e3Zr018VyZN+1Zj2McURCLGBx5SalAdeGV1RJE5hT8lxgcEwv9JbdxA==",
       "dependencies": {
         "ajv": "~6.12.3",
         "uuid": "~8.3.0"
@@ -6040,9 +6040,9 @@
       }
     },
     "cloudevents": {
-      "version": "4.0.3",
-      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-4.0.3.tgz",
-      "integrity": "sha512-FpwsQ0JZzGH1PcJmZTXRQkQSt5YFjwlppUrEUfTU0Ey175IIdYYDCIMeqMIX+qvDUhj8bFDrgU23xWA1JQbR1Q==",
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-5.2.0.tgz",
+      "integrity": "sha512-khYLL5qYImCuVBy9ki8c+twY37lWGu4e3Zr018VyZN+1Zj2McURCLGBx5SalAdeGV1RJE5hT8lxgcEwv9JbdxA==",
       "requires": {
         "ajv": "~6.12.3",
         "uuid": "~8.3.0"
