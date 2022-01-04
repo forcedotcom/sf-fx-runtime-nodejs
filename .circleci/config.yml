@@ -1,14 +1,25 @@
+---
 version: 2.1
 
 orbs:
   node: circleci/node@4.7
+  win: circleci/windows@2.2.0
 
-jobs:
-  check-and-build:
-    docker:
-      # We need the JDK in order to run Wiremock.
-      - image: cimg/openjdk:11.0-node
+commands:
+  install-java:
     steps:
+      - run:
+          name: Install default jre
+          command: |
+            apt-get update
+            apt-get install -y --no-install-recommends default-jre
+jobs:
+  node-17: &test
+    docker:
+      - image: node:17
+    steps:
+      # java required for testing with wiremock
+      - install-java
       - checkout
       - node/install-packages
       - run:
@@ -23,8 +34,40 @@ jobs:
       - run:
           name: Run build
           command: npm run build
+  node-16:
+    <<: *test
+    docker:
+      - image: node:16
+  node-14:
+    <<: *test
+    docker:
+      - image: node:14
+  windows:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - run: systeminfo
+      - run:
+          name: node info
+          shell: powershell.exe
+          command: |
+            node --version
+            npm --version
+      - run:
+          name: Install dependencies
+          shell: powershell.exe
+          command: npm ci
+      - run:
+          name: Run unit tests
+          shell: powershell.exe
+          command: npm run test
 
 workflows:
   check-and-build:
     jobs:
-      - check-and-build
+      - node-17
+      - node-16
+      - node-14
+      - windows
