@@ -32,7 +32,7 @@
         "chai": "^4.3.4",
         "concurrently": "^7.0.0",
         "eslint": "^7.32.0",
-        "eslint-plugin-license-header": "^0.2.0",
+        "eslint-plugin-license-header": "^0.3.0",
         "mocha": "^9.1.1",
         "prettier": "^2.3.2",
         "sf-fx-sdk-nodejs": "^3.0.0",
@@ -1770,9 +1770,9 @@
       }
     },
     "node_modules/eslint-plugin-license-header": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.2.1.tgz",
-      "integrity": "sha512-l+fiPajCJztDzIHJ8BA6AFy/0oDhI8ZovytzRp1dY49tiW7BP+1yKp2cv7SPlTAkTtUH1MFEYspPS4zxVhQ3QA==",
+      "version": "0.3.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.3.0.tgz",
+      "integrity": "sha512-y/U73ZNFAK4Dcj81GZFvQFX8ekSd9f03t+GMcayW4A0MCbZvnRNkCE5KmcRXSAErE9/bhVPqa7IEUNgwu5FRZQ==",
       "dev": true,
       "dependencies": {
         "requireindex": "^1.2.0"
@@ -6411,9 +6411,9 @@
       }
     },
     "eslint-plugin-license-header": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.2.1.tgz",
-      "integrity": "sha512-l+fiPajCJztDzIHJ8BA6AFy/0oDhI8ZovytzRp1dY49tiW7BP+1yKp2cv7SPlTAkTtUH1MFEYspPS4zxVhQ3QA==",
+      "version": "0.3.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.3.0.tgz",
+      "integrity": "sha512-y/U73ZNFAK4Dcj81GZFvQFX8ekSd9f03t+GMcayW4A0MCbZvnRNkCE5KmcRXSAErE9/bhVPqa7IEUNgwu5FRZQ==",
       "dev": true,
       "requires": {
         "requireindex": "^1.2.0"
