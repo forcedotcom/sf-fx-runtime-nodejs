@@ -8,6 +8,13 @@
 import { expect } from "chai";
 import { buildServer } from "../src/server.js";
 
+const salesforceConfig = { 
+  schemaVersion: "0.2",
+  type: "function",
+  id: "testfunction",
+  restApiVersion: "51.0" 
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const userFunction = async function (event, context, logger) {
   return "Hello World";
@@ -33,7 +40,7 @@ const cloudEventHeaders = {
 
 describe("server", () => {
   it("checks health", () => {
-    buildServer(userFunction).inject(
+    buildServer(userFunction, salesforceConfig).inject(
       {
         method: "POST",
         url: "/",
@@ -46,7 +53,7 @@ describe("server", () => {
   });
 
   it("adds extra info to a user thrown function error", () => {
-    buildServer(badFunction).inject(
+    buildServer(badFunction, salesforceConfig).inject(
       {
         method: "POST",
         url: "/",
@@ -68,7 +75,7 @@ describe("server", () => {
   });
 
   it("receives a valid response from valid cloudEventHeaders", () => {
-    buildServer(userFunction).inject(
+    buildServer(userFunction, salesforceConfig).inject(
       {
         method: "POST",
         url: "/",
@@ -83,7 +90,7 @@ describe("server", () => {
   });
 
   it("returns 400 on missing cloud event", () => {
-    buildServer(userFunction).inject(
+    buildServer(userFunction, salesforceConfig).inject(
       {
         method: "POST",
         url: "/",

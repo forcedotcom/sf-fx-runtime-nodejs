@@ -11,6 +11,7 @@ import { hideBin } from "yargs/helpers";
 import throng from "throng";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
+import { SalesforceConfig, readSalesforceConfig } from "./salesforce-config.js";
 import startServer from "./server.js";
 import logger from "./logger.js";
 import * as path from "path";
@@ -68,6 +69,7 @@ export default async function (
     h: string,
     p: number,
     f: SalesforceFunction<any, any>,
+    c: SalesforceConfig,
     w: number,
     d: () => void
   ) => Promise<void> = startServer,
@@ -83,6 +85,8 @@ export default async function (
     logger.error("Could not load function: " + error.message);
     process.exit(1);
   }
+
+  const salesforceConfig = await readSalesforceConfig(path.join(projectPath, "project.toml"));
 
   const { debugPort } = args;
   const master = function () {
@@ -100,7 +104,7 @@ export default async function (
     id: number,
     disconnect: () => void
   ): Promise<void> {
-    return await server(args.host, args.port, userFunction, id, disconnect);
+    return await server(args.host, args.port, userFunction, salesforceConfig, id, disconnect);
   };
 
   const count = debugPort ? 1 : args.workers;

@@ -14,7 +14,7 @@ import { promises as fs } from "fs";
 export interface SalesforceConfig {
   schemaVersion: string;
   id: string;
-  description: string;
+  description?: string;
   type: string;
   restApiVersion: string;
 }
