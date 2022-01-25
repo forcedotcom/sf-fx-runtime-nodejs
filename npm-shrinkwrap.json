@@ -9,7 +9,9 @@
       "version": "0.9.2",
       "license": "ISC",
       "dependencies": {
+        "@iarna/toml": "^2.2.5",
         "@salesforce/core": "^2.27.2",
+        "@types/iarna__toml": "^2.0.2",
         "cloudevents": "^4.0.3",
         "fastify": "^3.21.0",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
@@ -285,6 +287,11 @@
       "integrity": "sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==",
       "dev": true
     },
+    "node_modules/@iarna/toml": {
+      "version": "2.2.5",
+      "resolved": "https://registry.npmjs.org/@iarna/toml/-/toml-2.2.5.tgz",
+      "integrity": "sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg=="
+    },
     "node_modules/@nodelib/fs.scandir": {
       "version": "2.1.5",
       "resolved": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
@@ -535,6 +542,14 @@
       "version": "4.1.5",
       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
       "integrity": "sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==",
+      "dependencies": {
+        "@types/node": "*"
+      }
+    },
+    "node_modules/@types/iarna__toml": {
+      "version": "2.0.2",
+      "resolved": "https://registry.npmjs.org/@types/iarna__toml/-/iarna__toml-2.0.2.tgz",
+      "integrity": "sha512-Q3obxKhBLVVbEQ8zsAmsQVobAAZhi8dFFFjF0q5xKXiaHvH8IkSxcbM27e46M9feUMieR03SPpmp5CtaNzpdBg==",
       "dependencies": {
         "@types/node": "*"
       }
@@ -5238,6 +5253,11 @@
       "integrity": "sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==",
       "dev": true
     },
+    "@iarna/toml": {
+      "version": "2.2.5",
+      "resolved": "https://registry.npmjs.org/@iarna/toml/-/toml-2.2.5.tgz",
+      "integrity": "sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg=="
+    },
     "@nodelib/fs.scandir": {
       "version": "2.1.5",
       "resolved": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
@@ -5464,6 +5484,14 @@
       "version": "4.1.5",
       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
       "integrity": "sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==",
+      "requires": {
+        "@types/node": "*"
+      }
+    },
+    "@types/iarna__toml": {
+      "version": "2.0.2",
+      "resolved": "https://registry.npmjs.org/@types/iarna__toml/-/iarna__toml-2.0.2.tgz",
+      "integrity": "sha512-Q3obxKhBLVVbEQ8zsAmsQVobAAZhi8dFFFjF0q5xKXiaHvH8IkSxcbM27e46M9feUMieR03SPpmp5CtaNzpdBg==",
       "requires": {
         "@types/node": "*"
       }
