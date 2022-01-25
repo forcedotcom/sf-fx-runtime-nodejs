@@ -1,15 +1,27 @@
-import toml from '@iarna/toml';
-import { promises as fs } from 'fs';
+/*
+ * Copyright (c) 2021, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
 
+import toml from "@iarna/toml";
+import { promises as fs } from "fs";
+
+/**
+ * SalesforceConfig represents the ["com.salesforce"] portion of a project.toml
+ */
 export interface SalesforceConfig {
-  schemaVersion: string
-  id: string
-  description: string
-  type: string
-  restApiVersion: string
+  schemaVersion: string;
+  id: string;
+  description: string;
+  type: string;
+  restApiVersion: string;
 }
 
-export async function readSalesforceConfig(tomlPath: string): Promise<SalesforceConfig> {
+export async function readSalesforceConfig(
+  tomlPath: string
+): Promise<SalesforceConfig> {
   let tomlContents: Buffer;
   try {
     tomlContents = await fs.readFile(tomlPath);
@@ -24,10 +36,10 @@ export async function readSalesforceConfig(tomlPath: string): Promise<Salesforce
   }
   const salesforceConfig = project["com"]?.["salesforce"];
   return {
-    schemaVersion:  salesforceConfig?.["schema-version"],
-    id:             salesforceConfig?.id,
-    description:    salesforceConfig?.description,
-    type:           salesforceConfig?.type,
+    schemaVersion: salesforceConfig?.["schema-version"],
+    id: salesforceConfig?.id,
+    description: salesforceConfig?.description,
+    type: salesforceConfig?.type,
     restApiVersion: salesforceConfig?.["rest-api-version"] || "53.0",
   };
 }
