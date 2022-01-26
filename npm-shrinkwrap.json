@@ -11,7 +11,6 @@
       "dependencies": {
         "@iarna/toml": "^2.2.5",
         "@salesforce/core": "^2.27.2",
-        "@types/iarna__toml": "^2.0.2",
         "cloudevents": "^4.0.3",
         "fastify": "^3.21.0",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
@@ -26,6 +25,7 @@
       "devDependencies": {
         "@salesforce/ts-sinon": "^1.3.21",
         "@types/chai": "^4.2.21",
+        "@types/iarna__toml": "^2.0.2",
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.7.10",
         "@types/semver": "^7.3.9",
@@ -552,6 +552,7 @@
       "version": "2.0.2",
       "resolved": "https://registry.npmjs.org/@types/iarna__toml/-/iarna__toml-2.0.2.tgz",
       "integrity": "sha512-Q3obxKhBLVVbEQ8zsAmsQVobAAZhi8dFFFjF0q5xKXiaHvH8IkSxcbM27e46M9feUMieR03SPpmp5CtaNzpdBg==",
+      "dev": true,
       "dependencies": {
         "@types/node": "*"
       }
@@ -5500,6 +5501,7 @@
       "version": "2.0.2",
       "resolved": "https://registry.npmjs.org/@types/iarna__toml/-/iarna__toml-2.0.2.tgz",
       "integrity": "sha512-Q3obxKhBLVVbEQ8zsAmsQVobAAZhi8dFFFjF0q5xKXiaHvH8IkSxcbM27e46M9feUMieR03SPpmp5CtaNzpdBg==",
+      "dev": true,
       "requires": {
         "@types/node": "*"
       }
