@@ -12,7 +12,7 @@ const salesforceConfig = {
   schemaVersion: "0.2",
   type: "function",
   id: "testfunction",
-  restApiVersion: "51.0",
+  restApiVersion: "53.0",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
