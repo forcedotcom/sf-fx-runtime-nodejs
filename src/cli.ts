@@ -86,7 +86,9 @@ export default async function (
     process.exit(1);
   }
 
-  const salesforceConfig = await readSalesforceConfig(path.join(projectPath, "project.toml"));
+  const salesforceConfig = await readSalesforceConfig(
+    path.join(projectPath, "project.toml")
+  );
 
   const { debugPort } = args;
   const master = function () {
@@ -104,7 +106,14 @@ export default async function (
     id: number,
     disconnect: () => void
   ): Promise<void> {
-    return await server(args.host, args.port, userFunction, salesforceConfig, id, disconnect);
+    return await server(
+      args.host,
+      args.port,
+      userFunction,
+      salesforceConfig,
+      id,
+      disconnect
+    );
   };
 
   const count = debugPort ? 1 : args.workers;

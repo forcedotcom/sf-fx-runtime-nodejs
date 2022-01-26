@@ -8,11 +8,11 @@
 import { expect } from "chai";
 import { buildServer } from "../src/server.js";
 
-const salesforceConfig = { 
+const salesforceConfig = {
   schemaVersion: "0.2",
   type: "function",
   id: "testfunction",
-  restApiVersion: "51.0" 
+  restApiVersion: "51.0",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

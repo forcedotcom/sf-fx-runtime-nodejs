@@ -19,7 +19,7 @@ import MimeType from "whatwg-mimetype/lib/mime-type.js";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { InvocationEventImpl } from "./sdk/invocation-event.js";
 import { ContextImpl } from "./sdk/context.js";
-import { SalesforceConfig } from "./salesforce-config.js"
+import { SalesforceConfig } from "./salesforce-config.js";
 
 const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
