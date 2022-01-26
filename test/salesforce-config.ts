@@ -24,10 +24,10 @@ describe("readSalesforceConfig", () => {
     const conf = await readSalesforceConfig(path);
     expect(conf.id).to.eql("esm");
     expect(conf.description).to.not.be.empty;
-    expect(conf.restApiVersion).to.eql("54.0");
+    expect(conf.salesforceApiVersion).to.eql("54.0");
   });
 
-  it("uses a default value for restApiVersion", async () => {
+  it("uses a default value for salesforceApiVersion", async () => {
     const path = join(
       dirname(fileURLToPath(import.meta.url)),
       "..",
@@ -36,7 +36,7 @@ describe("readSalesforceConfig", () => {
       "project.toml"
     );
     const conf = await readSalesforceConfig(path);
-    expect(conf.restApiVersion).to.eql("53.0");
+    expect(conf.salesforceApiVersion).to.eql("53.0");
   });
 
   it("throws for a missing project.toml", async () => {
@@ -62,7 +62,7 @@ describe("readSalesforceConfig", () => {
 
   it("throws for an old rest API version", async () => {
     const path = join(tmpdir(), "sf-fx-runtime-nodejs-old-api-project.toml");
-    const toml = '[com.salesforce]\n  rest-api-version = "50.0"\n';
+    const toml = '[com.salesforce]\n  salesforce-api-version = "50.0"\n';
     writeFileSync(path, toml);
     try {
       await readSalesforceConfig(path);

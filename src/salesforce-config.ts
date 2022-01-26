@@ -17,7 +17,7 @@ export interface SalesforceConfig {
   id: string;
   description?: string;
   type: string;
-  restApiVersion: string;
+  salesforceApiVersion: string;
 }
 
 export async function readSalesforceConfig(
@@ -37,22 +37,22 @@ export async function readSalesforceConfig(
   }
   const salesforceConfig = project["com"]?.["salesforce"];
 
-  let restApiVersion = salesforceConfig?.["rest-api-version"];
-  if (!restApiVersion) {
+  let salesforceApiVersion = salesforceConfig?.["salesforce-api-version"];
+  if (!salesforceApiVersion) {
     console.log(
-      "DEPRECATION NOTICE: com.salesforce.rest-api-version is not defined in project.toml and has been defaulted to '53.0'. This field will be required in a future release."
+      "DEPRECATION NOTICE: com.salesforce.salesforce-api-version is not defined in project.toml and has been defaulted to '53.0'. This field will be required in a future release."
     );
-    restApiVersion = "53.0";
+    salesforceApiVersion = "53.0";
   }
 
   if (
     !semver.satisfies(
-      semver.coerce(restApiVersion),
+      semver.coerce(salesforceApiVersion),
       `>=${semver.coerce("53.0")}`
     )
   ) {
     throw new Error(
-      `Salesforce Rest API Version ${restApiVersion} is not supported. Please change \`com.salesforce.rest-api-version\` in project.toml to "53.0" or newer.`
+      `Salesforce Rest API Version ${salesforceApiVersion} is not supported. Please change \`com.salesforce.salesforce-api-version\` in project.toml to "53.0" or newer.`
     );
   }
 
@@ -61,6 +61,6 @@ export async function readSalesforceConfig(
     id: salesforceConfig?.id,
     description: salesforceConfig?.description,
     type: salesforceConfig?.type,
-    restApiVersion,
+    salesforceApiVersion,
   };
 }

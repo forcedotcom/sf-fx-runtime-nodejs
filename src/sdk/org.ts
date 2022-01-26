@@ -34,12 +34,12 @@ export class OrgImpl implements Org {
       username,
       onBehalfOfUserId,
     }: SalesforceUserContext,
-    { restApiVersion }: SalesforceConfig
+    { salesforceApiVersion }: SalesforceConfig
   ) {
     this.id = orgId;
     this.baseUrl = salesforceBaseUrl;
     this.domainUrl = orgDomainUrl;
-    this.apiVersion = restApiVersion;
+    this.apiVersion = salesforceApiVersion;
 
     this.dataApi = new DataApiImpl(this.baseUrl, this.apiVersion, accessToken);
     this.user = new UserImpl(userId, username, onBehalfOfUserId);
