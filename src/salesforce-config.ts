@@ -6,6 +6,7 @@
  */
 
 import toml from "@iarna/toml";
+import semver from "semver";
 import { promises as fs } from "fs";
 
 /**
@@ -40,6 +41,10 @@ export async function readSalesforceConfig(
   if (!restApiVersion) {
     console.log("DEPRECATION NOTICE: com.salesforce.rest-api-version is not defined in project.toml and has been defaulted to '53.0'. This field will be required in a future release.");
     restApiVersion = '53.0';
+  }
+
+  if (!semver.satisfies(semver.coerce(restApiVersion), `>=${semver.coerce("53.0")}`)) {
+    throw new Error(`Salesforce Rest API Version ${restApiVersion} is not supported. Please change \`com.salesforce.rest-api-version\` in project.toml to "53.0" or newer.`)
   }
 
   return {

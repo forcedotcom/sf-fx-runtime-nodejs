@@ -24,7 +24,7 @@ describe("readSalesforceConfig", () => {
     const conf = await readSalesforceConfig(path);
     expect(conf.id).to.eql("esm");
     expect(conf.description).to.not.be.empty;
-    expect(conf.restApiVersion).to.eql("51.0");
+    expect(conf.restApiVersion).to.eql("54.0");
   });
 
   it("uses a default value for restApiVersion", async () => {
@@ -57,6 +57,18 @@ describe("readSalesforceConfig", () => {
       throw "Expected readSalesforceConfig to reject";
     } catch (e) {
       expect(e.message).to.contain("Could not parse SalesforceConfig");
+    }
+  });
+
+  it("throws for an old rest API version", async () => {
+    const path = join(tmpdir(), "sf-fx-runtime-nodejs-old-api-project.toml");
+    const toml = '[com.salesforce]\n  rest-api-version = "50.0"\n';
+    writeFileSync(path, toml);
+    try {
+      await readSalesforceConfig(path);
+      throw "Expected readSalesforceConfig to reject";
+    } catch (e) {
+      expect(e.message).to.contain("Rest API Version");
     }
   });
 });

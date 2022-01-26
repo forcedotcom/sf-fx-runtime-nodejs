@@ -15,6 +15,7 @@
         "cloudevents": "^4.0.3",
         "fastify": "^3.21.0",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
+        "semver": "^7.3.5",
         "throng": "^5.0.0",
         "whatwg-mimetype": "^3.0.0",
         "yargs": "^17.1.1"
@@ -27,6 +28,7 @@
         "@types/chai": "^4.2.21",
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.7.10",
+        "@types/semver": "^7.3.9",
         "@types/sinon": "^10.0.0",
         "@types/yargs": "^17.0.2",
         "@typescript-eslint/eslint-plugin": "^4.31.0",
@@ -586,6 +588,12 @@
       "version": "16.11.12",
       "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.12.tgz",
       "integrity": "sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw=="
+    },
+    "node_modules/@types/semver": {
+      "version": "7.3.9",
+      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.9.tgz",
+      "integrity": "sha512-L/TMpyURfBkf+o/526Zb6kd/tchUP3iBDEPjqjb+U2MAJhVRxxrmr2fwpe08E7QsV7YLcpq0tUaQ9O9x97ZIxQ==",
+      "dev": true
     },
     "node_modules/@types/sinon": {
       "version": "10.0.6",
@@ -5528,6 +5536,12 @@
       "version": "16.11.12",
       "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.12.tgz",
       "integrity": "sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw=="
+    },
+    "@types/semver": {
+      "version": "7.3.9",
+      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.9.tgz",
+      "integrity": "sha512-L/TMpyURfBkf+o/526Zb6kd/tchUP3iBDEPjqjb+U2MAJhVRxxrmr2fwpe08E7QsV7YLcpq0tUaQ9O9x97ZIxQ==",
+      "dev": true
     },
     "@types/sinon": {
       "version": "10.0.6",
