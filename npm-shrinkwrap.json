@@ -32,7 +32,7 @@
         "chai": "^4.3.4",
         "concurrently": "^7.0.0",
         "eslint": "^7.32.0",
-        "eslint-plugin-license-header": "^0.3.0",
+        "eslint-plugin-license-header": "^0.4.0",
         "mocha": "^9.1.1",
         "prettier": "^2.3.2",
         "sf-fx-sdk-nodejs": "^3.0.0",
@@ -1770,9 +1770,9 @@
       }
     },
     "node_modules/eslint-plugin-license-header": {
-      "version": "0.3.0",
-      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.3.0.tgz",
-      "integrity": "sha512-y/U73ZNFAK4Dcj81GZFvQFX8ekSd9f03t+GMcayW4A0MCbZvnRNkCE5KmcRXSAErE9/bhVPqa7IEUNgwu5FRZQ==",
+      "version": "0.4.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.4.0.tgz",
+      "integrity": "sha512-KNpyxD+r8d9VoioyaHofUDsrYO+epVv/WjGZKugfO+qVN1KvHi/LwpXXY1618OCOYEaRNXZeRUtbOIb2YvJXTw==",
       "dev": true,
       "dependencies": {
         "requireindex": "^1.2.0"
@@ -2061,9 +2061,9 @@
       "integrity": "sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag=="
     },
     "node_modules/fastify": {
-      "version": "3.25.3",
-      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.25.3.tgz",
-      "integrity": "sha512-20SbobjjMfjGNCU4PlcZis3d5XLDtQxIbcAf6ogi/8zPxRxOOkKwfjmj7yW9Q1VnxDpBwcllwPtbZ/LyvQzXbQ==",
+      "version": "3.27.0",
+      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.27.0.tgz",
+      "integrity": "sha512-p99Fd7xt4DFew39U5Wnp/Soy7jkpxpaqToekwQ3XWv+ECUPXd6bSF9l79EiwkutWALtEU/JiRlzS9qjP2gLHFg==",
       "dependencies": {
         "@fastify/ajv-compiler": "^1.0.0",
         "abstract-logging": "^2.0.0",
@@ -4716,9 +4716,9 @@
       }
     },
     "node_modules/typedoc-plugin-markdown": {
-      "version": "3.11.8",
-      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.11.8.tgz",
-      "integrity": "sha512-j2Kwi/RnwDwiNr9CMy4lrwB9+1alwjrMakb9+7S0Bz9gnDsdqamOguZ6e27iB97U18nK6GBeR8qDarIyoJYDCg==",
+      "version": "3.11.12",
+      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.11.12.tgz",
+      "integrity": "sha512-gb/RuzgZ1zCnRUOqUg6firIqU7xDs9s7hq0vlU/gAsFfVCnpl3NTM9vPyPON75nnpfVFCxr/hmKQ01k1CYY/Qg==",
       "dev": true,
       "dependencies": {
         "handlebars": "^4.7.7"
@@ -4748,9 +4748,9 @@
       }
     },
     "node_modules/typescript": {
-      "version": "4.5.3",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.5.3.tgz",
-      "integrity": "sha512-eVYaEHALSt+s9LbvgEv4Ef+Tdq7hBiIZgii12xXJnukryt3pMgJf6aKhoCZ3FWQsu6sydEnkg11fYXLzhLBjeQ==",
+      "version": "4.5.5",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.5.5.tgz",
+      "integrity": "sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==",
       "dev": true,
       "bin": {
         "tsc": "bin/tsc",
@@ -6411,9 +6411,9 @@
       }
     },
     "eslint-plugin-license-header": {
-      "version": "0.3.0",
-      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.3.0.tgz",
-      "integrity": "sha512-y/U73ZNFAK4Dcj81GZFvQFX8ekSd9f03t+GMcayW4A0MCbZvnRNkCE5KmcRXSAErE9/bhVPqa7IEUNgwu5FRZQ==",
+      "version": "0.4.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-license-header/-/eslint-plugin-license-header-0.4.0.tgz",
+      "integrity": "sha512-KNpyxD+r8d9VoioyaHofUDsrYO+epVv/WjGZKugfO+qVN1KvHi/LwpXXY1618OCOYEaRNXZeRUtbOIb2YvJXTw==",
       "dev": true,
       "requires": {
         "requireindex": "^1.2.0"
@@ -6597,9 +6597,9 @@
       "integrity": "sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag=="
     },
     "fastify": {
-      "version": "3.25.3",
-      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.25.3.tgz",
-      "integrity": "sha512-20SbobjjMfjGNCU4PlcZis3d5XLDtQxIbcAf6ogi/8zPxRxOOkKwfjmj7yW9Q1VnxDpBwcllwPtbZ/LyvQzXbQ==",
+      "version": "3.27.0",
+      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.27.0.tgz",
+      "integrity": "sha512-p99Fd7xt4DFew39U5Wnp/Soy7jkpxpaqToekwQ3XWv+ECUPXd6bSF9l79EiwkutWALtEU/JiRlzS9qjP2gLHFg==",
       "requires": {
         "@fastify/ajv-compiler": "^1.0.0",
         "abstract-logging": "^2.0.0",
@@ -8658,18 +8658,18 @@
       }
     },
     "typedoc-plugin-markdown": {
-      "version": "3.11.8",
-      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.11.8.tgz",
-      "integrity": "sha512-j2Kwi/RnwDwiNr9CMy4lrwB9+1alwjrMakb9+7S0Bz9gnDsdqamOguZ6e27iB97U18nK6GBeR8qDarIyoJYDCg==",
+      "version": "3.11.12",
+      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.11.12.tgz",
+      "integrity": "sha512-gb/RuzgZ1zCnRUOqUg6firIqU7xDs9s7hq0vlU/gAsFfVCnpl3NTM9vPyPON75nnpfVFCxr/hmKQ01k1CYY/Qg==",
       "dev": true,
       "requires": {
         "handlebars": "^4.7.7"
       }
     },
     "typescript": {
-      "version": "4.5.3",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.5.3.tgz",
-      "integrity": "sha512-eVYaEHALSt+s9LbvgEv4Ef+Tdq7hBiIZgii12xXJnukryt3pMgJf6aKhoCZ3FWQsu6sydEnkg11fYXLzhLBjeQ==",
+      "version": "4.5.5",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.5.5.tgz",
+      "integrity": "sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==",
       "dev": true
     },
     "uglify-js": {
