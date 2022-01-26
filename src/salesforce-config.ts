@@ -35,11 +35,18 @@ export async function readSalesforceConfig(
     throw new Error(`Could not parse SalesforceConfig in ${tomlPath}: ${e}`);
   }
   const salesforceConfig = project["com"]?.["salesforce"];
+
+  let restApiVersion = salesforceConfig?.["rest-api-version"];
+  if (!restApiVersion) {
+    console.log("DEPRECATION NOTICE: com.salesforce.rest-api-version is not defined in project.toml and has been defaulted to '53.0'. This field will be required in a future release.");
+    restApiVersion = '53.0';
+  }
+
   return {
     schemaVersion: salesforceConfig?.["schema-version"],
     id: salesforceConfig?.id,
     description: salesforceConfig?.description,
     type: salesforceConfig?.type,
-    restApiVersion: salesforceConfig?.["rest-api-version"] || "53.0",
+    restApiVersion
   };
 }
