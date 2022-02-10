@@ -589,9 +589,9 @@
       "dev": true
     },
     "node_modules/@types/node": {
-      "version": "16.11.12",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.12.tgz",
-      "integrity": "sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw=="
+      "version": "16.11.24",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.24.tgz",
+      "integrity": "sha512-Ezv33Rl4mIi6YdSHfIRNBd4Q9kUe5okiaw/ikvJiJDmuQZNW5kfdg7+oQPF8NO6sTcr3woIpj3jANzTXdvEZXA=="
     },
     "node_modules/@types/semver": {
       "version": "7.3.9",
@@ -5985,9 +5985,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "16.11.12",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.12.tgz",
-      "integrity": "sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw=="
+      "version": "16.11.24",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-16.11.24.tgz",
+      "integrity": "sha512-Ezv33Rl4mIi6YdSHfIRNBd4Q9kUe5okiaw/ikvJiJDmuQZNW5kfdg7+oQPF8NO6sTcr3woIpj3jANzTXdvEZXA=="
     },
     "@types/semver": {
       "version": "7.3.9",
