@@ -597,13 +597,19 @@
       "dev": true
     },
     "node_modules/@types/sinon": {
-      "version": "10.0.6",
-      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.6.tgz",
-      "integrity": "sha512-6EF+wzMWvBNeGrfP3Nx60hhx+FfwSg1JJBLAAP/IdIUq0EYkqCYf70VT3PhuhPX9eLD+Dp+lNdpb/ZeHG8Yezg==",
+      "version": "10.0.11",
+      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.11.tgz",
+      "integrity": "sha512-dmZsHlBsKUtBpHriNjlK0ndlvEh8dcb9uV9Afsbt89QIyydpC7NcR+nWlAhASfy3GHnxTl4FX/aKE7XZUt/B4g==",
       "dev": true,
       "dependencies": {
-        "@sinonjs/fake-timers": "^7.1.0"
+        "@types/sinonjs__fake-timers": "*"
       }
+    },
+    "node_modules/@types/sinonjs__fake-timers": {
+      "version": "8.1.1",
+      "resolved": "https://registry.npmjs.org/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.1.tgz",
+      "integrity": "sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==",
+      "dev": true
     },
     "node_modules/@types/yargs": {
       "version": "17.0.8",
@@ -2085,9 +2091,9 @@
       "integrity": "sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag=="
     },
     "node_modules/fastify": {
-      "version": "3.25.3",
-      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.25.3.tgz",
-      "integrity": "sha512-20SbobjjMfjGNCU4PlcZis3d5XLDtQxIbcAf6ogi/8zPxRxOOkKwfjmj7yW9Q1VnxDpBwcllwPtbZ/LyvQzXbQ==",
+      "version": "3.27.1",
+      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.27.1.tgz",
+      "integrity": "sha512-GLn3ow5BGqg/m+ztXvztp8Xp7SuH99vAm4zfbN7407Qzi4mB055SG/lWH/gYolz5Oq2K8LtUpZqt1Ccf/YkVmA==",
       "dependencies": {
         "@fastify/ajv-compiler": "^1.0.0",
         "abstract-logging": "^2.0.0",
@@ -5546,13 +5552,19 @@
       "dev": true
     },
     "@types/sinon": {
-      "version": "10.0.6",
-      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.6.tgz",
-      "integrity": "sha512-6EF+wzMWvBNeGrfP3Nx60hhx+FfwSg1JJBLAAP/IdIUq0EYkqCYf70VT3PhuhPX9eLD+Dp+lNdpb/ZeHG8Yezg==",
+      "version": "10.0.11",
+      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.11.tgz",
+      "integrity": "sha512-dmZsHlBsKUtBpHriNjlK0ndlvEh8dcb9uV9Afsbt89QIyydpC7NcR+nWlAhASfy3GHnxTl4FX/aKE7XZUt/B4g==",
       "dev": true,
       "requires": {
-        "@sinonjs/fake-timers": "^7.1.0"
+        "@types/sinonjs__fake-timers": "*"
       }
+    },
+    "@types/sinonjs__fake-timers": {
+      "version": "8.1.1",
+      "resolved": "https://registry.npmjs.org/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.1.tgz",
+      "integrity": "sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==",
+      "dev": true
     },
     "@types/yargs": {
       "version": "17.0.8",
@@ -6641,9 +6653,9 @@
       "integrity": "sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag=="
     },
     "fastify": {
-      "version": "3.25.3",
-      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.25.3.tgz",
-      "integrity": "sha512-20SbobjjMfjGNCU4PlcZis3d5XLDtQxIbcAf6ogi/8zPxRxOOkKwfjmj7yW9Q1VnxDpBwcllwPtbZ/LyvQzXbQ==",
+      "version": "3.27.1",
+      "resolved": "https://registry.npmjs.org/fastify/-/fastify-3.27.1.tgz",
+      "integrity": "sha512-GLn3ow5BGqg/m+ztXvztp8Xp7SuH99vAm4zfbN7407Qzi4mB055SG/lWH/gYolz5Oq2K8LtUpZqt1Ccf/YkVmA==",
       "requires": {
         "@fastify/ajv-compiler": "^1.0.0",
         "abstract-logging": "^2.0.0",
