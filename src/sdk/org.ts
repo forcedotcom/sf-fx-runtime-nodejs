@@ -10,6 +10,7 @@ import {
   SalesforceFunctionContext,
   SalesforceUserContext,
 } from "../cloud-event.js";
+import { SalesforceConfig } from "../salesforce-config";
 import { UserImpl } from "./user.js";
 import { Org, User, DataApi } from "sf-fx-sdk-nodejs";
 import { DataApiImpl } from "./data-api.js";
@@ -32,16 +33,13 @@ export class OrgImpl implements Org {
       userId,
       username,
       onBehalfOfUserId,
-    }: SalesforceUserContext
+    }: SalesforceUserContext,
+    { salesforceApiVersion }: SalesforceConfig
   ) {
     this.id = orgId;
     this.baseUrl = salesforceBaseUrl;
     this.domainUrl = orgDomainUrl;
-
-    // An API version is also available in SalesforceContext. That value differs
-    // between orgs and can change seemingly randomly. To avoid surprises at runtime, we
-    // intentionally don't use that value and instead fix the version.
-    this.apiVersion = "53.0";
+    this.apiVersion = salesforceApiVersion;
 
     this.dataApi = new DataApiImpl(this.baseUrl, this.apiVersion, accessToken);
     this.user = new UserImpl(userId, username, onBehalfOfUserId);

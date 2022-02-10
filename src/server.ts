@@ -19,6 +19,7 @@ import MimeType from "whatwg-mimetype/lib/mime-type.js";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { InvocationEventImpl } from "./sdk/invocation-event.js";
 import { ContextImpl } from "./sdk/context.js";
+import { SalesforceConfig } from "./salesforce-config.js";
 
 const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
@@ -26,7 +27,8 @@ const INTERNAL_SERVER_ERROR_STATUS = 500;
 const SERVICE_UNAVAILABLE_STATUS = 503;
 
 export function buildServer(
-  userFunction: SalesforceFunction<any, any>
+  userFunction: SalesforceFunction<any, any>,
+  salesforceConfig: SalesforceConfig
 ): FastifyInstance {
   const server = fastify.fastify({ logger: false });
 
@@ -72,7 +74,11 @@ export function buildServer(
     const invocationEvent = new InvocationEventImpl(
       salesforceFunctionsCloudEvent
     );
-    const context = new ContextImpl(salesforceFunctionsCloudEvent);
+
+    const context = new ContextImpl(
+      salesforceFunctionsCloudEvent,
+      salesforceConfig
+    );
     const logger = new LoggerImpl(salesforceFunctionsCloudEvent);
 
     try {
@@ -133,11 +139,12 @@ export default async function startServer(
   host: string,
   port: number,
   userFunction: SalesforceFunction<any, any>,
+  salesforceConfig: SalesforceConfig,
   workerId = 0,
   shutdown: (e?: number) => void = process.exit
 ): Promise<void> {
   logger.addField("worker", workerId);
-  const server = buildServer(userFunction);
+  const server = buildServer(userFunction, salesforceConfig);
   process.on("SIGTERM", () => {
     logger.info(`function worker exiting; received SIGTERM`);
     server.close(shutdown);

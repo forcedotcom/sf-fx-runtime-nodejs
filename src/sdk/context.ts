@@ -8,17 +8,22 @@
 import { SalesforceFunctionsCloudEvent } from "../cloud-event.js";
 import { Context, Org } from "sf-fx-sdk-nodejs";
 import { OrgImpl } from "./org.js";
+import { SalesforceConfig } from "src/salesforce-config.js";
 
 export class ContextImpl implements Context {
   readonly id: string;
   readonly org?: Org;
 
-  constructor(salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent) {
+  constructor(
+    salesforceFunctionsCloudEvent: SalesforceFunctionsCloudEvent,
+    salesforceConfig: SalesforceConfig
+  ) {
     this.id = salesforceFunctionsCloudEvent.cloudEvent.id;
     this.org = new OrgImpl(
       salesforceFunctionsCloudEvent.sfContext,
       salesforceFunctionsCloudEvent.sfFunctionContext,
-      salesforceFunctionsCloudEvent.sfContext.userContext
+      salesforceFunctionsCloudEvent.sfContext.userContext,
+      salesforceConfig
     );
   }
 }
