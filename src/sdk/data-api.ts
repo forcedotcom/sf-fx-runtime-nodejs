@@ -152,7 +152,7 @@ export class DataApiImpl implements DataApi {
 
       try {
         const response: any = await conn.update(recordUpdate.type, fields);
-        this.validate_record_response(response)
+        this.validate_record_response(response);
         return { id: response.id };
       } catch (e) {
         return this.handle_bad_response(e);
@@ -164,7 +164,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const response: any = await conn.delete(type, id);
-        this.validate_record_response(response)
+        this.validate_record_response(response);
         return { id: response.id };
       } catch (e) {
         return this.handle_bad_response(e);
@@ -243,21 +243,30 @@ export class DataApiImpl implements DataApi {
 
   private validate_response(response: any) {
     if (typeof response !== "object") {
-      throw new Error("Could not parse API response as JSON: " + JSON.stringify(response));
+      throw new Error(
+        "Could not parse API response as JSON: " + JSON.stringify(response)
+      );
     }
   }
 
   private validate_record_response(response: any) {
     this.validate_response(response);
     if (typeof response.id === "undefined") {
-      throw new Error("Could not read API response `id`: " + JSON.stringify(response));
+      throw new Error(
+        "Could not read API response `id`: " + JSON.stringify(response)
+      );
     }
   }
 
   private validate_records_response(response: any) {
     this.validate_response(response);
-    if (typeof response.records !== "object" || typeof response.records.map !== "function") {
-      throw new Error("Could not read API response `records`: " + JSON.stringify(response));
+    if (
+      typeof response.records !== "object" ||
+      typeof response.records.map !== "function"
+    ) {
+      throw new Error(
+        "Could not read API response `records`: " + JSON.stringify(response)
+      );
     }
   }
 
