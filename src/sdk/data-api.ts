@@ -81,9 +81,7 @@ export class DataApiImpl implements DataApi {
           recordCreate.type,
           recordCreate.fields
         );
-        this.validate_response(response, function (response) {
-          return typeof response.id != "undefined";
-        });
+        this.validate_record_response(response);
         return { id: response.id };
       } catch (e) {
         return this.handle_bad_response(e);
@@ -95,12 +93,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const response = await conn.query(soql);
-        this.validate_response(response, function (response) {
-          return (
-            typeof response.records === "object" &&
-            typeof response.records.map === "function"
-          );
-        });
+        this.validate_records_response(response);
         const records = response.records.map(createCaseInsensitiveRecord);
         return {
           done: response.done,
@@ -127,12 +120,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const response = await conn.queryMore(queryResult.nextRecordsUrl);
-        this.validate_response(response, function (response) {
-          return (
-            typeof response.records === "object" &&
-            typeof response.records.map === "function"
-          );
-        });
+        this.validate_records_response(response);
         const records = response.records.map(createCaseInsensitiveRecord);
 
         return {
@@ -164,9 +152,7 @@ export class DataApiImpl implements DataApi {
 
       try {
         const response: any = await conn.update(recordUpdate.type, fields);
-        this.validate_response(response, function (response) {
-          return typeof response.id != "undefined";
-        });
+        this.validate_record_response(response)
         return { id: response.id };
       } catch (e) {
         return this.handle_bad_response(e);
@@ -178,9 +164,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const response: any = await conn.delete(type, id);
-        this.validate_response(response, function (response) {
-          return typeof response.id != "undefined";
-        });
+        this.validate_record_response(response)
         return { id: response.id };
       } catch (e) {
         return this.handle_bad_response(e);
@@ -257,9 +241,23 @@ export class DataApiImpl implements DataApi {
     });
   }
 
-  private validate_response(response, validator) {
-    if (typeof response !== "object" || !validator(response)) {
-      throw new Error("Could not parse API response as JSON: " + response);
+  private validate_response(response: any) {
+    if (typeof response !== "object") {
+      throw new Error("Could not parse API response as JSON: " + JSON.stringify(response));
+    }
+  }
+
+  private validate_record_response(response: any) {
+    this.validate_response(response);
+    if (typeof response.id === "undefined") {
+      throw new Error("Could not read API response `id`: " + JSON.stringify(response));
+    }
+  }
+
+  private validate_records_response(response: any) {
+    this.validate_response(response);
+    if (typeof response.records !== "object" || typeof response.records.map !== "function") {
+      throw new Error("Could not read API response `records`: " + JSON.stringify(response));
     }
   }
 
