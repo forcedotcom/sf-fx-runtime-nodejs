@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2022-02-23
+
+- Improved DataAPI error messaging ([#294](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/294))
+
 ## [0.10.0] - 2022-02-10
 
 - Salesforce Rest API version may be specified in a function's project.toml ([#276](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/276))

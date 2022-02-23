@@ -296,6 +296,19 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("with 200: not found", async () => {
+      it("returns a missing records error", async () => {
+        try {
+          await dataApi.query("SELECT VersionData FROM ContentVersion");
+          expect.fail("Promise should have been rejected!");
+        } catch (e) {
+          expect(e.message).to.includes(
+            "Could not read API response `records`:"
+          );
+        }
+      });
+    });
   });
 
   describe("queryMore()", async () => {
