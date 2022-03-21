@@ -32,7 +32,7 @@
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "@salesforce/core": "^2.27.2",
-    "cloudevents": "^4.0.3",
+    "cloudevents": "^6.0.1",
     "fastify": "^3.21.0",
     "jsforce2": "npm:jsforce@^2.0.0-beta.8",
     "semver": "^7.3.5",
