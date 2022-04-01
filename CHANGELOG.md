@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 2022-04-01
+
+- Added shutdown routine for worker processes ([#305](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/305))
+
 ## [0.11.0] - 2022-02-23
 
 - Improved DataAPI error messaging ([#294](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/294))
