@@ -92,11 +92,12 @@ describe("cli shutdown routine", function () {
     );
 
     const closedInvokerProcess = await spawnedInvoker.processClosed;
-    expect(closedInvokerProcess.code).to.equal(0);
     if (expectForcedShutdown) {
       expect(closedInvokerProcess.output).to.include("Empty reply from server");
+      expect(closedInvokerProcess.code).to.not.equal(0);
     } else {
       expect(closedInvokerProcess.output).to.include('[{"complete":true}]');
+      expect(closedInvokerProcess.code).to.equal(0);
     }
   }
 
@@ -142,7 +143,7 @@ function run(options: {
 }): Promise<ProcessSpawnedResult> {
   const node = process.argv[0];
 
-  const cliScript = path.resolve(__dirname, "..", "bin", "test.js");
+  const cliScript = path.resolve(__dirname, "..", "bin", "dev.js");
 
   const args = [
     "--loader",
