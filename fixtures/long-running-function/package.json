@@ -1,0 +1,9 @@
+{
+  "name": "long-running-function",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "^14.0"
+  }
+}

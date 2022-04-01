@@ -9,6 +9,7 @@ import * as fastify from "fastify";
 import { FastifyReply, FastifyInstance } from "fastify";
 import { LoggerImpl } from "./user-function-logger.js";
 import logger from "./logger.js";
+import { Logger } from "@salesforce/core";
 import {
   parseCloudEvent,
   SalesforceFunctionsCloudEvent,
@@ -135,31 +136,82 @@ export function buildServer(
   return server;
 }
 
+export type StartServerOptions = {
+  host: string;
+  port: number;
+  userFunction: SalesforceFunction<any, any>;
+  salesforceConfig: SalesforceConfig;
+  id: number;
+  disconnect: () => void;
+  grace: number;
+  signals: NodeJS.Signals[];
+};
+
 export default async function startServer(
-  host: string,
-  port: number,
-  userFunction: SalesforceFunction<any, any>,
-  salesforceConfig: SalesforceConfig,
-  workerId = 0,
-  shutdown: (e?: number) => void = process.exit
+  options: StartServerOptions
 ): Promise<void> {
-  logger.addField("worker", workerId);
+  const {
+    id,
+    host,
+    port,
+    userFunction,
+    salesforceConfig,
+    disconnect,
+    signals,
+    grace,
+  } = options;
+
+  logger.addField("worker", id);
+
   const server = buildServer(userFunction, salesforceConfig);
-  process.on("SIGTERM", () => {
-    logger.info(`function worker exiting; received SIGTERM`);
-    server.close(shutdown);
-  });
-  process.on("SIGINT", () => {
-    logger.info(`function worker exiting; received SIGINT`);
-    server.close(shutdown);
-  });
+  registerShutdownHooks({ server, disconnect, grace, signals, logger });
+
   try {
     await server.listen(port, host);
-    logger.info(`started function worker ${workerId}`);
+    logger.info(`started function worker ${id}`);
   } catch (err) {
-    logger.error(`error starting function worker ${workerId}: ${err}`);
-    shutdown(1);
+    logger.error(`error starting function worker ${id}: ${err}`);
+    disconnect();
   }
+}
+
+type RegisterShutdownHooksOptions = Pick<
+  StartServerOptions,
+  "disconnect" | "grace" | "signals"
+> & {
+  server: FastifyInstance;
+  logger: Logger;
+};
+
+function registerShutdownHooks(options: RegisterShutdownHooksOptions): void {
+  const { server, disconnect, grace, signals } = options;
+
+  const shutdownGracefully = () => {
+    server.close(() => {
+      disconnect();
+    });
+  };
+
+  const forceShutdown = () => {
+    disconnect();
+    process.exit();
+  };
+
+  const handleShutdownSignal = (signal) => {
+    logger.info(`function worker exiting; received ${signal}`);
+    stopLogging(logger);
+    shutdownGracefully();
+    setTimeout(forceShutdown, grace).unref();
+  };
+
+  let alreadyShuttingDown = false;
+  signals.forEach((signal) => {
+    process.on(signal, () => {
+      if (alreadyShuttingDown) return; // because we don't need to run the shutdown routine twice :)
+      alreadyShuttingDown = true;
+      handleShutdownSignal(signal);
+    });
+  });
 }
 
 function makeResponse(
@@ -193,3 +245,21 @@ const emptyExtraInfo = {
   isFunctionError: false,
   stack: "",
 };
+
+/**
+ * Removes `stdout` from the list of log streams to prevent any grandchild[^1] process from writing output to the
+ * console after the master process has exited.
+ * [^1]: sf - the Salesforce CLI spins up its local run environment via npx
+ *       └── primary - the primary runtime script executed by npx
+ *           └── worker - one or more forked processes from the primary process
+ *
+ * Given the scenario above, when a process interrupt signal is received, the primary can exit before the workers
+ * have gracefully shutdown (e.g.; http connections to function still open). If this happens the worker processes
+ * become children of the process that executed the `sf` command. These workers will continue to run until graceful or
+ * forced shutdown causes them to eventually exit.
+ *
+ * Only call this when capturing output is no longer required (i.e.; shutdown)
+ */
+function stopLogging(logger) {
+  logger.getBunyanLogger().streams = [];
+}

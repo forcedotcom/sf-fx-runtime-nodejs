@@ -11,8 +11,8 @@ import { hideBin } from "yargs/helpers";
 import throng from "throng";
 import { SalesforceFunction } from "sf-fx-sdk-nodejs";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
-import { SalesforceConfig, readSalesforceConfig } from "./salesforce-config.js";
-import startServer from "./server.js";
+import { readSalesforceConfig } from "./salesforce-config.js";
+import startServer, { StartServerOptions } from "./server.js";
 import logger from "./logger.js";
 import * as path from "path";
 
@@ -52,6 +52,13 @@ export function parseArgs(params: Array<string>): any {
             description:
               "The number of Node.js cluster workers the invoker should use",
             default: 1,
+          })
+          .option("grace", {
+            alias: "g",
+            type: "number",
+            description:
+              "How long to wait for graceful shutdown before exiting forcefully",
+            default: 5000,
           });
       }
     )
@@ -65,14 +72,7 @@ export default async function (
   loadUserFunction: (
     p: string
   ) => Promise<SalesforceFunction<any, any>> = loadUserFunctionFromDirectory,
-  server: (
-    h: string,
-    p: number,
-    f: SalesforceFunction<any, any>,
-    c: SalesforceConfig,
-    w: number,
-    d: () => void
-  ) => Promise<void> = startServer,
+  server: (options: StartServerOptions) => Promise<void> = startServer,
   manager: (...p: Array<Record<string, unknown>>) => Promise<void> = throng
 ): Promise<void> {
   const args = parseArgs(params);
@@ -90,7 +90,10 @@ export default async function (
     path.join(projectPath, "project.toml")
   );
 
-  const { debugPort } = args;
+  const { debugPort, host, port, grace } = args;
+  const signals: NodeJS.Signals[] = ["SIGTERM", "SIGINT"];
+  const count = debugPort ? 1 : args.workers;
+
   const master = function () {
     if (debugPort) {
       const { execArgv } = process;
@@ -106,16 +109,23 @@ export default async function (
     id: number,
     disconnect: () => void
   ): Promise<void> {
-    return await server(
-      args.host,
-      args.port,
+    return await server({
+      host,
+      port,
       userFunction,
       salesforceConfig,
       id,
-      disconnect
-    );
+      disconnect,
+      grace,
+      signals,
+    });
   };
 
-  const count = debugPort ? 1 : args.workers;
-  return await manager({ master, worker, count });
+  return await manager({
+    master,
+    worker,
+    count,
+    grace,
+    signals,
+  });
 }
