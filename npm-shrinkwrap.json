@@ -350,16 +350,16 @@
       }
     },
     "node_modules/@salesforce/core": {
-      "version": "2.35.1",
-      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.35.1.tgz",
-      "integrity": "sha512-FK+Lm/PN2UEmiQAv3XBQPvSD9L3DVFsgobe5H4kN+pl6aSPKYa7dbVOJvpLeZaSE8owTuuujayE8Syfl48tQUg==",
+      "version": "2.36.0",
+      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.36.0.tgz",
+      "integrity": "sha512-VsKt7SXArxrOelaJl5Ez21Pmtdp2eU6qimqZ5clxnNaZDZKOySDPYnKHu7AYCt1LUNFN9cfsX8K5yOHxS+wT+w==",
       "dependencies": {
         "@salesforce/bunyan": "^2.0.0",
         "@salesforce/kit": "^1.5.17",
         "@salesforce/schemas": "^1.0.1",
         "@salesforce/ts-types": "^1.5.20",
         "@types/graceful-fs": "^4.1.5",
-        "@types/jsforce": "^1.9.38",
+        "@types/jsforce": "^1.9.41",
         "@types/mkdirp": "^1.0.1",
         "archiver": "^5.3.0",
         "debug": "^3.1.0",
@@ -5772,16 +5772,16 @@
       }
     },
     "@salesforce/core": {
-      "version": "2.35.1",
-      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.35.1.tgz",
-      "integrity": "sha512-FK+Lm/PN2UEmiQAv3XBQPvSD9L3DVFsgobe5H4kN+pl6aSPKYa7dbVOJvpLeZaSE8owTuuujayE8Syfl48tQUg==",
+      "version": "2.36.0",
+      "resolved": "https://registry.npmjs.org/@salesforce/core/-/core-2.36.0.tgz",
+      "integrity": "sha512-VsKt7SXArxrOelaJl5Ez21Pmtdp2eU6qimqZ5clxnNaZDZKOySDPYnKHu7AYCt1LUNFN9cfsX8K5yOHxS+wT+w==",
       "requires": {
         "@salesforce/bunyan": "^2.0.0",
         "@salesforce/kit": "^1.5.17",
         "@salesforce/schemas": "^1.0.1",
         "@salesforce/ts-types": "^1.5.20",
         "@types/graceful-fs": "^4.1.5",
-        "@types/jsforce": "^1.9.38",
+        "@types/jsforce": "^1.9.41",
         "@types/mkdirp": "^1.0.1",
         "archiver": "^5.3.0",
         "debug": "^3.1.0",
