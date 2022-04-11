@@ -1,12 +1,12 @@
 {
   "name": "@heroku/sf-fx-runtime-nodejs",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@heroku/sf-fx-runtime-nodejs",
-      "version": "0.11.0",
+      "version": "0.11.1",
       "license": "ISC",
       "dependencies": {
         "@iarna/toml": "^2.2.5",
@@ -5154,9 +5154,9 @@
       }
     },
     "node_modules/typedoc": {
-      "version": "0.22.13",
-      "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.22.13.tgz",
-      "integrity": "sha512-NHNI7Dr6JHa/I3+c62gdRNXBIyX7P33O9TafGLd07ur3MqzcKgwTvpg18EtvCLHJyfeSthAtCLpM7WkStUmDuQ==",
+      "version": "0.22.15",
+      "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.22.15.tgz",
+      "integrity": "sha512-CMd1lrqQbFvbx6S9G6fL4HKp3GoIuhujJReWqlIvSb2T26vGai+8Os3Mde7Pn832pXYemd9BMuuYWhFpL5st0Q==",
       "dev": true,
       "dependencies": {
         "glob": "^7.2.0",
@@ -9450,9 +9450,9 @@
       "dev": true
     },
     "typedoc": {
-      "version": "0.22.13",
-      "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.22.13.tgz",
-      "integrity": "sha512-NHNI7Dr6JHa/I3+c62gdRNXBIyX7P33O9TafGLd07ur3MqzcKgwTvpg18EtvCLHJyfeSthAtCLpM7WkStUmDuQ==",
+      "version": "0.22.15",
+      "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.22.15.tgz",
+      "integrity": "sha512-CMd1lrqQbFvbx6S9G6fL4HKp3GoIuhujJReWqlIvSb2T26vGai+8Os3Mde7Pn832pXYemd9BMuuYWhFpL5st0Q==",
       "dev": true,
       "requires": {
         "glob": "^7.2.0",
