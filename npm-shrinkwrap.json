@@ -5357,9 +5357,9 @@
       }
     },
     "node_modules/wiremock": {
-      "version": "2.32.0",
-      "resolved": "https://registry.npmjs.org/wiremock/-/wiremock-2.32.0.tgz",
-      "integrity": "sha512-wLJKiBIxruJNfFQwlzHRwE74fSqWNvVA+YLZFRok6KXJI3eaoOwDpIA/z9zbNGkJz5nI6tYdlB6MkLIHMAlVmg==",
+      "version": "2.33.1",
+      "resolved": "https://registry.npmjs.org/wiremock/-/wiremock-2.33.1.tgz",
+      "integrity": "sha512-JgcmT50WktUMZgo+RBY6eAuEzy5pPpCRczLGpvd5+9rvLv1EF3jClA1KVGM+yEm50+teJT+6+AC+uIaBmi7WrA==",
       "dev": true,
       "dependencies": {
         "npm-java-runner": "^0.0.17"
@@ -9597,9 +9597,9 @@
       }
     },
     "wiremock": {
-      "version": "2.32.0",
-      "resolved": "https://registry.npmjs.org/wiremock/-/wiremock-2.32.0.tgz",
-      "integrity": "sha512-wLJKiBIxruJNfFQwlzHRwE74fSqWNvVA+YLZFRok6KXJI3eaoOwDpIA/z9zbNGkJz5nI6tYdlB6MkLIHMAlVmg==",
+      "version": "2.33.1",
+      "resolved": "https://registry.npmjs.org/wiremock/-/wiremock-2.33.1.tgz",
+      "integrity": "sha512-JgcmT50WktUMZgo+RBY6eAuEzy5pPpCRczLGpvd5+9rvLv1EF3jClA1KVGM+yEm50+teJT+6+AC+uIaBmi7WrA==",
       "dev": true,
       "requires": {
         "npm-java-runner": "^0.0.17"
