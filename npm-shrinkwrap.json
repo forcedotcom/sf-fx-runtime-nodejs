@@ -40,7 +40,7 @@
         "mocha": "^10.0.0",
         "prettier": "^2.3.2",
         "sf-fx-sdk-nodejs": "^3.0.0",
-        "sinon": "^13.0.1",
+        "sinon": "^14.0.0",
         "ts-node": "^10.2.1",
         "typedoc": "^0.22.3",
         "typedoc-plugin-markdown": "^3.10.4",
@@ -4697,9 +4697,9 @@
       "integrity": "sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA=="
     },
     "node_modules/sinon": {
-      "version": "13.0.2",
-      "resolved": "https://registry.npmjs.org/sinon/-/sinon-13.0.2.tgz",
-      "integrity": "sha512-KvOrztAVqzSJWMDoxM4vM+GPys1df2VBoXm+YciyB/OLMamfS3VXh3oGh5WtrAGSzrgczNWFFY22oKb7Fi5eeA==",
+      "version": "14.0.0",
+      "resolved": "https://registry.npmjs.org/sinon/-/sinon-14.0.0.tgz",
+      "integrity": "sha512-ugA6BFmE+WrJdh0owRZHToLd32Uw3Lxq6E6LtNRU+xTVBefx632h03Q7apXWRsRdZAJ41LB8aUfn2+O4jsDNMw==",
       "dev": true,
       "dependencies": {
         "@sinonjs/commons": "^1.8.3",
@@ -9126,9 +9126,9 @@
       "integrity": "sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA=="
     },
     "sinon": {
-      "version": "13.0.2",
-      "resolved": "https://registry.npmjs.org/sinon/-/sinon-13.0.2.tgz",
-      "integrity": "sha512-KvOrztAVqzSJWMDoxM4vM+GPys1df2VBoXm+YciyB/OLMamfS3VXh3oGh5WtrAGSzrgczNWFFY22oKb7Fi5eeA==",
+      "version": "14.0.0",
+      "resolved": "https://registry.npmjs.org/sinon/-/sinon-14.0.0.tgz",
+      "integrity": "sha512-ugA6BFmE+WrJdh0owRZHToLd32Uw3Lxq6E6LtNRU+xTVBefx632h03Q7apXWRsRdZAJ41LB8aUfn2+O4jsDNMw==",
       "dev": true,
       "requires": {
         "@sinonjs/commons": "^1.8.3",
