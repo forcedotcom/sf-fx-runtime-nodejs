@@ -24,7 +24,7 @@ describe("readSalesforceConfig", () => {
     const conf = await readSalesforceConfig(path);
     expect(conf.id).to.eql("esm");
     expect(conf.description).to.not.be.empty;
-    expect(conf.salesforceApiVersion).to.eql("54.0");
+    expect(conf.salesforceApiVersion).to.eql("55.0");
   });
 
   it("uses a default value for salesforceApiVersion", async () => {
@@ -36,7 +36,7 @@ describe("readSalesforceConfig", () => {
       "project.toml"
     );
     const conf = await readSalesforceConfig(path);
-    expect(conf.salesforceApiVersion).to.eql("53.0");
+    expect(conf.salesforceApiVersion).to.eql("55.0");
   });
 
   it("throws for a missing project.toml", async () => {
