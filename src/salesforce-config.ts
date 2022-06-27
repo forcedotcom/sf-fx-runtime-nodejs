@@ -48,11 +48,11 @@ export async function readSalesforceConfig(
   if (
     !semver.satisfies(
       semver.coerce(salesforceApiVersion),
-      `>=${semver.coerce("55.0")}`
+      `>=${semver.coerce("53.0")}`
     )
   ) {
     throw new Error(
-      `Salesforce Rest API Version ${salesforceApiVersion} is not supported. Please change \`com.salesforce.salesforce-api-version\` in project.toml to "55.0" or newer.`
+      `Salesforce Rest API Version ${salesforceApiVersion} is not supported. Please change \`com.salesforce.salesforce-api-version\` in project.toml to "53.0" or newer.`
     );
   }
 
