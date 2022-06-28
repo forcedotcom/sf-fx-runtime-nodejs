@@ -40,9 +40,9 @@ export async function readSalesforceConfig(
   let salesforceApiVersion = salesforceConfig?.["salesforce-api-version"];
   if (!salesforceApiVersion) {
     console.log(
-      "DEPRECATION NOTICE: com.salesforce.salesforce-api-version is not defined in project.toml and has been defaulted to '55.0'. This field will be required in a future release."
+      "DEPRECATION NOTICE: com.salesforce.salesforce-api-version is not defined in project.toml and has been defaulted to '53.0'. This field will be required in a future release."
     );
-    salesforceApiVersion = "55.0";
+    salesforceApiVersion = "53.0";
   }
 
   if (
