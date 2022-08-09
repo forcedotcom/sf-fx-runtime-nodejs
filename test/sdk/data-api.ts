@@ -13,6 +13,7 @@ const uri = "http://localhost:8080";
 const token =
   "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
 const dataApiv51 = new DataApiImpl(uri, "51.0", token);
+const dataApiv55 = new DataApiImpl(uri, "55.0", token);
 const dataApiInvalidToken = new DataApiImpl(uri, "51.0", "badToken");
 const dataApiInvalidVersion = new DataApiImpl(uri, "iAmABadVersion", token);
 const dataApiInvalidUrl = new DataApiImpl(
@@ -306,6 +307,17 @@ describe("DataApi Class", async () => {
             "Could not read API response `records`:"
           );
         }
+      });
+    });
+
+    describe("with binary/base64 content", async () => {
+      it("includes both the relative url and decoded content", async () => {
+          const result = await dataApiv55.query("SELECT VersionData FROM ContentVersion");
+          expect(result.done).equal(true);
+          expect(result.totalSize).equal(1);
+          const record = result.records[0];
+          expect(record.type).equal("ContentVersion");
+          expect(record.fields.versiondata).equal("/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData");
       });
     });
   });

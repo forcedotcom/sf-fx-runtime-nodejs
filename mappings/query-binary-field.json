@@ -1,0 +1,40 @@
+{
+  "id" : "9e7b40cf-4be1-4b2d-be45-ad33b20a7ae0",
+  "name" : "services_data_v550_query",
+  "request" : {
+    "urlPath" : "/services/data/v55.0/query",
+    "method" : "GET",
+    "queryParameters": {
+      "q": {
+        "equalTo": "SELECT VersionData FROM ContentVersion"
+      }
+    },
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer 00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      },
+      "Sforce-Call-Options": {
+        "matches": "client=sf-fx-runtime-nodejs-sdk-impl-v\\d+:\\d+\\.\\d+\\.\\d+(-[a-zA-Z]+)*"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"totalSize\":1,\"done\":true,\"records\":[{\"attributes\":{\"type\":\"ContentVersion\",\"url\":\"/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA\"},\"VersionData\":\"/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData\"}]}",
+    "headers" : {
+      "Date" : "Tue, 09 Aug 2022 16:37:36 GMT",
+      "Set-Cookie" : [ "CookieConsentPolicy=0:1; path=/; expires=Wed, 09-Aug-2023 16:37:36 GMT; Max-Age=31536000", "LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Wed, 09-Aug-2023 16:37:36 GMT; Max-Age=31536000", "BrowserId=kybw3RgBEe2doWVsevDYwg; domain=.salesforce.com; path=/; expires=Wed, 09-Aug-2023 16:37:36 GMT; Max-Age=31536000" ],
+      "Strict-Transport-Security" : "max-age=63072000; includeSubDomains",
+      "X-Content-Type-Options" : "nosniff",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Robots-Tag" : "none",
+      "Cache-Control" : "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Sforce-Limit-Info" : "api-usage=16/5000000",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "9e7b40cf-4be1-4b2d-be45-ad33b20a7ae0",
+  "persistent" : true,
+  "insertionIndex" : 26
+}
