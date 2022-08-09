@@ -39,13 +39,26 @@
         "eslint-plugin-license-header": "^0.6.0",
         "mocha": "^10.0.0",
         "prettier": "^2.3.2",
-        "sf-fx-sdk-nodejs": "^3.0.0",
+        "sf-fx-sdk-nodejs": "../sf-fx-sdk-nodejs",
         "sinon": "^14.0.0",
         "ts-node": "^10.2.1",
         "typedoc": "^0.23.7",
         "typedoc-plugin-markdown": "^3.10.4",
         "typescript": "^4.4.2",
         "wiremock": "^2.29.0"
+      }
+    },
+    "../sf-fx-sdk-nodejs": {
+      "version": "3.0.0",
+      "dev": true,
+      "license": "BSD-3-Clause",
+      "devDependencies": {
+        "@salesforce/dev-scripts": "0.9.18",
+        "@typescript-eslint/eslint-plugin": "^4.28.3",
+        "@typescript-eslint/parser": "^4.28.3",
+        "eslint": "^7.30.0",
+        "eslint-config-prettier": "^8.3.0",
+        "typescript": "^4.3.5"
       }
     },
     "node_modules/@babel/code-frame": {
@@ -5197,10 +5210,8 @@
       "integrity": "sha512-1jeBGaKNGdEq4FgIrORu/N570dwoPYio8lSoYLWmX7sQ//0JY08Xh9o5pBcgmHQ/MbsYp/aZnOe1s1lIsbLprQ=="
     },
     "node_modules/sf-fx-sdk-nodejs": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/sf-fx-sdk-nodejs/-/sf-fx-sdk-nodejs-3.0.0.tgz",
-      "integrity": "sha512-5mW5A8vZhqrUNNLZMlWvgyjIFast6jvkIp/3Y38Apk+/bAdsW4380xoLsW0s/HPJPwZU0/weApHPaUn2U7l7Vw==",
-      "dev": true
+      "resolved": "../sf-fx-sdk-nodejs",
+      "link": true
     },
     "node_modules/shebang-command": {
       "version": "2.0.0",
@@ -10134,10 +10145,15 @@
       "integrity": "sha512-1jeBGaKNGdEq4FgIrORu/N570dwoPYio8lSoYLWmX7sQ//0JY08Xh9o5pBcgmHQ/MbsYp/aZnOe1s1lIsbLprQ=="
     },
     "sf-fx-sdk-nodejs": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/sf-fx-sdk-nodejs/-/sf-fx-sdk-nodejs-3.0.0.tgz",
-      "integrity": "sha512-5mW5A8vZhqrUNNLZMlWvgyjIFast6jvkIp/3Y38Apk+/bAdsW4380xoLsW0s/HPJPwZU0/weApHPaUn2U7l7Vw==",
-      "dev": true
+      "version": "file:../sf-fx-sdk-nodejs",
+      "requires": {
+        "@salesforce/dev-scripts": "0.9.18",
+        "@typescript-eslint/eslint-plugin": "^4.28.3",
+        "@typescript-eslint/parser": "^4.28.3",
+        "eslint": "^7.30.0",
+        "eslint-config-prettier": "^8.3.0",
+        "typescript": "^4.3.5"
+      }
     },
     "shebang-command": {
       "version": "2.0.0",

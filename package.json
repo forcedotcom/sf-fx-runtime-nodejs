@@ -57,7 +57,7 @@
     "eslint-plugin-license-header": "^0.6.0",
     "mocha": "^10.0.0",
     "prettier": "^2.3.2",
-    "sf-fx-sdk-nodejs": "^3.0.0",
+    "sf-fx-sdk-nodejs": "../sf-fx-sdk-nodejs",
     "sinon": "^14.0.0",
     "ts-node": "^10.2.1",
     "typedoc": "^0.23.7",
