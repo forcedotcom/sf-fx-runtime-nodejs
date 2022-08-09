@@ -6,7 +6,7 @@
     "method": "GET",
     "queryParameters": {
       "q": {
-        "equalTo": "SELECT VersionData FROM ContentVersion"
+        "equalTo": "SELECT Title FROM ContentVersion"
       }
     },
     "headers": {
