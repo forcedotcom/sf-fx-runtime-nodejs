@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import { UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
+  Record,
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
@@ -19,7 +20,7 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "sf-fx-sdk-nodejs";
-import { createCaseInsensitiveRecord } from "../utils/maps.js";
+import { createCaseInsensitiveMap, createCaseInsensitiveRecord } from "../utils/maps.js";
 const pkgPath = join(
   fileURLToPath(import.meta.url),
   "..",
@@ -94,7 +95,7 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.query(soql);
         this.validate_records_response(response);
-        const records = response.records.map(createCaseInsensitiveRecord);
+        const records = await Promise.all(response.records.map((record_data) => buildRecord(conn, record_data)));
         return {
           done: response.done,
           totalSize: response.totalSize,
@@ -282,4 +283,25 @@ export class DataApiImpl implements DataApi {
     }
     throw error;
   }
+}
+
+async function buildRecord(conn: Connection, data: any): Promise<Record> {
+  const fields = createCaseInsensitiveMap(data);
+  delete fields["attributes"];
+  const type = data.attributes.type;
+  const binaryFields = await fetchBinaryFields(conn, type, fields);
+
+  return {
+    type,
+    fields,
+    binaryFields
+  };
+}
+
+async function fetchBinaryFields(conn: Connection, type: string, fields: any): Promise<any> {
+  if (type == "ContentVersion") {
+    const result = await conn.request(fields["VersionData"]);
+    return createCaseInsensitiveMap({ "VersionData": result });
+  }
+  return {};
 }
