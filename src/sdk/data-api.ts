@@ -300,8 +300,8 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
 
 async function fetchBinaryFields(conn: Connection, type: string, fields: any): Promise<any> {
   if (type == "ContentVersion") {
-    const result = await conn.request(fields["VersionData"]);
-    return createCaseInsensitiveMap({ "VersionData": result });
+    const result: string = await conn.request(fields["VersionData"]);
+    return createCaseInsensitiveMap({ "VersionData": Buffer.from(result) });
   }
   return {};
 }

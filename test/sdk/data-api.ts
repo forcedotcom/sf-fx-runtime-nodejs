@@ -318,7 +318,7 @@ describe("DataApi Class", async () => {
           const record = result.records[0];
           expect(record.type).equal("ContentVersion");
           expect(record.fields.versiondata).equal("/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData");
-          expect(record.binaryFields["versiondata"]).includes("HYPNO TOAD");
+          expect(record.binaryFields.versiondata.includes("HYPNO TOAD")).to.be.true;
       });
     });
   });
