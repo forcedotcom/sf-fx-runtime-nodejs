@@ -609,9 +609,9 @@
       "dev": true
     },
     "node_modules/@types/chai": {
-      "version": "4.3.1",
-      "resolved": "https://registry.npmjs.org/@types/chai/-/chai-4.3.1.tgz",
-      "integrity": "sha512-/zPMqDkzSZ8t3VtxOa4KPq7uzzW978M9Tvh+j7GHKuo6k6GTLxPJ4J5gE5cjfJ26pnXst0N5Hax8Sr0T2Mi9zQ==",
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/@types/chai/-/chai-4.3.3.tgz",
+      "integrity": "sha512-hC7OMnszpxhZPduX+m+nrx+uFoLkWOMiR4oa/AZF3MuSETYTZmFfJAHqZEM8MVlvfG7BEUcgvtwoCTxBp6hm3g==",
       "dev": true
     },
     "node_modules/@types/graceful-fs": {
@@ -1688,9 +1688,9 @@
       "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
     },
     "node_modules/concurrently": {
-      "version": "7.2.2",
-      "resolved": "https://registry.npmjs.org/concurrently/-/concurrently-7.2.2.tgz",
-      "integrity": "sha512-DcQkI0ruil5BA/g7Xy3EWySGrFJovF5RYAYxwGvv9Jf9q9B1v3jPFP2tl6axExNf1qgF30kjoNYrangZ0ey4Aw==",
+      "version": "7.3.0",
+      "resolved": "https://registry.npmjs.org/concurrently/-/concurrently-7.3.0.tgz",
+      "integrity": "sha512-IiDwm+8DOcFEInca494A8V402tNTQlJaYq78RF2rijOrKEk/AOHTxhN4U1cp7GYKYX5Q6Ymh1dLTBlzIMN0ikA==",
       "dev": true,
       "dependencies": {
         "chalk": "^4.1.0",
@@ -5346,9 +5346,9 @@
       }
     },
     "node_modules/typedoc-plugin-markdown": {
-      "version": "3.13.3",
-      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.13.3.tgz",
-      "integrity": "sha512-KKvFkQphRcH26NoBCKjjZ7a3rkPBQAOuWg1F4s+snDSWXfTyGWO5isgoe19VUbG87W8X/0x3uc/O0Nj7Qle3TQ==",
+      "version": "3.13.4",
+      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.13.4.tgz",
+      "integrity": "sha512-E/EBBmu6ARtnbswZGtBVBB/BfukZiGMOlqPc0RXCI/NFitONBahFqbCAF5fKQlijlcfipJj5pw5AMFH3NytrAw==",
       "dev": true,
       "dependencies": {
         "handlebars": "^4.7.7"
@@ -6190,9 +6190,9 @@
       "dev": true
     },
     "@types/chai": {
-      "version": "4.3.1",
-      "resolved": "https://registry.npmjs.org/@types/chai/-/chai-4.3.1.tgz",
-      "integrity": "sha512-/zPMqDkzSZ8t3VtxOa4KPq7uzzW978M9Tvh+j7GHKuo6k6GTLxPJ4J5gE5cjfJ26pnXst0N5Hax8Sr0T2Mi9zQ==",
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/@types/chai/-/chai-4.3.3.tgz",
+      "integrity": "sha512-hC7OMnszpxhZPduX+m+nrx+uFoLkWOMiR4oa/AZF3MuSETYTZmFfJAHqZEM8MVlvfG7BEUcgvtwoCTxBp6hm3g==",
       "dev": true
     },
     "@types/graceful-fs": {
@@ -6984,9 +6984,9 @@
       "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
     },
     "concurrently": {
-      "version": "7.2.2",
-      "resolved": "https://registry.npmjs.org/concurrently/-/concurrently-7.2.2.tgz",
-      "integrity": "sha512-DcQkI0ruil5BA/g7Xy3EWySGrFJovF5RYAYxwGvv9Jf9q9B1v3jPFP2tl6axExNf1qgF30kjoNYrangZ0ey4Aw==",
+      "version": "7.3.0",
+      "resolved": "https://registry.npmjs.org/concurrently/-/concurrently-7.3.0.tgz",
+      "integrity": "sha512-IiDwm+8DOcFEInca494A8V402tNTQlJaYq78RF2rijOrKEk/AOHTxhN4U1cp7GYKYX5Q6Ymh1dLTBlzIMN0ikA==",
       "dev": true,
       "requires": {
         "chalk": "^4.1.0",
@@ -9805,9 +9805,9 @@
       }
     },
     "typedoc-plugin-markdown": {
-      "version": "3.13.3",
-      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.13.3.tgz",
-      "integrity": "sha512-KKvFkQphRcH26NoBCKjjZ7a3rkPBQAOuWg1F4s+snDSWXfTyGWO5isgoe19VUbG87W8X/0x3uc/O0Nj7Qle3TQ==",
+      "version": "3.13.4",
+      "resolved": "https://registry.npmjs.org/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.13.4.tgz",
+      "integrity": "sha512-E/EBBmu6ARtnbswZGtBVBB/BfukZiGMOlqPc0RXCI/NFitONBahFqbCAF5fKQlijlcfipJj5pw5AMFH3NytrAw==",
       "dev": true,
       "requires": {
         "handlebars": "^4.7.7"
