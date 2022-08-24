@@ -167,7 +167,7 @@ export default async function startServer(
   registerShutdownHooks({ server, disconnect, grace, signals, logger, host });
 
   try {
-    await server.listen(port, host);
+    await server.listen({ port, host });
     logger.info(`started function worker ${id}`);
   } catch (err) {
     logger.error(`error starting function worker ${id}: ${err}`);
