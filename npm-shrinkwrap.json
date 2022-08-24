@@ -665,15 +665,15 @@
       "integrity": "sha512-SST7B//wF7xlGoLo1IEVB0cQ4e7BgXlDk5IaPgb5s0DlYLjb4if07h8+0zbQIvahfPNXs6e7zyT0EH1MqaS+5g=="
     },
     "node_modules/@types/semver": {
-      "version": "7.3.10",
-      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.10.tgz",
-      "integrity": "sha512-zsv3fsC7S84NN6nPK06u79oWgrPVd0NvOyqgghV1haPaFcVxIrP4DLomRwGAXk0ui4HZA7mOcSFL98sMVW9viw==",
+      "version": "7.3.12",
+      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.12.tgz",
+      "integrity": "sha512-WwA1MW0++RfXmCr12xeYOOC5baSC9mSb0ZqCquFzKhcoF4TvHu5MKOuXsncgZcpVFhB1pXd5hZmM0ryAoCp12A==",
       "dev": true
     },
     "node_modules/@types/sinon": {
-      "version": "10.0.12",
-      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.12.tgz",
-      "integrity": "sha512-uWf4QJ4oky/GckJ1MYQxU52cgVDcXwBhDkpvLbi4EKoLPqLE4MOH6T/ttM33l3hi0oZ882G6oIzWv/oupRYSxQ==",
+      "version": "10.0.13",
+      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.13.tgz",
+      "integrity": "sha512-UVjDqJblVNQYvVNUsj0PuYYw0ELRmgt1Nt5Vk0pT5f16ROGfcKJY8o1HVuMOJOpD727RrGB9EGvoaTQE5tgxZQ==",
       "dev": true,
       "dependencies": {
         "@types/sinonjs__fake-timers": "*"
@@ -6246,15 +6246,15 @@
       "integrity": "sha512-SST7B//wF7xlGoLo1IEVB0cQ4e7BgXlDk5IaPgb5s0DlYLjb4if07h8+0zbQIvahfPNXs6e7zyT0EH1MqaS+5g=="
     },
     "@types/semver": {
-      "version": "7.3.10",
-      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.10.tgz",
-      "integrity": "sha512-zsv3fsC7S84NN6nPK06u79oWgrPVd0NvOyqgghV1haPaFcVxIrP4DLomRwGAXk0ui4HZA7mOcSFL98sMVW9viw==",
+      "version": "7.3.12",
+      "resolved": "https://registry.npmjs.org/@types/semver/-/semver-7.3.12.tgz",
+      "integrity": "sha512-WwA1MW0++RfXmCr12xeYOOC5baSC9mSb0ZqCquFzKhcoF4TvHu5MKOuXsncgZcpVFhB1pXd5hZmM0ryAoCp12A==",
       "dev": true
     },
     "@types/sinon": {
-      "version": "10.0.12",
-      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.12.tgz",
-      "integrity": "sha512-uWf4QJ4oky/GckJ1MYQxU52cgVDcXwBhDkpvLbi4EKoLPqLE4MOH6T/ttM33l3hi0oZ882G6oIzWv/oupRYSxQ==",
+      "version": "10.0.13",
+      "resolved": "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.13.tgz",
+      "integrity": "sha512-UVjDqJblVNQYvVNUsj0PuYYw0ELRmgt1Nt5Vk0pT5f16ROGfcKJY8o1HVuMOJOpD727RrGB9EGvoaTQE5tgxZQ==",
       "dev": true,
       "requires": {
         "@types/sinonjs__fake-timers": "*"
