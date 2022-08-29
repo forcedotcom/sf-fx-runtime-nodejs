@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Update publish.sh 
+- Packaged releases no longer available from s3 ([#362](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/362))
+- Silence deprecation warning from fastify ([#393](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/393))
 
 ## [0.11.2] - 2022-06-29
 - Update to enable Salesforce API version v55.0
