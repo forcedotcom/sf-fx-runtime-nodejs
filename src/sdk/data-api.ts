@@ -78,9 +78,18 @@ export class DataApiImpl implements DataApi {
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
+        const fields = recordCreate.fields;
+        // Automatically base64 encode any known binaryFields without overwriting existing fields.
+        if (recordCreate.type in knownBinaryFields) {
+          for (const binFieldName of knownBinaryFields[recordCreate.type]) {
+            if (Buffer.isBuffer(recordCreate.binaryFields[binFieldName]) && (recordCreate.fields[binFieldName] === null || recordCreate.fields[binFieldName] === undefined)) {
+              fields[binFieldName] = recordCreate.binaryFields[binFieldName].toString('base64');
+            }
+          }
+        }
         const response: any = await conn.insert(
           recordCreate.type,
-          recordCreate.fields
+          fields
         );
         this.validate_record_response(response);
         return { id: response.id };
@@ -140,10 +149,20 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
+      const fields = { Id: null };
+
+      // Automatically base64 encode any known binaryFields without overwriting existing fields.
+      if (recordUpdate.type in knownBinaryFields) {
+        for (const binFieldName of knownBinaryFields[recordUpdate.type]) {
+          if (Buffer.isBuffer(recordUpdate.binaryFields[binFieldName]) && (recordUpdate.fields[binFieldName] === null || recordUpdate.fields[binFieldName] === undefined)) {
+            fields[binFieldName] = recordUpdate.binaryFields[binFieldName].toString('base64');
+          }
+        }
+      }
+
       // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
       // our SDK definition requires customers to provide "id". Customers that are not using TS might also
       // pass other casings for the "id" field ("iD", "ID"). Any other fields are passed to the Salesforce API untouched.
-      const fields = { Id: null };
       Object.keys(recordUpdate.fields).forEach((key) => {
         const value = recordUpdate.fields[key];
         const targetKey = key.toLowerCase() === "id" ? "Id" : key;
@@ -285,6 +304,8 @@ export class DataApiImpl implements DataApi {
   }
 }
 
+const knownBinaryFields = { "ContentVersion": ["VersionData"] };
+
 async function buildRecord(conn: Connection, data: any): Promise<Record> {
   const fields = createCaseInsensitiveMap(data);
   delete fields["attributes"];
@@ -299,9 +320,14 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
 }
 
 async function fetchBinaryFields(conn: Connection, type: string, fields: any): Promise<any> {
-  if (type == "ContentVersion") {
-    const result: string = await conn.request(fields["VersionData"]);
-    return createCaseInsensitiveMap({ "VersionData": Buffer.from(result, 'binary') });
+  const binaryFields = {};
+  if (type in knownBinaryFields) {
+    for (const binFieldName of knownBinaryFields[type]) {
+      if (fields[binFieldName]) {
+        const body: string = await conn.request(fields[binFieldName]);
+        binaryFields[binFieldName] = Buffer.from(body, 'binary');
+      }
+    }
   }
-  return {};
+  return createCaseInsensitiveMap(binaryFields);
 }
