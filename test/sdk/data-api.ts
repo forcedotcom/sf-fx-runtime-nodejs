@@ -188,6 +188,7 @@ describe("DataApi Class", async () => {
 
         expect(records[0]).to.deep.equal({
           type: "Account",
+          binaryFields: {},
           fields: {
             name: "An awesome test account",
           },
@@ -197,6 +198,7 @@ describe("DataApi Class", async () => {
 
         expect(records[1]).to.deep.equal({
           type: "Account",
+          binaryFields: {},
           fields: {
             name: "Global Media",
           },
@@ -206,6 +208,7 @@ describe("DataApi Class", async () => {
 
         expect(records[2]).to.deep.equal({
           type: "Account",
+          binaryFields: {},
           fields: {
             name: "Acme",
           },
@@ -215,6 +218,7 @@ describe("DataApi Class", async () => {
 
         expect(records[3]).to.deep.equal({
           type: "Account",
+          binaryFields: {},
           fields: {
             name: "salesforce.com",
           },
@@ -222,6 +226,7 @@ describe("DataApi Class", async () => {
 
         expect(records[4]).to.deep.equal({
           type: "Account",
+          binaryFields: {},
           fields: {
             name: "Sample Account for Entitlements",
           },
