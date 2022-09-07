@@ -30,6 +30,7 @@ const pkgPath = join(
 );
 const pkg = readFileSync(pkgPath, "utf8");
 const ClientVersion = JSON.parse(pkg).version;
+const knownBinaryFields = { "ContentVersion": ["VersionData"] };
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -277,22 +278,28 @@ export class DataApiImpl implements DataApi {
   }
 }
 
-const knownBinaryFields = { "ContentVersion": ["VersionData"] };
-
 async function buildRecord(conn: Connection, data: any): Promise<Record> {
-  const fields = createCaseInsensitiveMap(data);
-  delete fields["attributes"];
   const type = data.attributes.type;
-  const binaryFields = await fetchBinaryFields(conn, type, fields);
+  const fields = createCaseInsensitiveMap(data.attributes);
+
+  // For any known binaryFields, eagerly fetch the data from the specified
+  // endpoint.
+  const binaryFields = {};
+  if (type in knownBinaryFields) {
+    for (const binFieldName of knownBinaryFields[type]) {
+      if (fields[binFieldName]) {
+        const body: string = await conn.request(fields[binFieldName]);
+        binaryFields[binFieldName] = Buffer.from(body, 'binary');
+      }
+    }
+  }
 
   return {
     type,
     fields,
-    binaryFields
+    binaryFields: createCaseInsensitiveMap(fields),
   };
 }
-
-
 
 function buildUploadFields(record: Record): {[key: string]: unknown} {
   const fields = {};
@@ -314,17 +321,4 @@ function buildUploadFields(record: Record): {[key: string]: unknown} {
   });
 
   return fields;
-}
-
-async function fetchBinaryFields(conn: Connection, type: string, fields: any): Promise<any> {
-  const binaryFields = {};
-  if (type in knownBinaryFields) {
-    for (const binFieldName of knownBinaryFields[type]) {
-      if (fields[binFieldName]) {
-        const body: string = await conn.request(fields[binFieldName]);
-        binaryFields[binFieldName] = Buffer.from(body, 'binary');
-      }
-    }
-  }
-  return createCaseInsensitiveMap(binaryFields);
 }
