@@ -20,7 +20,7 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "sf-fx-sdk-nodejs";
-import { createCaseInsensitiveMap, createCaseInsensitiveRecord } from "../utils/maps.js";
+import { createCaseInsensitiveMap } from "../utils/maps.js";
 const pkgPath = join(
   fileURLToPath(import.meta.url),
   "..",
@@ -124,7 +124,7 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.queryMore(queryResult.nextRecordsUrl);
         this.validate_records_response(response);
-        const records = response.records.map(createCaseInsensitiveRecord);
+        const records = await Promise.all(response.records.map((record_data) => buildRecord(conn, record_data)));
 
         return {
           done: response.done,
@@ -280,7 +280,8 @@ export class DataApiImpl implements DataApi {
 
 async function buildRecord(conn: Connection, data: any): Promise<Record> {
   const type = data.attributes.type;
-  const fields = createCaseInsensitiveMap(data.attributes);
+  const fields = createCaseInsensitiveMap(data);
+  delete fields["attributes"];
 
   // For any known binaryFields, eagerly fetch the data from the specified
   // endpoint.
@@ -297,7 +298,7 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
   return {
     type,
     fields,
-    binaryFields: createCaseInsensitiveMap(fields),
+    binaryFields: createCaseInsensitiveMap(binaryFields),
   };
 }
 

@@ -8,6 +8,7 @@
 import { expect } from "chai";
 import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
+import fs from 'fs';
 
 const uri = "http://localhost:8080";
 const token =
@@ -171,6 +172,24 @@ describe("DataApi Class", async () => {
           expect(e.message).equal("No SObject Type defined in record");
           expect(e.errorCode).undefined;
         }
+      });
+    });
+
+    describe("with binary / base64 field data", async() => {
+      it("encodes the binaryFields data", async () => {
+        const { id } = await dataApiv55.create({
+          type: "ContentVersion",
+          binaryFields: {
+            VersionData: fs.readFileSync(
+              new URL("../../fixtures/salesforce-tiny.png", import.meta.url)
+            ),
+          },
+          fields: {
+            Description: "Tiny Salesforce Logo",
+            PathOnClient: "salesforce-tiny.png",
+          },
+        });
+        expect(id).equal("068R0000002Hu1FIAS");
       });
     });
   });
