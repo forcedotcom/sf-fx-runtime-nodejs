@@ -334,7 +334,7 @@ describe("DataApi Class", async () => {
       });
     });
 
-    describe("with binary/base64 content", async () => {
+    describe("with binary / base64 fields", async () => {
       it("includes both the relative url and decoded content", async () => {
           const result = await dataApiv55.query("SELECT VersionData FROM ContentVersion");
           expect(result.done).equal(true);
@@ -499,6 +499,24 @@ describe("DataApi Class", async () => {
           expect(e.message).equal("No SObject Type defined in record");
           expect(e.errorCode).undefined;
         }
+      });
+    });
+
+    describe("with binary / base64 field data", async() => {
+      it("encodes binaryFields data", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Tiny Salesforce Logo",
+          },
+          binaryFields: {
+            VersionData: fs.readFileSync(
+              new URL("../../fixtures/salesforce-tiny.png", import.meta.url)
+            ),
+          },
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
       });
     });
   });
