@@ -30,7 +30,7 @@ const pkgPath = join(
 );
 const pkg = readFileSync(pkgPath, "utf8");
 const ClientVersion = JSON.parse(pkg).version;
-const knownBinaryFields = { "ContentVersion": ["VersionData"] };
+const knownBinaryFields = { ContentVersion: ["VersionData"] };
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -80,10 +80,7 @@ export class DataApiImpl implements DataApi {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
         const fields = buildUploadFields(recordCreate);
-        const response: any = await conn.insert(
-          recordCreate.type,
-          fields
-        );
+        const response: any = await conn.insert(recordCreate.type, fields);
         this.validate_record_response(response);
         return { id: response.id };
       } catch (e) {
@@ -97,7 +94,9 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.query(soql);
         this.validate_records_response(response);
-        const records = await Promise.all(response.records.map((record_data) => buildRecord(conn, record_data)));
+        const records = await Promise.all(
+          response.records.map((record_data) => buildRecord(conn, record_data))
+        );
         return {
           done: response.done,
           totalSize: response.totalSize,
@@ -124,7 +123,9 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.queryMore(queryResult.nextRecordsUrl);
         this.validate_records_response(response);
-        const records = await Promise.all(response.records.map((record_data) => buildRecord(conn, record_data)));
+        const records = await Promise.all(
+          response.records.map((record_data) => buildRecord(conn, record_data))
+        );
 
         return {
           done: response.done,
@@ -142,7 +143,7 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const fields = { "Id": null , ...buildUploadFields(recordUpdate) };
+      const fields = { Id: null, ...buildUploadFields(recordUpdate) };
 
       try {
         const response: any = await conn.update(recordUpdate.type, fields);
@@ -290,24 +291,33 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
     for (const binFieldName of knownBinaryFields[type]) {
       if (fields[binFieldName]) {
         const body: string = await conn.request(fields[binFieldName]);
-        binaryFields[binFieldName] = Buffer.from(body, 'binary');
+        binaryFields[binFieldName] = Buffer.from(body, "binary");
       }
     }
   }
 
   for (const _ in binaryFields) {
-    return { type, fields, binaryFields: createCaseInsensitiveMap(binaryFields) };
+    return {
+      type,
+      fields,
+      binaryFields: createCaseInsensitiveMap(binaryFields),
+    };
   }
   return { type, fields };
 }
 
-function buildUploadFields(record: Record): {[key: string]: unknown} {
+function buildUploadFields(record: Record): { [key: string]: unknown } {
   const fields = {};
   // Automatically base64 encode any known binaryFields without overwriting existing fields.
   if (record.type in knownBinaryFields) {
     for (const binFieldName of knownBinaryFields[record.type]) {
-      if (Buffer.isBuffer(record.binaryFields[binFieldName]) && (record.fields[binFieldName] === undefined || record.fields[binFieldName] === null)) {
-        fields[binFieldName] = record.binaryFields[binFieldName].toString('base64');
+      if (
+        Buffer.isBuffer(record.binaryFields[binFieldName]) &&
+        (record.fields[binFieldName] === undefined ||
+          record.fields[binFieldName] === null)
+      ) {
+        fields[binFieldName] =
+          record.binaryFields[binFieldName].toString("base64");
       }
     }
   }

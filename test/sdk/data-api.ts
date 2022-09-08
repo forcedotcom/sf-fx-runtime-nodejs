@@ -8,7 +8,7 @@
 import { expect } from "chai";
 import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
-import fs from 'fs';
+import fs from "fs";
 
 const uri = "http://localhost:8080";
 const token =
@@ -22,7 +22,6 @@ const dataApiInvalidUrl = new DataApiImpl(
   "51.0",
   token
 );
-
 
 describe("DataApi Class", async () => {
   describe("public class attributes", async () => {
@@ -175,7 +174,7 @@ describe("DataApi Class", async () => {
       });
     });
 
-    describe("with binary / base64 field data", async() => {
+    describe("with binary / base64 field data", async () => {
       it("encodes the binaryFields data", async () => {
         const { id } = await dataApiv55.create({
           type: "ContentVersion",
@@ -251,7 +250,9 @@ describe("DataApi Class", async () => {
     describe("when there are additional pages of results", async () => {
       it("returns nextRecordsUrl", async () => {
         const { done, totalSize, records, nextRecordsUrl } =
-          await dataApiv51.query("SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c");
+          await dataApiv51.query(
+            "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
+          );
 
         expect(done).equal(false);
         expect(totalSize).equal(10000);
@@ -331,13 +332,18 @@ describe("DataApi Class", async () => {
 
     describe("with binary / base64 fields", async () => {
       it("includes both the relative url and decoded content", async () => {
-          const result = await dataApiv55.query("SELECT VersionData FROM ContentVersion");
-          expect(result.done).equal(true);
-          expect(result.totalSize).equal(1);
-          const record = result.records[0];
-          expect(record.type).equal("ContentVersion");
-          expect(record.fields.versiondata).equal("/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData");
-          expect(record.binaryFields.versiondata.includes("HYPNO TOAD")).to.be.true;
+        const result = await dataApiv55.query(
+          "SELECT VersionData FROM ContentVersion"
+        );
+        expect(result.done).equal(true);
+        expect(result.totalSize).equal(1);
+        const record = result.records[0];
+        expect(record.type).equal("ContentVersion");
+        expect(record.fields.versiondata).equal(
+          "/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData"
+        );
+        expect(record.binaryFields.versiondata.includes("HYPNO TOAD")).to.be
+          .true;
       });
     });
   });
@@ -497,7 +503,7 @@ describe("DataApi Class", async () => {
       });
     });
 
-    describe("with binary / base64 field data", async() => {
+    describe("with binary / base64 field data", async () => {
       it("encodes binaryFields data", async () => {
         const { id } = await dataApiv55.update({
           type: "ContentVersion",
