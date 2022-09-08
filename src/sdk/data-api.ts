@@ -295,11 +295,10 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
     }
   }
 
-  return {
-    type,
-    fields,
-    binaryFields: createCaseInsensitiveMap(binaryFields),
-  };
+  for (const _ in binaryFields) {
+    return { type, fields, binaryFields: createCaseInsensitiveMap(binaryFields) };
+  }
+  return { type, fields };
 }
 
 function buildUploadFields(record: Record): {[key: string]: unknown} {
