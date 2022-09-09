@@ -570,6 +570,7 @@ describe("DataApi Class", async () => {
             type: "Franchise__c",
             fields: {
               Name: "Star Wars",
+              ReleaseDate__c: null,
             },
           });
 
