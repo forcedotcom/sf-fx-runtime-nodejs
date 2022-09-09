@@ -141,5 +141,5 @@ function expandReferenceIds(fields: { [key: string]: unknown }): {
 }
 
 function isReferenceId(val: any): val is ReferenceId {
-  return (val as ReferenceId).toApiString !== undefined;
+  return val && typeof val === 'object' && 'toApiString' in val && 'toString' in val;
 }
