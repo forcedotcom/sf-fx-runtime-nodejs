@@ -6,7 +6,7 @@
     "method": "POST",
     "bodyPatterns": [
       {
-        "equalToJson": "{\n    \"graphs\": [\n        {\n            \"graphId\": \"graph0\",\n            \"compositeRequest\": [\n                {\n                    \"url\": \"/services/data/v51.0/sobjects/Movie__c\",\n                    \"method\": \"POST\",\n                    \"referenceId\": \"insert-anh\",\n                    \"body\": {\n                        \"Name\": \"Star Wars Episode IV - A New Hope\",\n                        \"Rating__c\": \"Excellent\"\n                    }\n                }\n            ]\n        }\n    ]\n}"
+        "equalToJson": "{ \"graphs\": [ { \"graphId\": \"graph0\", \"compositeRequest\": [ { \"url\": \"/services/data/v51.0/sobjects/Movie__c\", \"method\": \"POST\", \"referenceId\": \"insert-anh\", \"body\": { \"Name\": \"Star Wars Episode IV - A New Hope\", \"Rating__c\": \"Excellent\", \"ReleaseDate__c\": null } } ] } ]}"
       }
     ],
     "headers": {
