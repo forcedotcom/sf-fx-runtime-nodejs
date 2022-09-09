@@ -510,6 +510,7 @@ describe("DataApi Class", async () => {
             fields: {
               Name: "Star Wars Episode IV - A New Hope",
               Rating__c: "Excellent",
+              ReleaseDate__c: null,
             },
           });
 
@@ -570,7 +571,6 @@ describe("DataApi Class", async () => {
             type: "Franchise__c",
             fields: {
               Name: "Star Wars",
-              ReleaseDate__c: null,
             },
           });
 
