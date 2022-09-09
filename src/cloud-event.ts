@@ -60,12 +60,12 @@ function parseBase64Json(data: unknown): any {
   if (data === undefined || data === null) {
     return null;
   }
-  const dataString = data.toString();
-  if (dataString.trim() === "") {
+  const decodedData = Buffer.from(data.toString(), "base64").toString("utf-8");
+  if (decodedData.trim() === "") {
     return null;
   }
   try {
-    return JSON.parse(Buffer.from(dataString, "base64").toString("utf-8"));
+    return JSON.parse(decodedData);
   } catch (error) {
     throw new Error(
       "Could not execute function. Function arguments could not be determined due to invalid JSON body: " +
