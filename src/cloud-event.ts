@@ -13,21 +13,20 @@ export function parseCloudEvent(
   body: string | unknown
 ): SalesforceFunctionsCloudEvent {
   const cloudEvent = CloudEvents.HTTP.toEvent({ headers, body });
+  if (Array.isArray(cloudEvent)) {
+    throw new Error(
+      "Could not execute function. Function arguments could not be determined due to invalid function payload. Expected a singular CloudEvent, but found multiple CloudEvents."
+    );
+  }
   return {
-    cloudEvent,
-    sfContext:
-      cloudEvent.sfcontext == undefined
-        ? null
-        : parseBase64Json(cloudEvent.sfcontext.toString()),
-    sfFunctionContext:
-      cloudEvent.sffncontext == undefined
-        ? null
-        : parseBase64Json(cloudEvent.sffncontext.toString()),
+    cloudEvent: cloudEvent as CloudEvent<unknown>,
+    sfContext: parseBase64Json(cloudEvent.sfcontext),
+    sfFunctionContext: parseBase64Json(cloudEvent.sffncontext),
   };
 }
 
 export interface SalesforceFunctionsCloudEvent {
-  cloudEvent: CloudEvent;
+  cloudEvent: CloudEvent<unknown>;
   sfContext: SalesforceContext;
   sfFunctionContext: SalesforceFunctionContext;
 }
@@ -57,9 +56,16 @@ export interface SalesforceFunctionContext {
   readonly resource?: string;
 }
 
-function parseBase64Json<A>(data: string): A {
+function parseBase64Json(data: unknown): any {
+  if (data === undefined || data === null) {
+    return null;
+  }
+  const decodedData = Buffer.from(data.toString(), "base64").toString("utf-8");
+  if (decodedData.trim() === "") {
+    return null;
+  }
   try {
-    return JSON.parse(Buffer.from(data, "base64").toString("utf-8"));
+    return JSON.parse(decodedData);
   } catch (error) {
     throw new Error(
       "Could not execute function. Function arguments could not be determined due to invalid JSON body: " +
