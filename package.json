@@ -31,7 +31,7 @@
   "license": "ISC",
   "dependencies": {
     "@iarna/toml": "^2.2.5",
-    "@salesforce/core": "^2.27.2",
+    "@salesforce/core": "^3.30.8",
     "cloudevents": "^6.0.2",
     "fastify": "^4.0.2",
     "jsforce2": "npm:jsforce@^2.0.0-beta.8",
