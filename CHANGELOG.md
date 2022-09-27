@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Default url for DataAPI is now `orgDomainUrl` rather than `salesforceBaseUrl` ([#417](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/417))
 - Update to cloudevents 6.0 ([#402](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/402))
 - Fix `isReferenceId(null)` type check ([#401](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/401))
 - Packaged releases no longer available from s3 ([#362](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/362))
