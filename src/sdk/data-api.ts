@@ -290,8 +290,12 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
   if (type in knownBinaryFields) {
     for (const binFieldName of knownBinaryFields[type]) {
       if (fields[binFieldName]) {
-        const body: string = await conn.request(fields[binFieldName]);
-        binaryFields[binFieldName] = Buffer.from(body, "binary");
+        try {
+          const body: string = await conn.request(fields[binFieldName]);
+          binaryFields[binFieldName] = Buffer.from(body, "binary");
+        } catch(err) {
+          throw new Error(`Unable to load binary field data for ${type}.${binFieldName}: ${err}`);
+        }
       }
     }
   }
