@@ -293,8 +293,10 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
         try {
           const body: string = await conn.request(fields[binFieldName]);
           binaryFields[binFieldName] = Buffer.from(body, "binary");
-        } catch(err) {
-          throw new Error(`Unable to load binary field data for ${type}.${binFieldName}: ${err}`);
+        } catch (err) {
+          throw new Error(
+            `Unable to load binary field data for ${type}.${binFieldName}: ${err}`
+          );
         }
       }
     }
@@ -328,7 +330,10 @@ function buildCreateFields(record: Record): { [key: string]: unknown } {
   return fields;
 }
 
-function buildUpdateFields(record: Record): { Id: string, [key: string]: unknown } {
+function buildUpdateFields(record: Record): {
+  Id: string;
+  [key: string]: unknown;
+} {
   const fields = buildCreateFields(record);
   // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
   // our SDK definition requires customers to provide "id". Customers that are not using TS might also
@@ -340,6 +345,8 @@ function buildUpdateFields(record: Record): { Id: string, [key: string]: unknown
       break;
     }
   }
-  if (fields["Id"] === undefined) { fields["Id"] = ""; }
-  return fields as { Id: string, [key: string]: unknown };
+  if (fields["Id"] === undefined) {
+    fields["Id"] = "";
+  }
+  return fields as { Id: string; [key: string]: unknown };
 }
