@@ -522,7 +522,7 @@ describe("DataApi Class", async () => {
             id: "068R0000002Hu5MIAS",
             description: "Salesforce Official Logo",
           },
-          binaryFields: {}
+          binaryFields: {},
         });
         expect(id).equal("068R0000002Hu5MIAS");
       });

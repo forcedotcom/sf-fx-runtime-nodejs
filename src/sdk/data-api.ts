@@ -318,7 +318,8 @@ function buildCreateFields(record: Record): { [key: string]: unknown } {
   if (record.type in knownBinaryFields) {
     for (const binFieldName of knownBinaryFields[record.type]) {
       if (
-        record.binaryFields && Buffer.isBuffer(record.binaryFields[binFieldName]) &&
+        record.binaryFields &&
+        Buffer.isBuffer(record.binaryFields[binFieldName]) &&
         (record.fields[binFieldName] === undefined ||
           record.fields[binFieldName] === null)
       ) {
