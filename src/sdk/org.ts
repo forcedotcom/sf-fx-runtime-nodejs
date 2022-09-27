@@ -41,7 +41,7 @@ export class OrgImpl implements Org {
     this.domainUrl = orgDomainUrl;
     this.apiVersion = salesforceApiVersion;
 
-    this.dataApi = new DataApiImpl(this.baseUrl, this.apiVersion, accessToken);
+    this.dataApi = new DataApiImpl(this.domainUrl, this.apiVersion, accessToken);
     this.user = new UserImpl(userId, username, onBehalfOfUserId);
   }
 }
