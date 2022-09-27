@@ -79,7 +79,7 @@ export class DataApiImpl implements DataApi {
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
-        const fields = buildUploadFields(recordCreate);
+        const fields = buildCreateFields(recordCreate);
         const response: any = await conn.insert(recordCreate.type, fields);
         this.validate_record_response(response);
         return { id: response.id };
@@ -143,7 +143,7 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      const fields = { Id: null, ...buildUploadFields(recordUpdate) };
+      const fields = buildUpdateFields(recordUpdate);
 
       try {
         const response: any = await conn.update(recordUpdate.type, fields);
@@ -306,8 +306,11 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
   return { type, fields };
 }
 
-function buildUploadFields(record: Record): { [key: string]: unknown } {
+function buildCreateFields(record: Record): { [key: string]: unknown } {
   const fields = {};
+  Object.keys(record.fields).forEach((key) => {
+    if (key.toLowerCase() !== "id") { fields[key] = record.fields[key]; }
+  });
   // Automatically base64 encode any known binaryFields without overwriting existing fields.
   if (record.type in knownBinaryFields) {
     for (const binFieldName of knownBinaryFields[record.type]) {
@@ -321,14 +324,19 @@ function buildUploadFields(record: Record): { [key: string]: unknown } {
       }
     }
   }
+  return fields;
+}
 
+function buildUpdateFields(record: Record): { Id: string, [key: string]: unknown } {
+  const fields = buildCreateFields(record);
   // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
   // our SDK definition requires customers to provide "id". Customers that are not using TS might also
   // pass other casings for the "id" field ("iD", "ID"). Any other fields are passed to the Salesforce API untouched.
-  Object.keys(record.fields).forEach((key) => {
-    const targetKey = key.toLowerCase() === "id" ? "Id" : key;
-    fields[targetKey] = record.fields[key];
-  });
-
-  return fields;
+  fields.Id = "";
+  for (const idKey of ["id", "Id", "ID", "iD"]) {
+    if (idKey in record.fields) {
+      fields["Id"] = record.fields[idKey];
+    }
+  }
+  return fields as { Id: string, [key: string]: unknown };
 }
