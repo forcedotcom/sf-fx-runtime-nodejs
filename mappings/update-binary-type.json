@@ -1,0 +1,44 @@
+{
+  "id": "498b3e67-057d-4646-9c36-50ac7122cbef",
+  "name": "services_data_v550_sobjects_contentversion_068r0000002hu5mias",
+  "request": {
+    "url": "/services/data/v55.0/sobjects/ContentVersion/068R0000002Hu5MIAS",
+    "method": "PATCH",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"Salesforce Official Logo\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer 00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      },
+      "Sforce-Call-Options": {
+        "matches": "client=sf-fx-runtime-nodejs-sdk-impl-v\\d+:\\d+\\.\\d+\\.\\d+(-[a-zA-Z]+)*"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Wed, 07 Sep 2022 19:10:14 GMT",
+      "Set-Cookie": [
+        "CookieConsentPolicy=0:1; path=/; expires=Thu, 07-Sep-2023 19:10:14 GMT; Max-Age=31536000",
+        "LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Thu, 07-Sep-2023 19:10:14 GMT; Max-Age=31536000",
+        "BrowserId=s8Wlli7gEe2TWxVUybHmig; domain=.salesforce.com; path=/; expires=Thu, 07-Sep-2023 19:10:14 GMT; Max-Age=31536000"
+      ],
+      "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Content-Security-Policy": "upgrade-insecure-requests",
+      "X-Robots-Tag": "none",
+      "Cache-Control": "no-cache,must-revalidate,max-age=0,no-store,private",
+      "Sforce-Limit-Info": "api-usage=40/5000000"
+    }
+  },
+  "uuid": "498b3e67-057d-4646-9c36-50ac7122cbef",
+  "persistent": true,
+  "insertionIndex": 30
+}

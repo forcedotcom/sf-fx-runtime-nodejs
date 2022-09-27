@@ -174,7 +174,7 @@ describe("DataApi Class", async () => {
       });
     });
 
-    describe("with binary / base64 field data", async () => {
+    describe("with binary / base64 types", async () => {
       it("encodes the binaryFields data", async () => {
         const { id } = await dataApiv55.create({
           type: "ContentVersion",
@@ -503,7 +503,30 @@ describe("DataApi Class", async () => {
       });
     });
 
-    describe("with binary / base64 field data", async () => {
+    describe("with binary / base64 types", async () => {
+      it("updates basic fields without a binaryFields object", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Salesforce Official Logo",
+          },
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
+      });
+
+      it("updates basic fields without a binaryFields value", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Salesforce Official Logo",
+          },
+          binaryFields: {}
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
+      });
+
       it("encodes binaryFields data", async () => {
         const { id } = await dataApiv55.update({
           type: "ContentVersion",
