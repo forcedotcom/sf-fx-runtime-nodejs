@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import { UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
+  Record,
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
@@ -19,7 +20,7 @@ import {
   ReferenceId,
   UnitOfWork,
 } from "sf-fx-sdk-nodejs";
-import { createCaseInsensitiveRecord } from "../utils/maps.js";
+import { createCaseInsensitiveMap } from "../utils/maps.js";
 const pkgPath = join(
   fileURLToPath(import.meta.url),
   "..",
@@ -29,6 +30,7 @@ const pkgPath = join(
 );
 const pkg = readFileSync(pkgPath, "utf8");
 const ClientVersion = JSON.parse(pkg).version;
+const knownBinaryFields = { ContentVersion: ["VersionData"] };
 
 export class DataApiImpl implements DataApi {
   private readonly baseUrl: string;
@@ -77,10 +79,8 @@ export class DataApiImpl implements DataApi {
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
       try {
-        const response: any = await conn.insert(
-          recordCreate.type,
-          recordCreate.fields
-        );
+        const fields = buildCreateFields(recordCreate);
+        const response: any = await conn.insert(recordCreate.type, fields);
         this.validate_record_response(response);
         return { id: response.id };
       } catch (e) {
@@ -94,7 +94,9 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.query(soql);
         this.validate_records_response(response);
-        const records = response.records.map(createCaseInsensitiveRecord);
+        const records = await Promise.all(
+          response.records.map((record_data) => buildRecord(conn, record_data))
+        );
         return {
           done: response.done,
           totalSize: response.totalSize,
@@ -121,7 +123,9 @@ export class DataApiImpl implements DataApi {
       try {
         const response = await conn.queryMore(queryResult.nextRecordsUrl);
         this.validate_records_response(response);
-        const records = response.records.map(createCaseInsensitiveRecord);
+        const records = await Promise.all(
+          response.records.map((record_data) => buildRecord(conn, record_data))
+        );
 
         return {
           done: response.done,
@@ -139,16 +143,7 @@ export class DataApiImpl implements DataApi {
     recordUpdate: RecordForUpdate
   ): Promise<RecordModificationResult> {
     return this.promisifyRequests(async (conn: Connection) => {
-      // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
-      // our SDK definition requires customers to provide "id". Customers that are not using TS might also
-      // pass other casings for the "id" field ("iD", "ID"). Any other fields are passed to the Salesforce API untouched.
-      const fields = { Id: null };
-      Object.keys(recordUpdate.fields).forEach((key) => {
-        const value = recordUpdate.fields[key];
-        const targetKey = key.toLowerCase() === "id" ? "Id" : key;
-
-        fields[targetKey] = value;
-      });
+      const fields = buildUpdateFields(recordUpdate);
 
       try {
         const response: any = await conn.update(recordUpdate.type, fields);
@@ -282,4 +277,80 @@ export class DataApiImpl implements DataApi {
     }
     throw error;
   }
+}
+
+async function buildRecord(conn: Connection, data: any): Promise<Record> {
+  const type = data.attributes.type;
+  const fields = createCaseInsensitiveMap(data);
+  delete fields["attributes"];
+
+  // For any known binaryFields, eagerly fetch the data from the specified
+  // endpoint.
+  const binaryFields = {};
+  if (type in knownBinaryFields) {
+    for (const binFieldName of knownBinaryFields[type]) {
+      if (fields[binFieldName]) {
+        try {
+          const body: string = await conn.request(fields[binFieldName]);
+          binaryFields[binFieldName] = Buffer.from(body, "binary");
+        } catch (err) {
+          throw new Error(
+            `Unable to load binary field data for ${type}.${binFieldName}: ${err}`
+          );
+        }
+      }
+    }
+  }
+
+  for (const _ in binaryFields) {
+    return {
+      type,
+      fields,
+      binaryFields: createCaseInsensitiveMap(binaryFields),
+    };
+  }
+  return { type, fields };
+}
+
+function buildCreateFields(record: Record): { [key: string]: unknown } {
+  const fields = { ...record.fields };
+  // Automatically base64 encode any known binaryFields without overwriting existing fields.
+  if (record.type in knownBinaryFields) {
+    for (const binFieldName of knownBinaryFields[record.type]) {
+      if (
+        record.binaryFields &&
+        Buffer.isBuffer(record.binaryFields[binFieldName])
+      ) {
+        if (record.fields[binFieldName]) {
+          throw new Error(
+            `${binFieldName} provided in both fields and binaryFields of ${record.type}, but is only supported in one or the other.`
+          );
+        }
+        fields[binFieldName] =
+          record.binaryFields[binFieldName].toString("base64");
+      }
+    }
+  }
+  return fields;
+}
+
+function buildUpdateFields(record: Record): {
+  Id: string;
+  [key: string]: unknown;
+} {
+  const fields = buildCreateFields(record);
+  // Normalize the "id" field casing. jsforce requires an "Id" field, whereas
+  // our SDK definition requires customers to provide "id". Customers that are not using TS might also
+  // pass other casings for the "id" field ("iD", "ID").
+  for (const idKey of ["id", "Id", "ID", "iD"]) {
+    if (idKey in record.fields) {
+      delete fields[idKey];
+      fields["Id"] = record.fields[idKey];
+      break;
+    }
+  }
+  if (fields["Id"] === undefined) {
+    fields["Id"] = "";
+  }
+  return fields as { Id: string; [key: string]: unknown };
 }

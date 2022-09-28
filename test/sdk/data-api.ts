@@ -8,32 +8,32 @@
 import { expect } from "chai";
 import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
+import fs from "fs";
 
 const uri = "http://localhost:8080";
-const apiVersion = "51.0";
 const token =
   "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
-const dataApi = new DataApiImpl(uri, apiVersion, token);
-const dataApiInvalid = new DataApiImpl(
+const dataApiv51 = new DataApiImpl(uri, "51.0", token);
+const dataApiv55 = new DataApiImpl(uri, "55.0", token);
+const dataApiInvalidToken = new DataApiImpl(uri, "51.0", "badToken");
+const dataApiInvalidVersion = new DataApiImpl(uri, "iAmABadVersion", token);
+const dataApiInvalidUrl = new DataApiImpl(
   "http://thisdoesnotexistalsdkfjalsdkfjasdlkfjasdlkfjalsdkfja.com",
-  apiVersion,
+  "51.0",
   token
 );
-
-const dataApiInvalidToken = new DataApiImpl(uri, apiVersion, "badToken");
-const dataApiInvalidVersion = new DataApiImpl(uri, "iAmABadVersion", token);
 
 describe("DataApi Class", async () => {
   describe("public class attributes", async () => {
     it("exposes accessToken", async () => {
-      expect(dataApi.accessToken).equal(token);
+      expect(dataApiv51.accessToken).equal(token);
     });
   });
 
   describe("create()", async () => {
     describe("valid request", async () => {
       it("returns the reference id", async () => {
-        const { id } = await dataApi.create({
+        const { id } = await dataApiv51.create({
           type: "Movie__c",
           fields: {
             Name: "Star Wars Episode V: The Empire Strikes Back",
@@ -49,7 +49,7 @@ describe("DataApi Class", async () => {
       it("throws invalid pick list error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.create({
+          await dataApiv51.create({
             type: "Movie__c",
             fields: {
               Name: "Star Wars Episode VIII: The Last Jedi",
@@ -70,7 +70,7 @@ describe("DataApi Class", async () => {
       it("throws a not found error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.create({
+          await dataApiv51.create({
             type: "PlayingCard__c",
             fields: {
               Name: "Ace of Spades",
@@ -121,7 +121,7 @@ describe("DataApi Class", async () => {
     describe("invalid field", async () => {
       it("throws an invalid field error", async () => {
         try {
-          await dataApi.create({
+          await dataApiv51.create({
             type: "Account",
             fields: {
               FavoritePet__c: "Dog",
@@ -141,7 +141,7 @@ describe("DataApi Class", async () => {
       it("throws missing field error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.create({
+          await dataApiv51.create({
             type: "Spaceship__c",
             fields: {
               Name: "Falcon 9",
@@ -161,7 +161,7 @@ describe("DataApi Class", async () => {
         try {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          await dataApi.create({
+          await dataApiv51.create({
             fields: {
               Name: "Ace of Spades",
             },
@@ -173,13 +173,48 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("with binary / base64 types", async () => {
+      it("encodes the binaryFields data", async () => {
+        const { id } = await dataApiv55.create({
+          type: "ContentVersion",
+          binaryFields: {
+            VersionData: fs.readFileSync(
+              new URL("../../fixtures/salesforce-tiny.png", import.meta.url)
+            ),
+          },
+          fields: {
+            Description: "Tiny Salesforce Logo",
+            PathOnClient: "salesforce-tiny.png",
+          },
+        });
+        expect(id).equal("068R0000002Hu1FIAS");
+      });
+
+      it("errors when the same field is provided in both fields and binaryFields", async () => {
+        try {
+          await dataApiv55.create({
+            type: "ContentVersion",
+            binaryFields: {
+              VersionData: Buffer.from("some data"),
+            },
+            fields: {
+              VersionData: Buffer.from("some data").toString("base64"),
+            },
+          });
+          expect(true, "create should fail").to.eq(false);
+        } catch (e) {
+          expect(e.message).to.include("both fields and binaryFields");
+        }
+      });
+    });
   });
 
   describe("query()", async () => {
     describe("valid query", async () => {
       it("returns a simple query from DataApi", async () => {
         const { done, totalSize, records, nextRecordsUrl } =
-          await dataApi.query("SELECT Name FROM Account");
+          await dataApiv51.query("SELECT Name FROM Account");
 
         expect(done).equal(true);
         expect(totalSize).equal(5);
@@ -232,7 +267,9 @@ describe("DataApi Class", async () => {
     describe("when there are additional pages of results", async () => {
       it("returns nextRecordsUrl", async () => {
         const { done, totalSize, records, nextRecordsUrl } =
-          await dataApi.query("SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c");
+          await dataApiv51.query(
+            "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
+          );
 
         expect(done).equal(false);
         expect(totalSize).equal(10000);
@@ -247,7 +284,7 @@ describe("DataApi Class", async () => {
       it("returns invalid field error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.query("SELECT Bacon__c FROM Account LIMIT 2");
+          await dataApiv51.query("SELECT Bacon__c FROM Account LIMIT 2");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal(
@@ -262,7 +299,7 @@ describe("DataApi Class", async () => {
       it("returns a malformed query error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.query("SELEKT Name FROM Account");
+          await dataApiv51.query("SELEKT Name FROM Account");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal("unexpected token: SELEKT");
@@ -274,7 +311,7 @@ describe("DataApi Class", async () => {
     describe("with an unexpected response", async () => {
       it("returns a malformed query error", async () => {
         try {
-          await dataApi.query("SELECT Name FROM FruitVendor__c");
+          await dataApiv51.query("SELECT Name FROM FruitVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal(
@@ -287,7 +324,7 @@ describe("DataApi Class", async () => {
     describe("with a unparseable json as body", async () => {
       it("returns a malformed query error", async () => {
         try {
-          await dataApi.query("SELECT Name FROM VeggieVendor__c");
+          await dataApiv51.query("SELECT Name FROM VeggieVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).to.includes(
@@ -300,7 +337,7 @@ describe("DataApi Class", async () => {
     describe("with 200: not found", async () => {
       it("returns a missing records error", async () => {
         try {
-          await dataApi.query("SELECT VersionData FROM ContentVersion");
+          await dataApiv51.query("SELECT Title FROM ContentVersion");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).to.includes(
@@ -309,12 +346,29 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("with binary / base64 fields", async () => {
+      it("includes both the relative url and decoded content", async () => {
+        const result = await dataApiv55.query(
+          "SELECT VersionData FROM ContentVersion"
+        );
+        expect(result.done).equal(true);
+        expect(result.totalSize).equal(1);
+        const record = result.records[0];
+        expect(record.type).equal("ContentVersion");
+        expect(record.fields.versiondata).equal(
+          "/services/data/v55.0/sobjects/ContentVersion/0689A0000002c13QAA/VersionData"
+        );
+        expect(record.binaryFields.versiondata.includes("HYPNO TOAD")).to.be
+          .true;
+      });
+    });
   });
 
   describe("queryMore()", async () => {
     describe("valid query with next results", async () => {
       it("returns the next query from DataApi", async () => {
-        const result = await dataApi.query(
+        const result = await dataApiv51.query(
           "SELECT RANDOM_1__c, RANDOM_2__c FROM Random__c"
         );
         expect(result.done).equal(false);
@@ -324,7 +378,7 @@ describe("DataApi Class", async () => {
           "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
         );
 
-        const result2 = await dataApi.queryMore(result);
+        const result2 = await dataApiv51.queryMore(result);
         expect(result2.done).equal(false);
         expect(result2.totalSize).equal(result.totalSize);
         expect(result2.records.length).equal(2000);
@@ -336,13 +390,13 @@ describe("DataApi Class", async () => {
 
     describe("with done results", async () => {
       it("returns zero records", async () => {
-        const result = await dataApi.query("SELECT Name FROM Account");
+        const result = await dataApiv51.query("SELECT Name FROM Account");
         expect(result.done).equal(true);
         expect(result.totalSize).equal(5);
         expect(result.records.length).equal(5);
         expect(result.nextRecordsUrl).undefined;
 
-        const result2 = await dataApi.queryMore(result);
+        const result2 = await dataApiv51.queryMore(result);
         expect(result2.done).equal(true);
         expect(result2.totalSize).equal(result.totalSize);
         expect(result2.records.length).equal(0);
@@ -354,7 +408,7 @@ describe("DataApi Class", async () => {
   describe("update()", async () => {
     describe("valid update", async () => {
       it("returns the updated record id", async () => {
-        const { id } = await dataApi.update({
+        const { id } = await dataApiv51.update({
           type: "Movie__c",
           fields: {
             id: "a00B000000FSjVUIA1",
@@ -368,7 +422,7 @@ describe("DataApi Class", async () => {
       it("accepts any casing of id", () => {
         return Promise.all(
           ["id", "Id", "iD", "ID"].map(async (idProp) => {
-            const { id } = await dataApi.update({
+            const { id } = await dataApiv51.update({
               type: "Movie__c",
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -388,7 +442,7 @@ describe("DataApi Class", async () => {
       it("throws malformed id error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.update({
+          await dataApiv51.update({
             type: "Movie__c",
             fields: {
               id: "a00B000000FSjVUIB1",
@@ -409,7 +463,7 @@ describe("DataApi Class", async () => {
       it("throws invalid field error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.update({
+          await dataApiv51.update({
             type: "Movie__c",
             fields: {
               id: "a00B000000FSjVUIB1",
@@ -430,7 +484,7 @@ describe("DataApi Class", async () => {
       it("throws id not found in record error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.update({
+          await dataApiv51.update({
             type: "Movie__c",
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -452,7 +506,7 @@ describe("DataApi Class", async () => {
         try {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          await dataApi.update({
+          await dataApiv51.update({
             fields: {
               id: "a00B000000FSjVUIA1",
               ReleaseDate__c: "1980-05-21",
@@ -465,12 +519,53 @@ describe("DataApi Class", async () => {
         }
       });
     });
+
+    describe("with binary / base64 types", async () => {
+      it("updates basic fields without a binaryFields object", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Salesforce Official Logo",
+          },
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
+      });
+
+      it("updates basic fields without a binaryFields value", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Salesforce Official Logo",
+          },
+          binaryFields: {},
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
+      });
+
+      it("encodes binaryFields data", async () => {
+        const { id } = await dataApiv55.update({
+          type: "ContentVersion",
+          fields: {
+            id: "068R0000002Hu5MIAS",
+            description: "Tiny Salesforce Logo",
+          },
+          binaryFields: {
+            VersionData: fs.readFileSync(
+              new URL("../../fixtures/salesforce-tiny.png", import.meta.url)
+            ),
+          },
+        });
+        expect(id).equal("068R0000002Hu5MIAS");
+      });
+    });
   });
 
   describe("delete()", async () => {
     describe("valid delete", async () => {
       it("returns the deleted record id", async () => {
-        const { id } = await dataApi.delete("Account", "001B000001Lp1FxIAJ");
+        const { id } = await dataApiv51.delete("Account", "001B000001Lp1FxIAJ");
         expect(id).equal("001B000001Lp1FxIAJ");
       });
     });
@@ -479,7 +574,7 @@ describe("DataApi Class", async () => {
       it("throws entity is deleted error", async () => {
         // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
         try {
-          await dataApi.delete("Account", "001B000001Lp1G2IAJ");
+          await dataApiv51.delete("Account", "001B000001Lp1G2IAJ");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).equal("entity is deleted");
@@ -494,7 +589,7 @@ describe("DataApi Class", async () => {
       let uow;
 
       beforeEach(() => {
-        uow = dataApi.newUnitOfWork();
+        uow = dataApiv51.newUnitOfWork();
       });
 
       describe("single create", async () => {
@@ -514,7 +609,7 @@ describe("DataApi Class", async () => {
             },
           });
 
-          const result = await dataApi.commitUnitOfWork(uow);
+          const result = await dataApiv51.commitUnitOfWork(uow);
           expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSoxIAE");
         });
@@ -529,7 +624,7 @@ describe("DataApi Class", async () => {
           });
           // Chai doesn't yet support promises natively, so we can't use .rejectedWith-like syntax.
           try {
-            await dataApi.commitUnitOfWork(uow);
+            await dataApiv51.commitUnitOfWork(uow);
             expect.fail("Promise should have been rejected!");
           } catch (e) {
             expect(e.message).equal(
@@ -548,7 +643,7 @@ describe("DataApi Class", async () => {
               ReleaseDate__c: "1980-05-21",
             },
           });
-          const result = await dataApi.commitUnitOfWork(uow);
+          const result = await dataApiv51.commitUnitOfWork(uow);
 
           expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSrFIAU");
@@ -559,7 +654,7 @@ describe("DataApi Class", async () => {
         it("successfully deletes record", async () => {
           const rId = uow.registerDelete("Movie__c", "a01B0000009gSr9IAE");
 
-          const result = await dataApi.commitUnitOfWork(uow);
+          const result = await dataApiv51.commitUnitOfWork(uow);
           expect(result.size).equal(1);
           expect(result.get(rId).id).equal("a01B0000009gSr9IAE");
         });
@@ -598,7 +693,7 @@ describe("DataApi Class", async () => {
             },
           });
 
-          const result = await dataApi.commitUnitOfWork(uow);
+          const result = await dataApiv51.commitUnitOfWork(uow);
           expect(result.size).equal(4);
           expect(result.get(rId0).id).equal("a03B0000007BhQQIA0");
           expect(result.get(rId1).id).equal("a00B000000FSkioIAD");
@@ -611,7 +706,7 @@ describe("DataApi Class", async () => {
         it("should not make a composite graph API request and return an empty result", async () => {
           // This will fail with a rejected promise if a request is being made since there won't be a wiremock mapping
           // for an empty composite graph API request.
-          const result = await dataApi.commitUnitOfWork(uow);
+          const result = await dataApiv51.commitUnitOfWork(uow);
           expect(result.size).to.equal(0);
         });
       });
@@ -622,7 +717,7 @@ describe("DataApi Class", async () => {
     describe("invalid instance URL", async () => {
       it("logs an exception", async () => {
         try {
-          await dataApiInvalid.query("SELECT Name FROM Account");
+          await dataApiInvalidUrl.query("SELECT Name FROM Account");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
           expect(e.message).contains("failed, reason: getaddrinfo ENOTFOUND");
