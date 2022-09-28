@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2022-09-28
+
 - Automatic handling of base64 / binary data via binaryFields ([#400](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/400))
 - Default url for DataAPI is now `orgDomainUrl` rather than `salesforceBaseUrl` ([#417](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/417))
 - Update to cloudevents 6.0 ([#402](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/402))
