@@ -319,10 +319,13 @@ function buildCreateFields(record: Record): { [key: string]: unknown } {
     for (const binFieldName of knownBinaryFields[record.type]) {
       if (
         record.binaryFields &&
-        Buffer.isBuffer(record.binaryFields[binFieldName]) &&
-        (record.fields[binFieldName] === undefined ||
-          record.fields[binFieldName] === null)
+        Buffer.isBuffer(record.binaryFields[binFieldName])
       ) {
+        if (record.fields[binFieldName]) {
+          throw new Error(
+            `${binFieldName} provided in both fields and binaryFields of ${record.type}, but is only supported in one or the other.`
+          );
+        }
         fields[binFieldName] =
           record.binaryFields[binFieldName].toString("base64");
       }

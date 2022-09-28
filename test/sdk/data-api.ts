@@ -190,6 +190,23 @@ describe("DataApi Class", async () => {
         });
         expect(id).equal("068R0000002Hu1FIAS");
       });
+
+      it("errors when the same field is provided in both fields and binaryFields", async () => {
+        try {
+          await dataApiv55.create({
+            type: "ContentVersion",
+            binaryFields: {
+              VersionData: Buffer.from("some data"),
+            },
+            fields: {
+              VersionData: Buffer.from("some data").toString("base64"),
+            },
+          });
+          expect(true, "create should fail").to.eq(false);
+        } catch (e) {
+          expect(e.message).to.include("both fields and binaryFields");
+        }
+      });
     });
   });
 
