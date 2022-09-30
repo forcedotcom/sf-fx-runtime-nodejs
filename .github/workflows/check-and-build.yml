@@ -1,0 +1,89 @@
+name: forcedotcom/sf-fx-runtime-nodejs/check-and-build
+on:
+  push:
+jobs:
+  node-17:
+    runs-on: sfdc-hk-ubuntu-latest
+    container:
+      image: node:17
+    steps:
+    - uses: "./.github/actions/install-java"
+    - uses: actions/checkout@v2
+    - id: npm-cache-dir
+      run: echo "::set-output name=dir::$(npm config get cache)"
+    - uses: actions/cache@v2
+      with:
+        path: "${{ steps.npm-cache-dir.outputs.dir }}"
+        key: "${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}"
+        restore-keys: "${{ runner.os }}-node-"
+    - run: npm ci
+    - name: Run format check
+      run: npm run format:check
+    - name: Run linter
+      run: npm run lint
+    - name: Run unit tests
+      run: npm run test
+    - name: Run build
+      run: npm run build
+  node-16:
+    runs-on: sfdc-hk-ubuntu-latest
+    container:
+      image: node:16
+    steps:
+    - uses: "./.github/actions/install-java"
+    - uses: actions/checkout@v2
+    - id: npm-cache-dir
+      run: echo "::set-output name=dir::$(npm config get cache)"
+    - uses: actions/cache@v2
+      with:
+        path: "${{ steps.npm-cache-dir.outputs.dir }}"
+        key: "${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}"
+        restore-keys: "${{ runner.os }}-node-"
+    - run: npm ci
+    - name: Run format check
+      run: npm run format:check
+    - name: Run linter
+      run: npm run lint
+    - name: Run unit tests
+      run: npm run test
+    - name: Run build
+      run: npm run build
+  node-14:
+    runs-on: sfdc-hk-ubuntu-latest
+    container:
+      image: node:14
+    steps:
+    - uses: "./.github/actions/install-java"
+    - uses: actions/checkout@v2
+    - id: npm-cache-dir
+      run: echo "::set-output name=dir::$(npm config get cache)"
+    - uses: actions/cache@v2
+      with:
+        path: "${{ steps.npm-cache-dir.outputs.dir }}"
+        key: "${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}"
+        restore-keys: "${{ runner.os }}-node-"
+    - run: npm ci
+    - name: Run format check
+      run: npm run format:check
+    - name: Run linter
+      run: npm run lint
+    - name: Run unit tests
+      run: npm run test
+    - name: Run build
+      run: npm run build
+  windows:
+    runs-on: sfdc-hk-ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: systeminfo
+    - name: node info
+      run: |-
+        node --version
+        npm --version
+      shell: powershell.exe
+    - name: Install dependencies
+      run: npm ci
+      shell: powershell.exe
+    - name: Run unit tests
+      run: npm run test
+      shell: powershell.exe
