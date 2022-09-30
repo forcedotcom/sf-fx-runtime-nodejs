@@ -1,0 +1,9 @@
+name: install-java
+runs:
+  using: composite
+  steps:
+  - name: Install default jre
+    run: |-
+      apt-get update
+      apt-get install -y --no-install-recommends default-jre
+    shell: bash
