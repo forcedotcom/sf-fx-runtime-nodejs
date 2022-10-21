@@ -34,7 +34,7 @@ export function buildServer(
 ): FastifyInstance {
   const server = fastify.fastify({
     bodyLimit: 12 * MB,
-    logger: false
+    logger: false,
   });
 
   server.post("/", async (request, reply) => {

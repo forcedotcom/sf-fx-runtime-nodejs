@@ -33,13 +33,13 @@ export type SalesforceFunction<A, B> = (
  * the same algorithm to determine the value used.
  */
 export interface InvocationEvent<A> {
-    readonly id: string;
-    readonly type: string;
-    readonly source: string;
-    readonly data: A;
-    readonly dataContentType?: string;
-    readonly dataSchema?: string;
-    readonly time?: string;
+  readonly id: string;
+  readonly type: string;
+  readonly source: string;
+  readonly data: A;
+  readonly dataContentType?: string;
+  readonly dataSchema?: string;
+  readonly time?: string;
 }
 
 /**
@@ -49,8 +49,8 @@ export interface InvocationEvent<A> {
  * @property org Information about the invoking Salesforce organization.
  */
 export interface Context {
-    readonly id: string;
-    readonly org?: Org;
+  readonly id: string;
+  readonly org?: Org;
 }
 
 /**
@@ -63,12 +63,12 @@ export interface Context {
  * @property user The currently logged in user
  */
 export interface Org {
-    readonly id: string;
-    readonly baseUrl: string;
-    readonly domainUrl: string;
-    readonly apiVersion: string;
-    readonly dataApi: DataApi;
-    readonly user: User;
+  readonly id: string;
+  readonly baseUrl: string;
+  readonly domainUrl: string;
+  readonly apiVersion: string;
+  readonly dataApi: DataApi;
+  readonly user: User;
 }
 
 /**
@@ -80,10 +80,10 @@ export interface Org {
  * @property nextRecordsUrl The URL for the next set of records, if any.
  */
 export interface RecordQueryResult {
-    readonly done: boolean;
-    readonly totalSize: number;
-    readonly records: Array<Record>;
-    readonly nextRecordsUrl?: string;
+  readonly done: boolean;
+  readonly totalSize: number;
+  readonly records: Array<Record>;
+  readonly nextRecordsUrl?: string;
 }
 
 /**
@@ -95,9 +95,9 @@ export interface RecordQueryResult {
  * key/value pair will ignore casing when getting and setting fields.
  */
 export type Record = {
-    readonly type: string;
-    readonly fields: { [key: string]: unknown };
-    readonly binaryFields?: { [key: string]: Buffer };
+  readonly type: string;
+  readonly fields: { [key: string]: unknown };
+  readonly binaryFields?: { [key: string]: Buffer };
 };
 
 /**
@@ -105,7 +105,7 @@ export type Record = {
  * @property id The ID of the modified record.
  */
 export interface RecordModificationResult {
-    readonly id: string;
+  readonly id: string;
 }
 
 /**
@@ -113,21 +113,21 @@ export interface RecordModificationResult {
  * occur as a part of a UnitOfWork.
  */
 export interface ReferenceId {
-    /**
-     * Get a reference to a record modification, creation, or deletion that may
-     * occur as a part of a UnitOfWork.
-     *
-     * @returns A string identifier
-     */
-    toString(): string;
+  /**
+   * Get a reference to a record modification, creation, or deletion that may
+   * occur as a part of a UnitOfWork.
+   *
+   * @returns A string identifier
+   */
+  toString(): string;
 
-    /**
-     * Get a reference to a record's ID that may be created, deleted, or modified
-     * as part of a UnitOfWork.
-     *
-     * @returns A string reference to a record id
-     */
-    toApiString(): string;
+  /**
+   * Get a reference to a record's ID that may be created, deleted, or modified
+   * as part of a UnitOfWork.
+   *
+   * @returns A string reference to a record id
+   */
+  toApiString(): string;
 }
 
 /**
@@ -139,9 +139,9 @@ export interface ReferenceId {
  * The keys in fields and binaryFields are case insensitive.
  */
 export type RecordForCreate = {
-    type: string;
-    fields: { [key: string]: unknown };
-    binaryFields?: { [key: string]: Buffer };
+  type: string;
+  fields: { [key: string]: unknown };
+  binaryFields?: { [key: string]: Buffer };
 };
 
 /**
@@ -153,44 +153,44 @@ export type RecordForCreate = {
  * The keys in fields and binaryFields are case insensitive.
  */
 export type RecordForUpdate = {
-    type: string;
-    fields: {
-        id: string;
-        [key: string]: unknown;
-    };
-    binaryFields?: { [key: string]: Buffer };
+  type: string;
+  fields: {
+    id: string;
+    [key: string]: unknown;
+  };
+  binaryFields?: { [key: string]: Buffer };
 };
 
 /**
  * Represents a UnitOfWork.
  */
 export interface UnitOfWork {
-    /**
-     * Registers a {@link RecordForCreate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that
-     * can be used to refer to the created record in subsequent operations in this UnitOfWork.
-     *
-     * @param record The record to create.
-     * @returns The ReferenceId for the created record.
-     */
-    registerCreate(record: RecordForCreate): ReferenceId;
+  /**
+   * Registers a {@link RecordForCreate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that
+   * can be used to refer to the created record in subsequent operations in this UnitOfWork.
+   *
+   * @param record The record to create.
+   * @returns The ReferenceId for the created record.
+   */
+  registerCreate(record: RecordForCreate): ReferenceId;
 
-    /**
-     * Registers a {@link RecordForUpdate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that can
-     * be used to refer to the updated record in subsequent operations in this UnitOfWork.
-     *
-     * @param record The record to update.
-     * @returns The ReferenceId for the updated record.
-     */
-    registerUpdate(record: RecordForUpdate): ReferenceId;
+  /**
+   * Registers a {@link RecordForUpdate} for the {@link UnitOfWork} and returns a {@link ReferenceId} that can
+   * be used to refer to the updated record in subsequent operations in this UnitOfWork.
+   *
+   * @param record The record to update.
+   * @returns The ReferenceId for the updated record.
+   */
+  registerUpdate(record: RecordForUpdate): ReferenceId;
 
-    /**
-     * Registers a deletion of an existing record of the given type and id.
-     *
-     * @param type The object type of the record to delete.
-     * @param id The id of the record to delete.
-     * @returns The ReferenceId for the deleted record.
-     */
-    registerDelete(type: string, id: string): ReferenceId;
+  /**
+   * Registers a deletion of an existing record of the given type and id.
+   *
+   * @param type The object type of the record to delete.
+   * @param id The id of the record to delete.
+   * @returns The ReferenceId for the deleted record.
+   */
+  registerDelete(type: string, id: string): ReferenceId;
 }
 
 /**
@@ -199,61 +199,61 @@ export interface UnitOfWork {
  * third-party API client or to perform custom API calls with a HTTP library.
  */
 export interface DataApi {
-    readonly accessToken: string;
+  readonly accessToken: string;
 
-    /**
-     * Queries for records with a given SOQL string.
-     * @param soql The SOQL string.
-     * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
-     */
-    query(soql: string): Promise<RecordQueryResult>;
+  /**
+   * Queries for records with a given SOQL string.
+   * @param soql The SOQL string.
+   * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
+   */
+  query(soql: string): Promise<RecordQueryResult>;
 
-    /**
-     * Queries for more records, based on the given {@link RecordQueryResult}.
-     * @param recordQueryResult The query result to query more data for.
-     * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
-     */
-    queryMore(recordQueryResult: RecordQueryResult): Promise<RecordQueryResult>;
+  /**
+   * Queries for more records, based on the given {@link RecordQueryResult}.
+   * @param recordQueryResult The query result to query more data for.
+   * @returns A {@link RecordQueryResult} that contains the queried data wrapped in a Promise.
+   */
+  queryMore(recordQueryResult: RecordQueryResult): Promise<RecordQueryResult>;
 
-    /**
-     * Creates a new record described by the given {@link RecordForCreate}.
-     * @param record The record create description.
-     * @returns A {@link RecordModificationResult} that contains the created data wrapped in a Promise.
-     */
-    create(record: RecordForCreate): Promise<RecordModificationResult>;
+  /**
+   * Creates a new record described by the given {@link RecordForCreate}.
+   * @param record The record create description.
+   * @returns A {@link RecordModificationResult} that contains the created data wrapped in a Promise.
+   */
+  create(record: RecordForCreate): Promise<RecordModificationResult>;
 
-    /**
-     * Updates an existing record described by the given {@link RecordForUpdate}.
-     * @param update The record update description.
-     * @returns A {@link RecordModificationResult} that contains the updated data wrapped in a Promise.
-     */
-    update(update: RecordForUpdate): Promise<RecordModificationResult>;
+  /**
+   * Updates an existing record described by the given {@link RecordForUpdate}.
+   * @param update The record update description.
+   * @returns A {@link RecordModificationResult} that contains the updated data wrapped in a Promise.
+   */
+  update(update: RecordForUpdate): Promise<RecordModificationResult>;
 
-    /**
-     * Deletes a record, based on the given type and id.
-     * @param type The object type of the record to delete.
-     * @param id The id of the record to delete.
-     * @returns A {@link RecordModificationResult} that contains the deleted data wrapped in a Promise.
-     */
-    delete(type: string, id: string): Promise<RecordModificationResult>;
+  /**
+   * Deletes a record, based on the given type and id.
+   * @param type The object type of the record to delete.
+   * @param id The id of the record to delete.
+   * @returns A {@link RecordModificationResult} that contains the deleted data wrapped in a Promise.
+   */
+  delete(type: string, id: string): Promise<RecordModificationResult>;
 
-    /**
-     * Creates a new and empty {@link UnitOfWork}.
-     * @returns An empty {@link UnitOfWork}.
-     */
-    newUnitOfWork(): UnitOfWork;
+  /**
+   * Creates a new and empty {@link UnitOfWork}.
+   * @returns An empty {@link UnitOfWork}.
+   */
+  newUnitOfWork(): UnitOfWork;
 
-    /**
-     * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
-     * operations fail, the whole unit is rolled back. To examine results for a single operation,
-     * inspect the returned map (which is keyed with {@link ReferenceId} returned from
-     * {@link UnitOfWork#registerCreate} and {@link UnitOfWork#registerUpdate}).
-     * @param unitOfWork The {@link UnitOfWork} to commit.
-     * @returns A map of {@link RecordModificationResult}s, indexed by their {@link ReferenceId}s.
-     */
-    commitUnitOfWork(
-      unitOfWork: UnitOfWork
-    ): Promise<Map<ReferenceId, RecordModificationResult>>;
+  /**
+   * Commits a {@link UnitOfWork}, executing all operations registered with it. If any of these
+   * operations fail, the whole unit is rolled back. To examine results for a single operation,
+   * inspect the returned map (which is keyed with {@link ReferenceId} returned from
+   * {@link UnitOfWork#registerCreate} and {@link UnitOfWork#registerUpdate}).
+   * @param unitOfWork The {@link UnitOfWork} to commit.
+   * @returns A map of {@link RecordModificationResult}s, indexed by their {@link ReferenceId}s.
+   */
+  commitUnitOfWork(
+    unitOfWork: UnitOfWork
+  ): Promise<Map<ReferenceId, RecordModificationResult>>;
 }
 
 /**
@@ -263,47 +263,47 @@ export interface DataApi {
  * @property onBehalfOfUserId The id of the user this user operates in behalf of.
  */
 export interface User {
-    readonly id: string;
-    readonly username: string;
-    readonly onBehalfOfUserId?: string;
+  readonly id: string;
+  readonly username: string;
+  readonly onBehalfOfUserId?: string;
 }
 
 /**
  * Represents the logging functionality to log given messages at various levels.
  */
 export interface Logger {
-    /**
-     * Logs the given message at the 'error' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    error(message: string): void;
+  /**
+   * Logs the given message at the 'error' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  error(message: string): void;
 
-    /**
-     * Logs the given message at the 'warn' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    warn(message: string): void;
+  /**
+   * Logs the given message at the 'warn' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  warn(message: string): void;
 
-    /**
-     * Logs the given message at the 'info' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    info(message: string): void;
+  /**
+   * Logs the given message at the 'info' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  info(message: string): void;
 
-    /**
-     * Logs the given message at the 'debug' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    debug(message: string): void;
+  /**
+   * Logs the given message at the 'debug' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  debug(message: string): void;
 
-    /**
-     * Logs the given message at the 'trace' level.
-     * @param message The message to log.
-     * @returns void
-     */
-    trace(message: string): void;
+  /**
+   * Logs the given message at the 'trace' level.
+   * @param message The message to log.
+   * @returns void
+   */
+  trace(message: string): void;
 }
