@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { User } from "sf-fx-sdk-nodejs";
+import { User } from "../types";
 
 export class UserImpl implements User {
   readonly id: string;

@@ -11,7 +11,7 @@ import {
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
-} from "sf-fx-sdk-nodejs";
+} from "../types";
 import {
   CompositeSubRequest,
   CreateRecordSubRequest,

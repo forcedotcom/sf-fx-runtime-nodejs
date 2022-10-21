@@ -6,7 +6,7 @@
  */
 
 import { SalesforceFunctionsCloudEvent } from "../cloud-event";
-import { InvocationEvent } from "sf-fx-sdk-nodejs";
+import { InvocationEvent } from "../types";
 
 export class InvocationEventImpl implements InvocationEvent<unknown> {
   id: string;
