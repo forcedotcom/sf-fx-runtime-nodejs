@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-java@v3 # java required for testing with wiremock
         with:
           java-package: jre
+          java-version: 11
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.version }}
