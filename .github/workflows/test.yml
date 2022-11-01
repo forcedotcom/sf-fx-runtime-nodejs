@@ -1,0 +1,25 @@
+name: Test
+on: [push]
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [latest, lts/*, lts/-1, lts/-2]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    name: Node ${{ matrix.version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3 # java required for testing with wiremock
+        with:
+          java-package: jre
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
