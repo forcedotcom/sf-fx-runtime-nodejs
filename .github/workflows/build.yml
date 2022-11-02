@@ -5,8 +5,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [latest] # [latest, lts/*, lts/-1, lts/-2]
-        os: [ubuntu-latest] # [windows-latest, macos-latest, ubuntu-latest]
+        version: [latest, lts/*, lts/-1, lts/-2]
+        os: [windows-latest, macos-latest, ubuntu-latest]
     name: Node ${{ matrix.version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
