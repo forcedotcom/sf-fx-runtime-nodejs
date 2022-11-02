@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -b",
     "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",
-    "wiremock": "wiremock --port 8080 --print-all-network-traffic --verbose",
+    "wiremock": "wiremock --port 8080 --print-all-network-traffic --verbose --bind-address localhost",
     "mocha": "mocha",
     "test": "concurrently -k -s first \"npm run wiremock\" \"npm run mocha\"",
     "format": "npm run format:write && npm run format:check",
