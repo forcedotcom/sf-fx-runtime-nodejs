@@ -10,7 +10,7 @@ import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
 import fs from "fs";
 
-const uri = "http://localhost:8080";
+const uri = "http://127.0.0.1:8080";
 const token =
   "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
 const dataApiv51 = new DataApiImpl(uri, "51.0", token);
