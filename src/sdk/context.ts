@@ -6,7 +6,7 @@
  */
 
 import { SalesforceFunctionsCloudEvent } from "../cloud-event.js";
-import { Context, Org } from "../types";
+import { Context, Org } from "../index";
 import { OrgImpl } from "./org.js";
 import { SalesforceConfig } from "src/salesforce-config.js";
 

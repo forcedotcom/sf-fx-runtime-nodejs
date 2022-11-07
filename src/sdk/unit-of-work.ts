@@ -11,7 +11,7 @@ import {
   RecordForCreate,
   RecordForUpdate,
   RecordModificationResult,
-} from "../types";
+} from "../index";
 import {
   CompositeSubRequest,
   CreateRecordSubRequest,

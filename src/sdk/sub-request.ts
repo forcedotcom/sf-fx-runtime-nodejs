@@ -10,7 +10,7 @@ import {
   RecordForUpdate,
   RecordModificationResult,
   ReferenceId,
-} from "../types";
+} from "../index";
 
 export interface CompositeSubRequest<T> {
   readonly httpMethod: string;

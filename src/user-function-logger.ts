@@ -7,7 +7,7 @@
 
 import { SalesforceFunctionsCloudEvent } from "./cloud-event.js";
 import logger from "./logger.js";
-import { Logger } from "./types";
+import { Logger } from "./index";
 
 export class LoggerImpl implements Logger {
   private readonly properties: Record<string, unknown>;

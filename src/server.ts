@@ -17,7 +17,7 @@ import {
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace.js";
 import MimeType from "whatwg-mimetype/lib/mime-type.js";
-import { SalesforceFunction } from "./types";
+import { SalesforceFunction } from "./index";
 import { InvocationEventImpl } from "./sdk/invocation-event.js";
 import { ContextImpl } from "./sdk/context.js";
 import { SalesforceConfig } from "./salesforce-config.js";

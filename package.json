@@ -3,7 +3,7 @@
   "version": "0.12.0",
   "type": "module",
   "description": "A web server that takes in function source code and provides the Salesforce FX SDK to the invoked source code.",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -b",
     "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",

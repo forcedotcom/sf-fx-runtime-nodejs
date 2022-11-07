@@ -8,7 +8,7 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
-import { SalesforceFunction } from "./types";
+import { SalesforceFunction } from "./index";
 
 export async function loadDefaultExport(
   fileUrl: string
