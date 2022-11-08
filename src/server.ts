@@ -17,7 +17,7 @@ import {
 import { performance } from "perf_hooks";
 import getRebasedStack from "./stacktrace.js";
 import MimeType from "whatwg-mimetype/lib/mime-type.js";
-import { SalesforceFunction } from "sf-fx-sdk-nodejs";
+import { SalesforceFunction } from "./index";
 import { InvocationEventImpl } from "./sdk/invocation-event.js";
 import { ContextImpl } from "./sdk/context.js";
 import { SalesforceConfig } from "./salesforce-config.js";
@@ -26,12 +26,16 @@ const OK_STATUS = 200;
 const BAD_REQUEST_STATUS = 400;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 const SERVICE_UNAVAILABLE_STATUS = 503;
+const MB = 1e6;
 
 export function buildServer(
   userFunction: SalesforceFunction<any, any>,
   salesforceConfig: SalesforceConfig
 ): FastifyInstance {
-  const server = fastify.fastify({ logger: false });
+  const server = fastify.fastify({
+    bodyLimit: 12 * MB,
+    logger: false,
+  });
 
   server.post("/", async (request, reply) => {
     // If the request is a health check request, stop processing and return a successful result as per spec.

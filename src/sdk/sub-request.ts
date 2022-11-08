@@ -10,7 +10,7 @@ import {
   RecordForUpdate,
   RecordModificationResult,
   ReferenceId,
-} from "sf-fx-sdk-nodejs";
+} from "../index";
 
 export interface CompositeSubRequest<T> {
   readonly httpMethod: string;

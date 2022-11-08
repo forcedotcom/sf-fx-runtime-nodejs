@@ -19,7 +19,7 @@ import {
   RecordQueryResult,
   ReferenceId,
   UnitOfWork,
-} from "sf-fx-sdk-nodejs";
+} from "../index";
 import { createCaseInsensitiveMap } from "../utils/maps.js";
 const pkgPath = join(
   fileURLToPath(import.meta.url),

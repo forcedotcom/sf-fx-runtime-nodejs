@@ -9,7 +9,7 @@ import cluster from "cluster";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import throng from "throng";
-import { SalesforceFunction } from "sf-fx-sdk-nodejs";
+import { SalesforceFunction } from "./index";
 import { loadUserFunctionFromDirectory } from "./user-function.js";
 import { readSalesforceConfig } from "./salesforce-config.js";
 import startServer, { StartServerOptions } from "./server.js";

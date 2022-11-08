@@ -12,7 +12,7 @@ import {
 } from "../cloud-event.js";
 import { SalesforceConfig } from "../salesforce-config";
 import { UserImpl } from "./user.js";
-import { Org, User, DataApi } from "sf-fx-sdk-nodejs";
+import { Org, User, DataApi } from "../index";
 import { DataApiImpl } from "./data-api.js";
 
 export class OrgImpl implements Org {
