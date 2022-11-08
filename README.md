@@ -1,3 +1,5 @@
+![Test workflow status](https://github.com/forcedotcom/sf-fx-runtime-nodejs/actions/workflows/build.yml/badge.svg)
+
 # sf-fx-runtime-nodejs
 
 ## Building
