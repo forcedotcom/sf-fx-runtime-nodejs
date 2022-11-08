@@ -17,5 +17,5 @@
     "removeComments": true,
     "declaration": true
   },
-  "exclude": ["node_modules", "test"]
+  "exclude": ["node_modules", "test", "fixtures", "dist"]
 }
