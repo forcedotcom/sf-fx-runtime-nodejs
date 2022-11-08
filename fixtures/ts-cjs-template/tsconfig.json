@@ -4,9 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./",
     "target": "es2017",
-    "lib": [
-      "es2017"
-    ],
+    "lib": ["es2017"],
     "types": ["node"],
     "sourceMap": false,
     "moduleResolution": "node",
@@ -16,7 +14,5 @@
     "alwaysStrict": true,
     "pretty": true
   },
-  "include": [
-    "index.ts"
-  ]
+  "include": ["index.ts"]
 }
