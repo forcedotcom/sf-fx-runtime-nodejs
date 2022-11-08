@@ -1,12 +1,12 @@
 {
   "name": "@heroku/sf-fx-runtime-nodejs",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@heroku/sf-fx-runtime-nodejs",
-      "version": "0.12.0",
+      "version": "0.13.0",
       "license": "ISC",
       "dependencies": {
         "@iarna/toml": "^2.2.5",
@@ -45,19 +45,6 @@
         "typedoc-plugin-markdown": "^3.10.4",
         "typescript": "^4.4.2",
         "wiremock": "^2.29.0"
-      }
-    },
-    "../sf-fx-sdk-nodejs": {
-      "version": "3.1.0",
-      "extraneous": true,
-      "license": "BSD-3-Clause",
-      "devDependencies": {
-        "@salesforce/dev-scripts": "0.9.18",
-        "@typescript-eslint/eslint-plugin": "^4.28.3",
-        "@typescript-eslint/parser": "^4.28.3",
-        "eslint": "^7.30.0",
-        "eslint-config-prettier": "^8.3.0",
-        "typescript": "^4.3.5"
       }
     },
     "node_modules/@babel/code-frame": {
