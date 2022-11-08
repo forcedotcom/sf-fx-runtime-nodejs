@@ -5,5 +5,8 @@
   "main": "index.js",
   "engines": {
     "node": "^14.0"
+  },
+  "dependencies": {
+    "@heroku/sf-fx-runtime-nodejs": "../.."
   }
 }

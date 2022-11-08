@@ -15,6 +15,9 @@
     "lint": "eslint . --ext .js --config .eslintrc",
     "test": "mocha"
   },
+  "dependencies": {
+    "@heroku/sf-fx-runtime-nodejs": "../.."
+  },
   "devDependencies": {
     "chai": "^4.3.4",
     "eslint": "^6.8.0",
