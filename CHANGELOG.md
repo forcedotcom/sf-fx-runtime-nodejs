@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Improved [Relationship Queries](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_relationships.htm) support for results returned by `dataApi.query("...")`
-  so related query data can be accessed using the `subquery` method on `RecordWithSubQuery` 
+  so related relationship queries on a `QueriedRecord` can be accessed ([#444](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/444))
 
 ## [0.13.0] - 2022-11-08
 - Moved SDK types from [`sf-fx-sdk-nodejs`](https://github.com/forcedotcom/sf-fx-sdk-nodejs) into runtime ([#435](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/435))
