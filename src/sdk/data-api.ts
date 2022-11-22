@@ -17,6 +17,7 @@ import {
   RecordForUpdate,
   RecordModificationResult,
   RecordQueryResult,
+  RecordWithSubQuery,
   ReferenceId,
   UnitOfWork,
 } from "../index";
@@ -95,7 +96,9 @@ export class DataApiImpl implements DataApi {
         const response = await conn.query(soql);
         this.validate_records_response(response);
         const records = await Promise.all(
-          response.records.map((record_data) => buildRecord(conn, record_data))
+          response.records.map((record_data) =>
+            buildRecordWithSubQuery(conn, record_data)
+          )
         );
         return {
           done: response.done,
@@ -302,7 +305,7 @@ async function buildRecord(conn: Connection, data: any): Promise<Record> {
     }
   }
 
-  for (const _ in binaryFields) {
+  if (Object.keys(binaryFields).length) {
     return {
       type,
       fields,
@@ -353,4 +356,37 @@ function buildUpdateFields(record: Record): {
     fields["Id"] = "";
   }
   return fields as { Id: string; [key: string]: unknown };
+}
+
+async function buildRecordWithSubQuery(
+  conn: Connection,
+  data: any
+): Promise<RecordWithSubQuery> {
+  const record = await buildRecord(conn, data);
+
+  return {
+    ...record,
+    subquery(sObjectName: string): RecordQueryResult {
+      const subquery = data[sObjectName];
+      if (
+        subquery &&
+        "totalSize" in subquery &&
+        "done" in subquery &&
+        "records" in subquery
+      ) {
+        return {
+          done: subquery.done,
+          totalSize: subquery.totalSize,
+          nextRecordsUrl: subquery.nextRecordsUrl,
+          records: subquery.records.map((data) => {
+            const type = data.attributes.type;
+            const fields = createCaseInsensitiveMap(data);
+            delete fields["attributes"];
+            return { type, fields };
+          }),
+        };
+      }
+      return null;
+    },
+  };
 }

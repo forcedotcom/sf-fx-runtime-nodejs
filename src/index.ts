@@ -82,12 +82,12 @@ export interface Org {
 export interface RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
-  readonly records: Array<Record>;
+  readonly records: RecordWithSubQuery[];
   readonly nextRecordsUrl?: string;
 }
 
 /**
- * Record items from a query or queryMore request
+ * The base record type representing an SObject
  * @property type The Salesforce Object type
  * @property fields A JavaScript object with all fields from the returned records.
  * @property binaryFields An optional JavaScript object with any eagerly-loaded base64 decoded binary content.
@@ -98,6 +98,19 @@ export type Record = {
   readonly type: string;
   readonly fields: { [key: string]: unknown };
   readonly binaryFields?: { [key: string]: Buffer };
+};
+
+/**
+ * Records returned from a query or queryMore request
+ */
+export type RecordWithSubQuery = Record & {
+  /**
+   * Returns the result of a sub query related to this record. Records can have sub query results when the record is the result of a relationship query.
+   *
+   * @param sObjectName The object name of the sub query.
+   * @return The result of a sub query related to this record.
+   */
+  subquery(sObjectName: string): RecordQueryResult;
 };
 
 /**
