@@ -748,74 +748,77 @@ describe("DataApi Class", async () => {
       ] = results.records;
 
       expect(genePoint.fields.Name).to.eq("GenePoint");
-      expect(genePoint.subquery("Contacts")).to.include({
+      expect(genePoint.subQueryResults.Contacts).to.include({
         totalSize: 1,
         done: true,
         nextRecordsUrl: undefined,
       });
       expect([
-        genePoint.subquery("Contacts")?.records[0].fields.FirstName,
-        genePoint.subquery("Contacts")?.records[0].fields.LastName,
+        genePoint.subQueryResults.Contacts?.records[0].fields.FirstName,
+        genePoint.subQueryResults.Contacts?.records[0].fields.LastName,
       ]).to.deep.eq(["Edna", "Frank"]);
 
       expect(unitedOilAndGasUK.fields.Name).to.eq("United Oil & Gas, UK");
-      expect(unitedOilAndGasUK.subquery("Contacts")).to.include({
+      expect(unitedOilAndGasUK.subQueryResults.Contacts).to.include({
         totalSize: 1,
         done: true,
         nextRecordsUrl: undefined,
       });
       expect([
-        unitedOilAndGasUK.subquery("Contacts")?.records[0].fields.FirstName,
-        unitedOilAndGasUK.subquery("Contacts")?.records[0].fields.LastName,
+        unitedOilAndGasUK.subQueryResults.Contacts?.records[0].fields.FirstName,
+        unitedOilAndGasUK.subQueryResults.Contacts?.records[0].fields.LastName,
       ]).to.deep.eq(["Ashley", "James"]);
 
       expect(unitedOilAndGasSingapore.fields.Name).to.eq(
         "United Oil & Gas, Singapore"
       );
-      expect(unitedOilAndGasSingapore.subquery("Contacts")).to.include({
+      expect(unitedOilAndGasSingapore.subQueryResults.Contacts).to.include({
         totalSize: 2,
         done: true,
         nextRecordsUrl: undefined,
       });
       expect([
-        unitedOilAndGasSingapore.subquery("Contacts")?.records[0].fields
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[0].fields
           .FirstName,
-        unitedOilAndGasSingapore.subquery("Contacts")?.records[0].fields
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[0].fields
           .LastName,
       ]).to.deep.eq(["Tom", "Ripley"]);
       expect([
-        unitedOilAndGasSingapore.subquery("Contacts")?.records[1].fields
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[1].fields
           .FirstName,
-        unitedOilAndGasSingapore.subquery("Contacts")?.records[1].fields
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[1].fields
           .LastName,
       ]).to.deep.eq(["Liz", "D'Cruz"]);
 
       expect(edgeCommunications.fields.Name).to.eq("Edge Communications");
-      expect(edgeCommunications.subquery("Contacts")).to.include({
+      expect(edgeCommunications.subQueryResults.Contacts).to.include({
         totalSize: 2,
         done: true,
         nextRecordsUrl: undefined,
       });
       expect([
-        edgeCommunications.subquery("Contacts")?.records[0].fields.FirstName,
-        edgeCommunications.subquery("Contacts")?.records[0].fields.LastName,
+        edgeCommunications.subQueryResults.Contacts?.records[0].fields
+          .FirstName,
+        edgeCommunications.subQueryResults.Contacts?.records[0].fields.LastName,
       ]).to.deep.eq(["Rose", "Gonzalez"]);
       expect([
-        edgeCommunications.subquery("Contacts")?.records[1].fields.FirstName,
-        edgeCommunications.subquery("Contacts")?.records[1].fields.LastName,
+        edgeCommunications.subQueryResults.Contacts?.records[1].fields
+          .FirstName,
+        edgeCommunications.subQueryResults.Contacts?.records[1].fields.LastName,
       ]).to.deep.eq(["Sean", "Forbes"]);
 
       expect(burlingtonTextiles.fields.Name).to.eq(
         "Burlington Textiles Corp of America"
       );
-      expect(burlingtonTextiles.subquery("Contacts")).to.include({
+      expect(burlingtonTextiles.subQueryResults.Contacts).to.include({
         totalSize: 1,
         done: true,
         nextRecordsUrl: undefined,
       });
       expect([
-        burlingtonTextiles.subquery("Contacts")?.records[0].fields.FirstName,
-        burlingtonTextiles.subquery("Contacts")?.records[0].fields.LastName,
+        burlingtonTextiles.subQueryResults.Contacts?.records[0].fields
+          .FirstName,
+        burlingtonTextiles.subQueryResults.Contacts?.records[0].fields.LastName,
       ]).to.deep.eq(["Jack", "Rogers"]);
     });
 
@@ -830,9 +833,7 @@ describe("DataApi Class", async () => {
       );
       expect(results.done).to.eq(true);
       expect(results.totalSize).to.eq(5);
-
-      const nonExistentRelationship = results.records[0].subquery("IDontExist");
-      expect(nonExistentRelationship).to.eq(null);
+      expect(results.records[0].subQueryResults.IDontExist).to.be.undefined;
     });
   });
 });

@@ -82,7 +82,7 @@ export interface Org {
 export interface RecordQueryResult {
   readonly done: boolean;
   readonly totalSize: number;
-  readonly records: RecordWithSubQuery[];
+  readonly records: QueriedRecord[];
   readonly nextRecordsUrl?: string;
 }
 
@@ -103,14 +103,14 @@ export type Record = {
 /**
  * Records returned from a query or queryMore request
  */
-export type RecordWithSubQuery = Record & {
+export type QueriedRecord = Record & {
   /**
    * Returns the result of a sub query related to this record. Records can have sub query results when the record is the result of a relationship query.
-   *
-   * @param sObjectName The object name of the sub query.
-   * @return The result of a sub query related to this record.
+   * @property subQueryResults The subquery results attached to this record
    */
-  subquery(sObjectName: string): RecordQueryResult;
+  readonly subQueryResults: {
+    [sObjectName: string]: RecordQueryResult;
+  };
 };
 
 /**
