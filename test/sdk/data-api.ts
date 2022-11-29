@@ -221,7 +221,7 @@ describe("DataApi Class", async () => {
         expect(records.length).equal(5);
         expect(nextRecordsUrl).undefined;
 
-        expect(records[0]).to.deep.equal({
+        expect(records[0]).to.deep.include({
           type: "Account",
           fields: {
             name: "An awesome test account",
@@ -230,7 +230,7 @@ describe("DataApi Class", async () => {
 
         expect(records[0].fields["Name"]).to.equal("An awesome test account");
 
-        expect(records[1]).to.deep.equal({
+        expect(records[1]).to.deep.include({
           type: "Account",
           fields: {
             name: "Global Media",
@@ -239,7 +239,7 @@ describe("DataApi Class", async () => {
 
         expect(records[1].fields.NAME).to.equal("Global Media");
 
-        expect(records[2]).to.deep.equal({
+        expect(records[2]).to.deep.include({
           type: "Account",
           fields: {
             name: "Acme",
@@ -248,14 +248,14 @@ describe("DataApi Class", async () => {
 
         expect(records[2].fields["namE"]).to.equal("Acme");
 
-        expect(records[3]).to.deep.equal({
+        expect(records[3]).to.deep.include({
           type: "Account",
           fields: {
             name: "salesforce.com",
           },
         });
 
-        expect(records[4]).to.deep.equal({
+        expect(records[4]).to.deep.include({
           type: "Account",
           fields: {
             name: "Sample Account for Entitlements",
@@ -723,6 +723,117 @@ describe("DataApi Class", async () => {
           expect(e.message).contains("failed, reason: getaddrinfo ENOTFOUND");
         }
       });
+    });
+  });
+
+  describe("queries with subqueries for relationships", () => {
+    it("should allow relationship subqueries to be navigated", async () => {
+      const dataApi = new DataApiImpl(
+        uri,
+        "53.0",
+        "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      );
+      const results = await dataApi.query(
+        "SELECT Account.Name, (SELECT Contact.FirstName, Contact.LastName FROM Account.Contacts) FROM Account LIMIT 5"
+      );
+      expect(results.done).to.eq(true);
+      expect(results.totalSize).to.eq(5);
+
+      const [
+        genePoint,
+        unitedOilAndGasUK,
+        unitedOilAndGasSingapore,
+        edgeCommunications,
+        burlingtonTextiles,
+      ] = results.records;
+
+      expect(genePoint.fields.Name).to.eq("GenePoint");
+      expect(genePoint.subQueryResults.Contacts).to.include({
+        totalSize: 1,
+        done: true,
+        nextRecordsUrl: undefined,
+      });
+      expect([
+        genePoint.subQueryResults.Contacts?.records[0].fields.FirstName,
+        genePoint.subQueryResults.Contacts?.records[0].fields.LastName,
+      ]).to.deep.eq(["Edna", "Frank"]);
+
+      expect(unitedOilAndGasUK.fields.Name).to.eq("United Oil & Gas, UK");
+      expect(unitedOilAndGasUK.subQueryResults.Contacts).to.include({
+        totalSize: 1,
+        done: true,
+        nextRecordsUrl: undefined,
+      });
+      expect([
+        unitedOilAndGasUK.subQueryResults.Contacts?.records[0].fields.FirstName,
+        unitedOilAndGasUK.subQueryResults.Contacts?.records[0].fields.LastName,
+      ]).to.deep.eq(["Ashley", "James"]);
+
+      expect(unitedOilAndGasSingapore.fields.Name).to.eq(
+        "United Oil & Gas, Singapore"
+      );
+      expect(unitedOilAndGasSingapore.subQueryResults.Contacts).to.include({
+        totalSize: 2,
+        done: true,
+        nextRecordsUrl: undefined,
+      });
+      expect([
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[0].fields
+          .FirstName,
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[0].fields
+          .LastName,
+      ]).to.deep.eq(["Tom", "Ripley"]);
+      expect([
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[1].fields
+          .FirstName,
+        unitedOilAndGasSingapore.subQueryResults.Contacts?.records[1].fields
+          .LastName,
+      ]).to.deep.eq(["Liz", "D'Cruz"]);
+
+      expect(edgeCommunications.fields.Name).to.eq("Edge Communications");
+      expect(edgeCommunications.subQueryResults.Contacts).to.include({
+        totalSize: 2,
+        done: true,
+        nextRecordsUrl: undefined,
+      });
+      expect([
+        edgeCommunications.subQueryResults.Contacts?.records[0].fields
+          .FirstName,
+        edgeCommunications.subQueryResults.Contacts?.records[0].fields.LastName,
+      ]).to.deep.eq(["Rose", "Gonzalez"]);
+      expect([
+        edgeCommunications.subQueryResults.Contacts?.records[1].fields
+          .FirstName,
+        edgeCommunications.subQueryResults.Contacts?.records[1].fields.LastName,
+      ]).to.deep.eq(["Sean", "Forbes"]);
+
+      expect(burlingtonTextiles.fields.Name).to.eq(
+        "Burlington Textiles Corp of America"
+      );
+      expect(burlingtonTextiles.subQueryResults.Contacts).to.include({
+        totalSize: 1,
+        done: true,
+        nextRecordsUrl: undefined,
+      });
+      expect([
+        burlingtonTextiles.subQueryResults.Contacts?.records[0].fields
+          .FirstName,
+        burlingtonTextiles.subQueryResults.Contacts?.records[0].fields.LastName,
+      ]).to.deep.eq(["Jack", "Rogers"]);
+    });
+
+    it("should return null if the requested relationship is not in the result set", async () => {
+      const dataApi = new DataApiImpl(
+        uri,
+        "53.0",
+        "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
+      );
+      const results = await dataApi.query(
+        "SELECT Account.Name, (SELECT Contact.FirstName, Contact.LastName FROM Account.Contacts) FROM Account LIMIT 5"
+      );
+      expect(results.done).to.eq(true);
+      expect(results.totalSize).to.eq(5);
+      expect(results.records[0].subQueryResults.IDontExist).to.be.undefined;
     });
   });
 });

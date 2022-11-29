@@ -17,6 +17,7 @@ import {
   RecordForUpdate,
   RecordModificationResult,
   RecordQueryResult,
+  QueriedRecord,
   ReferenceId,
   UnitOfWork,
 } from "../index";
@@ -95,7 +96,9 @@ export class DataApiImpl implements DataApi {
         const response = await conn.query(soql);
         this.validate_records_response(response);
         const records = await Promise.all(
-          response.records.map((record_data) => buildRecord(conn, record_data))
+          response.records.map((record_data) =>
+            buildQueriedRecord(conn, record_data)
+          )
         );
         return {
           done: response.done,
@@ -124,7 +127,9 @@ export class DataApiImpl implements DataApi {
         const response = await conn.queryMore(queryResult.nextRecordsUrl);
         this.validate_records_response(response);
         const records = await Promise.all(
-          response.records.map((record_data) => buildRecord(conn, record_data))
+          response.records.map((record_data) =>
+            buildQueriedRecord(conn, record_data)
+          )
         );
 
         return {
@@ -279,37 +284,45 @@ export class DataApiImpl implements DataApi {
   }
 }
 
-async function buildRecord(conn: Connection, data: any): Promise<Record> {
+async function buildQueriedRecord(
+  conn: Connection,
+  data: any
+): Promise<QueriedRecord> {
   const type = data.attributes.type;
-  const fields = createCaseInsensitiveMap(data);
-  delete fields["attributes"];
 
-  // For any known binaryFields, eagerly fetch the data from the specified
-  // endpoint.
-  const binaryFields = {};
-  if (type in knownBinaryFields) {
-    for (const binFieldName of knownBinaryFields[type]) {
-      if (fields[binFieldName]) {
-        try {
-          const body: string = await conn.request(fields[binFieldName]);
-          binaryFields[binFieldName] = Buffer.from(body, "binary");
-        } catch (err) {
-          throw new Error(
-            `Unable to load binary field data for ${type}.${binFieldName}: ${err}`
-          );
-        }
-      }
+  const fields: { [key: string]: unknown } = {};
+  const binaryFields: { [key: string]: Buffer } = {};
+  const subQueryResults: { [key: string]: RecordQueryResult } = {};
+
+  for await (const [key, val] of Object.entries(data)) {
+    if (key === "attributes" || val == null) {
+      continue;
+    }
+
+    if (type in knownBinaryFields && knownBinaryFields[type].includes(key)) {
+      binaryFields[key] = await eagerlyLoadBinaryField(conn, type, key, val);
+      fields[key] = val;
+    } else if (typeof val === "object") {
+      subQueryResults[key] = await buildSubQueryResult(conn, key, val);
+    } else if (val) {
+      fields[key] = val;
     }
   }
 
-  for (const _ in binaryFields) {
+  const queriedRecord: QueriedRecord = {
+    type,
+    fields: createCaseInsensitiveMap(fields),
+    subQueryResults: createCaseInsensitiveMap(subQueryResults),
+  };
+
+  if (Object.keys(binaryFields).length) {
     return {
-      type,
-      fields,
+      ...queriedRecord,
       binaryFields: createCaseInsensitiveMap(binaryFields),
     };
   }
-  return { type, fields };
+
+  return queriedRecord;
 }
 
 function buildCreateFields(record: Record): { [key: string]: unknown } {
@@ -353,4 +366,50 @@ function buildUpdateFields(record: Record): {
     fields["Id"] = "";
   }
   return fields as { Id: string; [key: string]: unknown };
+}
+
+async function eagerlyLoadBinaryField(
+  conn: Connection,
+  type: string,
+  key: string,
+  val: unknown
+): Promise<Buffer> {
+  try {
+    if (typeof val === "string") {
+      const body = await conn.request(val);
+      if (typeof body === "string") {
+        return Buffer.from(body, "binary");
+      }
+    }
+  } catch (err) {
+    throw new Error(
+      `Unable to load binary field data for ${type}.${key}: ${err}`
+    );
+  }
+
+  throw new Error(`Unable to load binary field data for ${type}.${key}`);
+}
+
+async function buildSubQueryResult(
+  conn: Connection,
+  key: string,
+  val: any
+): Promise<RecordQueryResult> {
+  const { done, nextRecordsUrl, totalSize, records } = val ?? {};
+  if (
+    typeof done === "boolean" &&
+    typeof totalSize === "number" &&
+    Array.isArray(records)
+  ) {
+    return {
+      done,
+      nextRecordsUrl,
+      totalSize,
+      records: await Promise.all(
+        records.map((r) => buildQueriedRecord(conn, r))
+      ),
+    };
+  }
+
+  throw new Error(`Unable to load subQuery data for ${key}`);
 }
