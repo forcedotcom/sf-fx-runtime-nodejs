@@ -1,6 +1,6 @@
 {
   "id": "ecf16e4b-f058-4802-b44d-2c77b1e49aa1",
-  "name": "services_data_v510_query",
+  "name": "services_data_v530_query",
   "request": {
     "urlPath": "/services/data/v53.0/query",
     "method": "GET",
