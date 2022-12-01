@@ -460,12 +460,12 @@
       "integrity": "sha512-6D7DvE6nFxpLyyTnrOIbbAeCJw2r/EpinFAcMh6gU0gA/CGfSbwV/8uR3uHLYL2zCyCZLH8jJ4dZ3BzCMqc+Eg=="
     },
     "node_modules/@salesforce/ts-sinon": {
-      "version": "1.4.0",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.0.tgz",
-      "integrity": "sha512-mqHMA6mCOfsZTMXk7JxBMG24Ci7bei3uf0m4yXWh9ERCnmNwbFMc+O90tSLqYwbRnafxIqLfSey9Q8dpJ9LTAw==",
+      "version": "1.4.2",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.2.tgz",
+      "integrity": "sha512-yoNaHdw+5IYUs8Jg/c30AuPG5jhWGR/zdy0G2XmLSzVhf/8duNTbnSl3AWYplCvU/Cz3CFIs1XnjePG0Resxmw==",
       "dev": true,
       "dependencies": {
-        "@salesforce/ts-types": "^1.5.21",
+        "@salesforce/ts-types": "^1.7.1",
         "sinon": "^5.1.1",
         "tslib": "^2.2.0"
       }
@@ -531,11 +531,11 @@
       }
     },
     "node_modules/@salesforce/ts-types": {
-      "version": "1.5.21",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-1.5.21.tgz",
-      "integrity": "sha512-qG8r8WOzqpFOHaH3EGU3IwGrY/pSv9NQp4B0wGxOuPDBbraXVvd3KhWVStxaLGKBkJClJ7/+t+iCSP82sEiGcg==",
+      "version": "1.7.1",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-1.7.1.tgz",
+      "integrity": "sha512-jwZb8fYxbOmEckoJTxG2+5ZEJNJOFxmRJ/FioPnSu4IMFzpK3QbyujfqpHwLfPKHq0xlKRMx+F8QAVVKI/PA4w==",
       "dependencies": {
-        "tslib": "^2.2.0"
+        "tslib": "^2.4.1"
       }
     },
     "node_modules/@sinonjs/commons": {
@@ -5745,9 +5745,9 @@
       }
     },
     "node_modules/tslib": {
-      "version": "2.3.0",
-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz",
-      "integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
+      "version": "2.4.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz",
+      "integrity": "sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA=="
     },
     "node_modules/tsutils": {
       "version": "3.21.0",
@@ -6577,12 +6577,12 @@
       "integrity": "sha512-6D7DvE6nFxpLyyTnrOIbbAeCJw2r/EpinFAcMh6gU0gA/CGfSbwV/8uR3uHLYL2zCyCZLH8jJ4dZ3BzCMqc+Eg=="
     },
     "@salesforce/ts-sinon": {
-      "version": "1.4.0",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.0.tgz",
-      "integrity": "sha512-mqHMA6mCOfsZTMXk7JxBMG24Ci7bei3uf0m4yXWh9ERCnmNwbFMc+O90tSLqYwbRnafxIqLfSey9Q8dpJ9LTAw==",
+      "version": "1.4.2",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.2.tgz",
+      "integrity": "sha512-yoNaHdw+5IYUs8Jg/c30AuPG5jhWGR/zdy0G2XmLSzVhf/8duNTbnSl3AWYplCvU/Cz3CFIs1XnjePG0Resxmw==",
       "dev": true,
       "requires": {
-        "@salesforce/ts-types": "^1.5.21",
+        "@salesforce/ts-types": "^1.7.1",
         "sinon": "^5.1.1",
         "tslib": "^2.2.0"
       },
@@ -6641,11 +6641,11 @@
       }
     },
     "@salesforce/ts-types": {
-      "version": "1.5.21",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-1.5.21.tgz",
-      "integrity": "sha512-qG8r8WOzqpFOHaH3EGU3IwGrY/pSv9NQp4B0wGxOuPDBbraXVvd3KhWVStxaLGKBkJClJ7/+t+iCSP82sEiGcg==",
+      "version": "1.7.1",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-1.7.1.tgz",
+      "integrity": "sha512-jwZb8fYxbOmEckoJTxG2+5ZEJNJOFxmRJ/FioPnSu4IMFzpK3QbyujfqpHwLfPKHq0xlKRMx+F8QAVVKI/PA4w==",
       "requires": {
-        "tslib": "^2.2.0"
+        "tslib": "^2.4.1"
       }
     },
     "@sinonjs/commons": {
@@ -10576,9 +10576,9 @@
       "integrity": "sha512-8DF80uA7JPu6m8ouHxGkyBpPTIGQnsgIUgLDqcRaD7EEhVowjG72KqCX334gsa1P+AmzeTVdd/xEzVFCAuPCtg=="
     },
     "tslib": {
-      "version": "2.3.0",
-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz",
-      "integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
+      "version": "2.4.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz",
+      "integrity": "sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA=="
     },
     "tsutils": {
       "version": "3.21.0",
