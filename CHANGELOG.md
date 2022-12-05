@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Fix parsing of query results to include nested `Record` fields ([#451](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/451))
 
 ## [0.14.0] - 2022-11-29
 - Improved [Relationship Queries](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_relationships.htm) support for results returned by `dataApi.query("...")`
