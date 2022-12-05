@@ -9,6 +9,7 @@ import { expect } from "chai";
 import { DataApiImpl } from "../../src/sdk/data-api.js";
 import stub from "sinon/lib/sinon/stub.js";
 import fs from "fs";
+import { Record } from "../../src";
 
 const uri = "http://127.0.0.1:8080";
 const token =
@@ -361,6 +362,27 @@ describe("DataApi Class", async () => {
         );
         expect(record.binaryFields.versiondata.includes("HYPNO TOAD")).to.be
           .true;
+      });
+    });
+
+    describe("with associated data", async () => {
+      it("parses the associated fields correctly", async () => {
+        const result = await dataApiv55.query(
+          "SELECT Name, Owner.Name from Account LIMIT 1"
+        );
+        expect(result.done).equal(true);
+        expect(result.totalSize).equal(1);
+        const record = result.records[0];
+        expect(record.type).equal("Account");
+
+        const owner: Record | unknown = record.fields.Owner;
+        expect(owner).not.to.be.null;
+
+        if (isRecord(owner)) {
+          expect(owner.fields.Name).to.eq("Guy Smiley");
+        } else {
+          expect.fail("this should be a nested record");
+        }
       });
     });
   });
@@ -837,3 +859,12 @@ describe("DataApi Class", async () => {
     });
   });
 });
+
+function isRecord(data: unknown): data is Record {
+  return (
+    data != null &&
+    typeof data === "object" &&
+    "type" in data &&
+    "fields" in data
+  );
+}

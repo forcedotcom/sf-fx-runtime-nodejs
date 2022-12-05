@@ -303,7 +303,11 @@ async function buildQueriedRecord(
       binaryFields[key] = await eagerlyLoadBinaryField(conn, type, key, val);
       fields[key] = val;
     } else if (typeof val === "object") {
-      subQueryResults[key] = await buildSubQueryResult(conn, key, val);
+      if ("attributes" in val) {
+        fields[key] = await buildQueriedRecord(conn, val);
+      } else {
+        subQueryResults[key] = await buildSubQueryResult(conn, key, val);
+      }
     } else if (val) {
       fields[key] = val;
     }
