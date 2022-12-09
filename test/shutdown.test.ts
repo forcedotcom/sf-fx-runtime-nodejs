@@ -35,7 +35,7 @@ const SECONDS = ONE_SECOND;
 const GRACE_PERIOD = 1000;
 
 describe("cli shutdown routine", function () {
-  this.timeout(30 * SECONDS);
+  this.timeout(60 * SECONDS);
 
   let functionProcess: FunctionProcess;
   let invocationRequest: InvocationRequest;
