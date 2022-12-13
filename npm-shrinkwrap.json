@@ -1,12 +1,12 @@
 {
   "name": "@heroku/sf-fx-runtime-nodejs",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@heroku/sf-fx-runtime-nodejs",
-      "version": "0.14.1",
+      "version": "0.14.2",
       "license": "ISC",
       "dependencies": {
         "@iarna/toml": "^2.2.5",
