@@ -1,14 +1,11 @@
 /*
- * Copyright (c) 2021, salesforce.com, inc.
+ * Copyright (c) 2023, salesforce.com, inc.
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
 import { Connection } from "jsforce2/lib/connection.js";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { fileURLToPath } from "url";
 import { UnitOfWorkImpl } from "./unit-of-work.js";
 import {
   DataApi,
@@ -22,15 +19,8 @@ import {
   UnitOfWork,
 } from "../index";
 import { createCaseInsensitiveMap } from "../utils/maps.js";
-const pkgPath = join(
-  fileURLToPath(import.meta.url),
-  "..",
-  "..",
-  "..",
-  "package.json"
-);
-const pkg = readFileSync(pkgPath, "utf8");
-const ClientVersion = JSON.parse(pkg).version;
+import { createConnection } from "../utils/create-connection.js";
+
 const knownBinaryFields = { ContentVersion: ["VersionData"] };
 
 export class DataApiImpl implements DataApi {
@@ -47,16 +37,12 @@ export class DataApiImpl implements DataApi {
 
   private async connect(): Promise<Connection> {
     if (!this.conn) {
-      this.conn = new Connection({
+      this.conn = createConnection({
         accessToken: this.accessToken,
         instanceUrl: this.baseUrl,
         version: this.apiVersion,
-        callOptions: {
-          client: `sf-fx-runtime-nodejs-sdk-impl-v1:${ClientVersion}`,
-        },
       });
     }
-
     return this.conn;
   }
 
@@ -107,6 +93,11 @@ export class DataApiImpl implements DataApi {
           nextRecordsUrl: response.nextRecordsUrl,
         };
       } catch (e) {
+        if (e instanceof TypeError) {
+          return this.handle_bad_response(
+            new Error(`Could not parse response: ${e.message}`)
+          );
+        }
         return this.handle_bad_response(e);
       }
     });

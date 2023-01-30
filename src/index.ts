@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2021, salesforce.com, inc.
+ * Copyright (c) 2023, salesforce.com, inc.
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+
+import { QueryOperation } from "jsforce2/lib/api/bulk";
 
 /**
  * Main interface for Salesforce Functions.
@@ -68,6 +70,8 @@ export interface Org {
   readonly domainUrl: string;
   readonly apiVersion: string;
   readonly dataApi: DataApi;
+
+  readonly bulkApi: BulkApi;
   readonly user: User;
 }
 
@@ -320,3 +324,166 @@ export interface Logger {
    */
   trace(message: string): void;
 }
+
+export interface BulkApi {
+  getInfo(
+    jobReference: IngestJobReference | QueryJobReference
+  ): Promise<IngestJobInfo | QueryJobInfo>;
+  getSuccessfulResults(jobReference: IngestJobReference): Promise<DataTable>;
+  getFailedResults(jobReference: IngestJobReference): Promise<DataTable>;
+  getUnprocessedRecords(jobReference: IngestJobReference): Promise<DataTable>;
+  getQueryResults(
+    jobReference: QueryJobReference,
+    getQueryJobResultsOptions?: GetQueryJobResultsOptions
+  ): Promise<QueryJobResults>;
+  getMoreQueryResults(
+    bulkQueryResult: QueryJobResults,
+    getMoreQueryResultsOptions?: GetQueryJobResultsOptions
+  ): Promise<QueryJobResults>;
+  abort(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
+  delete(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
+
+  ingest(
+    options: IngestJobOptions
+  ): Promise<Array<IngestJobReference | IngestJobFailure>>;
+
+  query(options: QueryJobOptions): Promise<QueryJobReference>;
+
+  createDataTableBuilder(columnNames: string[]): DataTableBuilder;
+
+  splitDataTable(dataTable: DataTable): DataTable[];
+}
+
+export type QueryJobOptions = {
+  soql: string;
+  operation?: QueryOperation;
+};
+
+export type IngestJobOptions = {
+  dataTable: DataTable;
+  object: string;
+  operation: IngestJobOperation;
+  externalIdFieldName?: string;
+  assignmentRuleId?: string;
+};
+
+export interface QueryJobReference {
+  id: string;
+  type: "queryJob";
+}
+
+export interface IngestJobReference {
+  id: string;
+  type: "ingestJob";
+}
+
+export interface GetQueryJobResultsOptions {
+  maxRecords: number;
+}
+
+interface JobInfo {
+  apexProcessingTime?: number;
+  apiActiveProcessingTime?: number;
+  apiVersion: number;
+  assignmentRuleId?: string;
+  columnDelimiter: "COMMA";
+  concurrencyMode: "Parallel";
+  contentType: "CSV";
+  contentUrl?: string;
+  createdById: string;
+  createdDate: string;
+  externalIdFieldName?: string;
+  id: string;
+  jobType: "V2Ingest" | "V2Query";
+  lineEnding: "LF";
+  numberRecordsFailed?: number;
+  numberRecordsProcessed?: number;
+  object: string;
+  operation: IngestJobOperation | QueryOperation;
+  retries?: number;
+  state: IngestJobState | QueryJobState;
+  systemModstamp: string;
+  totalProcessingTime?: number;
+}
+
+export interface IngestJobInfo extends JobInfo {
+  jobType: "V2Ingest";
+  operation: IngestJobOperation;
+  state: IngestJobState;
+  assignmentRuleId?: string;
+  externalIdFieldName?: string;
+  numberRecordsFailed?: number;
+  numberRecordsProcessed?: number;
+}
+
+export interface QueryJobInfo extends JobInfo {
+  jobType: "V2Query";
+  operation: QueryJobOperation;
+  state: QueryJobState;
+}
+
+export type IngestJobState =
+  | "Open"
+  | "UploadComplete"
+  | "InProgress"
+  | "Aborted"
+  | "JobComplete"
+  | "Failed";
+
+export type QueryJobState =
+  | "UploadComplete"
+  | "InProgress"
+  | "Aborted"
+  | "JobComplete"
+  | "Failed";
+
+export type IngestJobOperation =
+  | "insert"
+  | "delete"
+  | "hardDelete"
+  | "update"
+  | "upsert";
+
+export type QueryJobOperation = "query" | "queryAll";
+
+export interface QueryJobResults {
+  dataTable: DataTable;
+  done: boolean;
+  locator?: string;
+  numberOfRecords: number;
+  jobReference: QueryJobReference;
+}
+
+export class DataTable extends Array<Map<string, string>> {
+  columns: string[];
+}
+
+export type DataTableFieldValueExtractor<T> = (
+  data: T | undefined,
+  columnName: string
+) => string;
+
+export type IngestDataTableRow = Map<string, string> | Record | string[] | any;
+
+export interface DataTableBuilder {
+  addRow<T extends IngestDataTableRow>(
+    row: T,
+    fieldValueExtractor?: DataTableFieldValueExtractor<T>
+  ): DataTableBuilder;
+
+  addRows<T extends IngestDataTableRow>(
+    rows: Array<IngestDataTableRow>,
+    fieldValueExtractor?: DataTableFieldValueExtractor<T>
+  ): DataTableBuilder;
+  build(): DataTable;
+}
+
+export type IngestJobFailure = {
+  error: BulkApiError;
+  unprocessedRecords: DataTable;
+  jobReference?: IngestJobReference;
+};
+
+export type BulkApiError = Error & {
+  errorCode: string;
+};

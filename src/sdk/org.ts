@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, salesforce.com, inc.
+ * Copyright (c) 2023, salesforce.com, inc.
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
@@ -12,8 +12,9 @@ import {
 } from "../cloud-event.js";
 import { SalesforceConfig } from "../salesforce-config";
 import { UserImpl } from "./user.js";
-import { Org, User, DataApi } from "../index";
+import { Org, User, DataApi, BulkApi } from "../index";
 import { DataApiImpl } from "./data-api.js";
+import { createBulkApi } from "./bulk-api.js";
 
 export class OrgImpl implements Org {
   readonly id: string;
@@ -21,6 +22,7 @@ export class OrgImpl implements Org {
   readonly domainUrl: string;
   readonly apiVersion: string;
   readonly dataApi: DataApi;
+  readonly bulkApi: BulkApi;
   readonly user: User;
 
   constructor(
@@ -46,6 +48,11 @@ export class OrgImpl implements Org {
       this.apiVersion,
       accessToken
     );
+    this.bulkApi = createBulkApi({
+      instanceUrl: this.domainUrl,
+      version: this.apiVersion,
+      accessToken,
+    });
     this.user = new UserImpl(userId, username, onBehalfOfUserId);
   }
 }
