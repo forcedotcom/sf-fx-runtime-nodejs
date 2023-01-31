@@ -349,9 +349,13 @@ export interface BulkApi {
 
   query(options: QueryJobOptions): Promise<QueryJobReference>;
 
-  createDataTableBuilder(columnNames: string[]): DataTableBuilder;
+  createDataTableBuilder(columnNames: [string, ...string[]]): DataTableBuilder;
 
   splitDataTable(dataTable: DataTable): DataTable[];
+
+  formatNullValue(): string;
+  formatDate(value: Date): string;
+  formatDateTime(value: Date): string;
 }
 
 export type QueryJobOptions = {
@@ -455,25 +459,21 @@ export interface QueryJobResults {
 }
 
 export class DataTable extends Array<Map<string, string>> {
-  columns: string[];
+  columns: [string, ...string[]];
 }
 
 export type DataTableFieldValueExtractor<T> = (
-  data: T | undefined,
+  data: T,
   columnName: string
 ) => string;
 
-export type IngestDataTableRow = Map<string, string> | Record | string[] | any;
-
 export interface DataTableBuilder {
-  addRow<T extends IngestDataTableRow>(
-    row: T,
-    fieldValueExtractor?: DataTableFieldValueExtractor<T>
-  ): DataTableBuilder;
-
-  addRows<T extends IngestDataTableRow>(
-    rows: Array<IngestDataTableRow>,
-    fieldValueExtractor?: DataTableFieldValueExtractor<T>
+  addRow(row: string[] | Map<string, string>): DataTableBuilder;
+  addRow<T>(row: T, fieldValueExtractor: DataTableFieldValueExtractor<T>);
+  addRows(rows: Array<string[] | Map<string, string>>): DataTableBuilder;
+  addRows<T>(
+    rows: Array<T>,
+    fieldValueExtractor: DataTableFieldValueExtractor<T>
   ): DataTableBuilder;
   build(): DataTable;
 }

@@ -1,1736 +1,1869 @@
 {
-  "mappings" : [ {
-    "id" : "dcb18afd-d23b-4894-bf45-df43fd559192",
-    "name" : "Bulk API - Ingest Job - Delete - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "dcb18afd-d23b-4894-bf45-df43fd559192",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5d1afa15-5717-4a06-9424-76b517d83d53",
-    "name" : "Bulk API - Ingest Job - Abort - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "json"
-        }
+  "mappings": [
+    {
+      "id": "dcb18afd-d23b-4894-bf45-df43fd559192",
+      "name": "Bulk API - Ingest Job - Delete - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError$",
+        "method": "DELETE"
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}"
-      } ]
-    },
-    "response" : {
-      "status" : 400,
-      "body" : "[\n    {\n        \"errorCode\": \"INVALIDJOBSTATE\",\n        \"message\": \"Aborting already Completed Job not allowed\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "5d1afa15-5717-4a06-9424-76b517d83d53",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "3d24b1a6-1d10-415c-89cd-a5911ec63074",
-    "name" : "Bulk API - Query Job - Abort - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
-      "method" : "PATCH",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "3d24b1a6-1d10-415c-89cd-a5911ec63074",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "8523b105-846c-4d10-b417-b90c84ea966e",
-    "name" : "Bulk API - Query Job - Abort - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
-      "method" : "PATCH",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "8523b105-846c-4d10-b417-b90c84ea966e",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "949d992c-424c-4789-8058-8947a66a1c74",
-    "name" : "Bulk API - Query Job - Get Results - No Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/empty/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"Id\"\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Sforce-Locator" : "null",
-        "Sforce-NumberOfRecords" : "0",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "949d992c-424c-4789-8058-8947a66a1c74",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5db1236d-e33b-467e-a8c1-e1fc59f7c23f",
-    "name" : "Bulk API - Query Job - Get Results - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/serverError/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "5db1236d-e33b-467e-a8c1-e1fc59f7c23f",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f66b3532-c096-4398-ad84-8bad8093b06f",
-    "name" : "Bulk API - Query Job - Create - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query",
-      "method" : "POST",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM ServerError\"\n} ",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "f66b3532-c096-4398-ad84-8bad8093b06f",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "9456025f-9790-48a2-865c-b7200e46e191",
-    "name" : "Bulk API - Ingest Job - Get Failed Results - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/failedResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "9456025f-9790-48a2-865c-b7200e46e191",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "c456c3ae-3b09-4dbc-a0de-2d9705b041c6",
-    "name" : "Bulk API - Query Job - Create - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query",
-      "method" : "POST",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM ClientError\"\n} ",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "c456c3ae-3b09-4dbc-a0de-2d9705b041c6",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "2b604a2a-f961-4fd7-b561-159548f3c780",
-    "name" : "Bulk API - Ingest Job - Get Unprocessed Records - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/unprocessedrecords$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "2b604a2a-f961-4fd7-b561-159548f3c780",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "2e569c48-64e1-479e-be6e-7ca2d91cf6ce",
-    "name" : "Bulk API - Query Job - Get Info - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "2e569c48-64e1-479e-be6e-7ca2d91cf6ce",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "37f0e3e4-f9f5-483b-8686-e095accc294e",
-    "name" : "Bulk API - Ingest Job - Abort - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "json"
-        }
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}"
-      } ]
+      "uuid": "dcb18afd-d23b-4894-bf45-df43fd559192",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "37f0e3e4-f9f5-483b-8686-e095accc294e",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5f57233a-8c44-413d-bd47-bf434e019461",
-    "name" : "Bulk API - Ingest Job - Get Successful Results - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/successfulResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "5f57233a-8c44-413d-bd47-bf434e019461",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "28ce3619-cd0e-4ede-911e-5965080068f7",
-    "name" : "Bulk API - Query Job - Get Info - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "28ce3619-cd0e-4ede-911e-5965080068f7",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "e1c37732-2b81-4bb6-81b7-e1c5ec37277c",
-    "name" : "Bulk API - Query Job - Delete - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "e1c37732-2b81-4bb6-81b7-e1c5ec37277c",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "3602d7b3-62ed-4e03-b8f2-f77b68641277",
-    "name" : "Bulk API - Ingest Job - Get Failed Results - No Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/failedResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"sf__Id\",\"sf__Error\",Name,Description,NumberOfEmployees\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "3602d7b3-62ed-4e03-b8f2-f77b68641277",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "bac8fba1-342d-4cb5-a5d3-88a149102eed",
-    "name" : "Bulk API - Ingest Job - Get Unprocessed Records - No Data",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/unprocessedrecords$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "Name,Description,NumberOfEmployees\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "bac8fba1-342d-4cb5-a5d3-88a149102eed",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "3f846017-230b-45bb-b163-b958be20a67b",
-    "name" : "Bulk API - Ingest Job - Delete - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "3f846017-230b-45bb-b163-b958be20a67b",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "10023049-7913-4c8a-a847-82eeddefee63",
-    "name" : "Bulk API - Ingest Job - Get Unprocessed Records - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/unprocessedrecords$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "10023049-7913-4c8a-a847-82eeddefee63",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "775bea90-319c-4cc9-aafd-625a51f4a573",
-    "name" : "Bulk API - Ingest Job - Get Successful Results - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/successfulResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "775bea90-319c-4cc9-aafd-625a51f4a573",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "4b50be5f-d11e-4260-84d4-8d8ab658b956",
-    "name" : "Bulk API - Query Job - Delete - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "4b50be5f-d11e-4260-84d4-8d8ab658b956",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "ddde0283-86e9-48c7-b5b1-95f548c1c581",
-    "name" : "Bulk API - Query Job - Get More Results - With maxRecords",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
-        }
-      },
-      "queryParameters" : {
-        "locator" : {
-          "equalTo" : "MjAwMDAw"
+    {
+      "id": "5d1afa15-5717-4a06-9424-76b517d83d53",
+      "name": "Bulk API - Ingest Job - Abort - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "json"
+          }
         },
-        "maxRecords" : {
-          "matches" : "\\d+"
-        }
-      }
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"Id\"\n\"005R0000000UyrWIAv\"\n\"005R0000000GiwjIxx\"\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Sforce-Locator" : "null",
-        "Sforce-NumberOfRecords" : "2",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "ddde0283-86e9-48c7-b5b1-95f548c1c581",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "9e273240-72b0-4030-81a4-d5d2a3c69272",
-    "name" : "Bulk API - Ingest Job - Get Successful Results - No Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/successfulResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"sf__Id\",\"sf__Created\",Name,Description,NumberOfEmployees\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "9e273240-72b0-4030-81a4-d5d2a3c69272",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f0b49fd7-a6d8-408d-8bfb-b58087eed8e3",
-    "name" : "Bulk API - Ingest Job - Get Failed Results - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/failedResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "f0b49fd7-a6d8-408d-8bfb-b58087eed8e3",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "be1c9d7f-e49d-47fe-b1a5-3f4056c5cacc",
-    "name" : "Bulk API - Query Job - Get Results - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/clientError/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "be1c9d7f-e49d-47fe-b1a5-3f4056c5cacc",
-    "persistent" : true,
-    "priority" : 4,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "58605282-5b7c-47b1-9055-217563cadc29",
-    "name" : "BULK_API_INGEST_S09: uploaded_3 → closed_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}"
+          }
+        ]
+      },
+      "response": {
+        "status": 400,
+        "body": "[\n    {\n        \"errorCode\": \"INVALIDJOBSTATE\",\n        \"message\": \"Aborting already Completed Job not allowed\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "5d1afa15-5717-4a06-9424-76b517d83d53",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "58605282-5b7c-47b1-9055-217563cadc29",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "uploaded_3",
-    "newScenarioState" : "closed_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "88a2bc5f-174d-4e0b-8601-2e7fdd686bca",
-    "name" : "Bulk API - Query Job - Create with queryAll",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query",
-      "method" : "POST",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"operation\" : \"queryAll\",\n  \"query\" : \"SELECT Id FROM Account\"\n} ",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lTrkSQAS\",\n  \"operation\": \"queryAll\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:12.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "88a2bc5f-174d-4e0b-8601-2e7fdd686bca",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "1f0f7833-e4fe-4107-bb3a-1ae3df8e4f27",
-    "name" : "BULK_API_INGEST_S08: uploaded_2 → closed_2",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "3d24b1a6-1d10-415c-89cd-a5911ec63074",
+      "name": "Bulk API - Query Job - Abort - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
+        "method": "PATCH",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "3d24b1a6-1d10-415c-89cd-a5911ec63074",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
+    {
+      "id": "8523b105-846c-4d10-b417-b90c84ea966e",
+      "name": "Bulk API - Query Job - Abort - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
+        "method": "PATCH",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "8523b105-846c-4d10-b417-b90c84ea966e",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "1f0f7833-e4fe-4107-bb3a-1ae3df8e4f27",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "uploaded_2",
-    "newScenarioState" : "closed_2",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "d65e6d0d-feee-46e1-935c-4d8e27ee7471",
-    "name" : "Bulk API - Ingest Job - Get Successful Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/successfulResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"sf__Id\",\"sf__Created\",Name,Description,NumberOfEmployees\n\"0018Z00002rGc7YQAS\",\"true\",\"TestAccount1\",\"Description of TestAccount1\",\"30\"\n\"0018Z00002rGc7ZQAS\",\"true\",\"TestAccount2\",\"Another description\",\"40\"\n\"0018Z00002rGc7aQAC\",\"true\",\"TestAccount3\",\"Yet another description\",\"50\"\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "d65e6d0d-feee-46e1-935c-4d8e27ee7471",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "ee3fffa1-7226-40e0-b08c-fb47997e4c57",
-    "name" : "BULK_API_INGEST_S02: start → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST"
-    },
-    "response" : {
-      "status" : 400,
-      "body" : "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "ee3fffa1-7226-40e0-b08c-fb47997e4c57",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S02",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "9a622e9d-d874-4580-a624-5301b8fda401",
-    "name" : "Bulk API - Query Job - Get Info",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:25.000+0000\",\n  \"state\": \"JobComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"jobType\": \"V2Query\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\",\n  \"numberRecordsProcessed\": 51,\n  \"retries\": 0,\n  \"totalProcessingTime\": 240\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "9a622e9d-d874-4580-a624-5301b8fda401",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "23ffd8fb-a3fe-40c2-8f2c-9d3bb2266259",
-    "name" : "Bulk API - Query Job - Get More Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
+    {
+      "id": "949d992c-424c-4789-8058-8947a66a1c74",
+      "name": "Bulk API - Query Job - Get Results - No Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/empty/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
         }
       },
-      "queryParameters" : {
-        "locator" : {
-          "equalTo" : "MjAwMDAw"
-        }
-      }
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"Id\"\n\"005R0000000UyrWIAv\"\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Sforce-Locator" : "null",
-        "Sforce-NumberOfRecords" : "1",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "23ffd8fb-a3fe-40c2-8f2c-9d3bb2266259",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "d356d0b3-c1c3-4ae6-8a0d-1f63aa59cc8a",
-    "name" : "BULK_API_INGEST_S04: uploaded → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
-        }
-      }
-    },
-    "response" : {
-      "status" : 400,
-      "body" : "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "d356d0b3-c1c3-4ae6-8a0d-1f63aa59cc8a",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S04",
-    "requiredScenarioState" : "uploaded",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "bdafd75e-69d7-4926-a4c1-1e831882071b",
-    "name" : "BULK_API_INGEST_S09: error → created_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+      "response": {
+        "status": 200,
+        "body": "\"Id\"\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Sforce-Locator": "null",
+          "Sforce-NumberOfRecords": "0",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "949d992c-424c-4789-8058-8947a66a1c74",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "bdafd75e-69d7-4926-a4c1-1e831882071b",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "error",
-    "newScenarioState" : "created_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "b0f21ebb-e042-4263-9180-c511596e9f38",
-    "name" : "BULK_API_INGEST_S09: created_3 → uploaded_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "b0f21ebb-e042-4263-9180-c511596e9f38",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "created_3",
-    "newScenarioState" : "uploaded_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "e98f657a-f012-4b2c-9168-f7cecc384329",
-    "name" : "Bulk API - Query Job - Delete",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 204,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "e98f657a-f012-4b2c-9168-f7cecc384329",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "6225c130-e10e-4a99-8270-20d36982064f",
-    "name" : "BULK_API_INGEST_S09: uploaded_1 → closed_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "5db1236d-e33b-467e-a8c1-e1fc59f7c23f",
+      "name": "Bulk API - Query Job - Get Results - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/serverError/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "5db1236d-e33b-467e-a8c1-e1fc59f7c23f",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
+    {
+      "id": "f66b3532-c096-4398-ad84-8bad8093b06f",
+      "name": "Bulk API - Query Job - Create - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query",
+        "method": "POST",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM ServerError\"\n} ",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "f66b3532-c096-4398-ad84-8bad8093b06f",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "6225c130-e10e-4a99-8270-20d36982064f",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "uploaded_1",
-    "newScenarioState" : "closed_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "869db0d5-007e-4ef2-beaf-ae8214e30a4a",
-    "name" : "BULK_API_INGEST_S09: start → created_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "9456025f-9790-48a2-865c-b7200e46e191",
+      "name": "Bulk API - Ingest Job - Get Failed Results - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/failedResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "9456025f-9790-48a2-865c-b7200e46e191",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "869db0d5-007e-4ef2-beaf-ae8214e30a4a",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f79b2cf5-91ee-40e0-a631-4c62eb4e6847",
-    "name" : "BULK_API_INGEST_S08: uploaded_1 → closed_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "c456c3ae-3b09-4dbc-a0de-2d9705b041c6",
+      "name": "Bulk API - Query Job - Create - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query",
+        "method": "POST",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM ClientError\"\n} ",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "c456c3ae-3b09-4dbc-a0de-2d9705b041c6",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
+    {
+      "id": "2b604a2a-f961-4fd7-b561-159548f3c780",
+      "name": "Bulk API - Ingest Job - Get Unprocessed Records - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/unprocessedrecords$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "2b604a2a-f961-4fd7-b561-159548f3c780",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "f79b2cf5-91ee-40e0-a631-4c62eb4e6847",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "uploaded_1",
-    "newScenarioState" : "closed_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "7a8c5766-f9dc-426b-b937-5411dbdf6997",
-    "name" : "Bulk API - Ingest Job - Get Unprocessed Records",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/unprocessedrecords$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "Name,Description,NumberOfEmployees\nTestAccount3,Yet another description,50\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "7a8c5766-f9dc-426b-b937-5411dbdf6997",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "defc74a1-a240-4dff-9148-6302c1fd3cd0",
-    "name" : "BULK_API_INGEST_S08: created_1 → uploaded_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "defc74a1-a240-4dff-9148-6302c1fd3cd0",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "created_1",
-    "newScenarioState" : "uploaded_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "22794ab8-5e71-4f3a-a875-6ed6e1ecbf4f",
-    "name" : "BULK_API_INGEST_S07: uploaded → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
-        }
-      }
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "22794ab8-5e71-4f3a-a875-6ed6e1ecbf4f",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S07",
-    "requiredScenarioState" : "uploaded",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "388afd44-4abf-49dc-a562-a31b16b70184",
-    "name" : "Bulk API - Query Job - Abort",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
-      "method" : "PATCH",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:25.000+0000\",\n  \"state\": \"Aborted\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "388afd44-4abf-49dc-a562-a31b16b70184",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "7a985e28-f5b1-4086-ba81-6f5b90fe6d19",
-    "name" : "BULK_API_INGEST_S08: closed_2 → created_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "2e569c48-64e1-479e-be6e-7ca2d91cf6ce",
+      "name": "Bulk API - Query Job - Get Info - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "2e569c48-64e1-479e-be6e-7ca2d91cf6ce",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
+    {
+      "id": "37f0e3e4-f9f5-483b-8686-e095accc294e",
+      "name": "Bulk API - Ingest Job - Abort - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}"
+          }
+        ]
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "37f0e3e4-f9f5-483b-8686-e095accc294e",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "7a985e28-f5b1-4086-ba81-6f5b90fe6d19",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "closed_2",
-    "newScenarioState" : "created_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "8ecf98c9-623b-428c-80c2-cf4536b88441",
-    "name" : "Bulk API - Ingest Job - Get Job Info - Server Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError$",
-      "method" : "GET"
+    {
+      "id": "5f57233a-8c44-413d-bd47-bf434e019461",
+      "name": "Bulk API - Ingest Job - Get Successful Results - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/successfulResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "5f57233a-8c44-413d-bd47-bf434e019461",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
+    {
+      "id": "28ce3619-cd0e-4ede-911e-5965080068f7",
+      "name": "Bulk API - Query Job - Get Info - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "28ce3619-cd0e-4ede-911e-5965080068f7",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "8ecf98c9-623b-428c-80c2-cf4536b88441",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f316924c-8165-4c95-a2a2-0882727c9d9b",
-    "name" : "BULK_API_INGEST_S06: created → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
+    {
+      "id": "e1c37732-2b81-4bb6-81b7-e1c5ec37277c",
+      "name": "Bulk API - Query Job - Delete - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/serverError$",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "e1c37732-2b81-4bb6-81b7-e1c5ec37277c",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "f316924c-8165-4c95-a2a2-0882727c9d9b",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S06",
-    "requiredScenarioState" : "created",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "deaabacf-1555-4ded-b8d5-5b4b1518c668",
-    "name" : "BULK_API_INGEST_S08: uploaded_3 → closed_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "3602d7b3-62ed-4e03-b8f2-f77b68641277",
+      "name": "Bulk API - Ingest Job - Get Failed Results - No Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/failedResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "\"sf__Id\",\"sf__Error\",Name,Description,NumberOfEmployees\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "3602d7b3-62ed-4e03-b8f2-f77b68641277",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "deaabacf-1555-4ded-b8d5-5b4b1518c668",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "uploaded_3",
-    "newScenarioState" : "closed_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5260b855-f175-4d8b-9c8b-90d974a16a6e",
-    "name" : "Bulk API - Ingest Job - Abort",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "json"
+    {
+      "id": "bac8fba1-342d-4cb5-a5d3-88a149102eed",
+      "name": "Bulk API - Ingest Job - Get Unprocessed Records - No Data",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/unprocessedrecords$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "Name,Description,NumberOfEmployees\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"Aborted\"\n}"
-      } ]
+      "uuid": "bac8fba1-342d-4cb5-a5d3-88a149102eed",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lTqO1QAK\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T14:59:06.000+0000\",\n  \"systemModstamp\": \"2023-01-27T14:59:06.000+0000\",\n  \"state\": \"Aborted\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : { }
-    },
-    "uuid" : "5260b855-f175-4d8b-9c8b-90d974a16a6e",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f983ed5c-5895-41a9-8aa2-21189993930c",
-    "name" : "Bulk API - Query Job - Get Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
-      "method" : "GET",
-      "headers" : {
-        "Accept" : {
-          "contains" : "text/csv"
+    {
+      "id": "3f846017-230b-45bb-b163-b958be20a67b",
+      "name": "Bulk API - Ingest Job - Delete - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError$",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "queryParameters" : {
-        "locator" : {
-          "absent" : true
-        }
-      }
+      "uuid": "3f846017-230b-45bb-b163-b958be20a67b",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "\"Id\"\n\"0018Z00002eGbDRQA0\"\n\"0018Z00002f1vW4QAI\"\n\"0018Z00002f1vW5QAI\"\n",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Sforce-Locator" : "null",
-        "Sforce-NumberOfRecords" : "3",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "f983ed5c-5895-41a9-8aa2-21189993930c",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5a330cc5-5c5b-4c32-9f3a-a1b2080d5226",
-    "name" : "BULK_API_INGEST_S08: created_2 → uploaded_2",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "5a330cc5-5c5b-4c32-9f3a-a1b2080d5226",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "created_2",
-    "newScenarioState" : "uploaded_2",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "f5e90dc2-d65e-4611-8444-3ee715985210",
-    "name" : "BULK_API_INGEST_S09: created_2 → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "f5e90dc2-d65e-4611-8444-3ee715985210",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "created_2",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "9db6ccdb-d1a9-4bf5-b2fd-dd259d298999",
-    "name" : "BULK_API_INGEST_S08: created_3 → uploaded_3",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "9db6ccdb-d1a9-4bf5-b2fd-dd259d298999",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "created_3",
-    "newScenarioState" : "uploaded_3",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "cd3776f1-d84e-4ec6-9bf7-98cfb5952bae",
-    "name" : "Bulk API - Ingest Job - Get Job Info - Client Error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 404,
-      "body" : "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "cd3776f1-d84e-4ec6-9bf7-98cfb5952bae",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "beb6aa2b-2f76-465a-b39c-d63441d23ecd",
-    "name" : "BULK_API_INGEST_S08: start → created_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "10023049-7913-4c8a-a847-82eeddefee63",
+      "name": "Bulk API - Ingest Job - Get Unprocessed Records - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/unprocessedrecords$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "10023049-7913-4c8a-a847-82eeddefee63",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "beb6aa2b-2f76-465a-b39c-d63441d23ecd",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "78c8363d-d3cc-4965-9d4c-5148dc0187e0",
-    "name" : "BULK_API_INGEST_S04: created → uploaded",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
+    {
+      "id": "775bea90-319c-4cc9-aafd-625a51f4a573",
+      "name": "Bulk API - Ingest Job - Get Successful Results - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError/successfulResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "contains" : "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
-      } ]
+      "uuid": "775bea90-319c-4cc9-aafd-625a51f4a573",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "78c8363d-d3cc-4965-9d4c-5148dc0187e0",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S04",
-    "requiredScenarioState" : "created",
-    "newScenarioState" : "uploaded",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "c542a96e-d2e2-4819-9536-fe946a22f4a9",
-    "name" : "BULK_API_INGEST_S09: created_1 → uploaded_1",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "c542a96e-d2e2-4819-9536-fe946a22f4a9",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "created_1",
-    "newScenarioState" : "uploaded_1",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "b0e5dfce-ae4c-453d-9f70-fbf84019e191",
-    "name" : "Bulk API - Ingest Job - Delete",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "DELETE"
-    },
-    "response" : {
-      "status" : 204,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "b0e5dfce-ae4c-453d-9f70-fbf84019e191",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "df69201b-f707-4c21-a457-519ec6537e82",
-    "name" : "Bulk API - Ingest Job - Get Failed Results",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/failedResults$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "\"sf__Id\",\"sf__Error\",Name,Description,NumberOfEmployees\n\"\",\"REQUIRED_FIELD_MISSING:Required fields are missing: [Name]:Name --\",\"\",\"Description of TestAccount1\",\"30\"\n\"\",\"REQUIRED_FIELD_MISSING:Required fields are missing: [Name]:Name --\",\"\",\"Another description\",\"40\"",
-      "headers" : {
-        "Content-Type" : "text/csv",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "df69201b-f707-4c21-a457-519ec6537e82",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "faf4cbf1-bd9e-4aea-b0e3-f86edc5d627e",
-    "name" : "BULK_API_INGEST_S09: closed_1 → created_2",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "4b50be5f-d11e-4260-84d4-8d8ab658b956",
+      "name": "Bulk API - Query Job - Delete - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/clientError$",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "4b50be5f-d11e-4260-84d4-8d8ab658b956",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "faf4cbf1-bd9e-4aea-b0e3-f86edc5d627e",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S09",
-    "requiredScenarioState" : "closed_1",
-    "newScenarioState" : "created_2",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "4ded7a30-91fb-495a-ba1c-1aa42a3b4b48",
-    "name" : "BULK_API_INGEST_S03: created → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
-        }
-      }
-    },
-    "response" : {
-      "status" : 400,
-      "body" : "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "4ded7a30-91fb-495a-ba1c-1aa42a3b4b48",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S03",
-    "requiredScenarioState" : "created",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "4b4b82f9-9092-418c-aac0-82f2447fc8de",
-    "name" : "Bulk API - Query Job - Create",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/query",
-      "method" : "POST",
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM Account\"\n} ",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:12.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "4b4b82f9-9092-418c-aac0-82f2447fc8de",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "5ca28cce-fdd0-425f-a0da-237cf7189cd6",
-    "name" : "Bulk API - Ingest Job - Get Job Info",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "GET"
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:47.000+0000\",\n  \"state\": \"JobComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"jobType\": \"V2Ingest\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\",\n  \"numberRecordsProcessed\": 3,\n  \"numberRecordsFailed\": 0,\n  \"retries\": 0,\n  \"totalProcessingTime\": 374,\n  \"apiActiveProcessingTime\": 283,\n  \"apexProcessingTime\": 0\n}",
-      "headers" : {
-        "Sforce-Limit-Info" : "api-usage=4/15000",
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "5ca28cce-fdd0-425f-a0da-237cf7189cd6",
-    "persistent" : true,
-    "priority" : 5,
-    "postServeActions" : [ ]
-  }, {
-    "id" : "380946f5-ab79-44bb-ba35-d81f88b64866",
-    "name" : "BULK_API_INGEST_S01: uploaded → closed",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
-      "method" : "PATCH",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "ddde0283-86e9-48c7-b5b1-95f548c1c581",
+      "name": "Bulk API - Query Job - Get More Results - With maxRecords",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
+        },
+        "queryParameters": {
+          "locator": {
+            "equalTo": "MjAwMDAw"
+          },
+          "maxRecords": {
+            "matches": "\\d+"
+          }
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n\t\"state\":\"UploadComplete\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8"
-      }
-    },
-    "uuid" : "380946f5-ab79-44bb-ba35-d81f88b64866",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S01",
-    "requiredScenarioState" : "uploaded",
-    "newScenarioState" : "closed",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "784499a3-3196-4415-aa0e-b87233cb7399",
-    "name" : "BULK_API_INGEST_S05: start → error",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST"
-    },
-    "response" : {
-      "status" : 500,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "784499a3-3196-4415-aa0e-b87233cb7399",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S05",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "error",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "97a3f7ae-51bc-4362-8ca1-90cb3932f58c",
-    "name" : "BULK_API_INGEST_S01: created → uploaded",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
+      "response": {
+        "status": 200,
+        "body": "\"Id\"\n\"005R0000000UyrWIAv\"\n\"005R0000000GiwjIxx\"\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Sforce-Locator": "null",
+          "Sforce-NumberOfRecords": "2",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "contains" : "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
-      } ]
+      "uuid": "ddde0283-86e9-48c7-b5b1-95f548c1c581",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
-    },
-    "uuid" : "97a3f7ae-51bc-4362-8ca1-90cb3932f58c",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S01",
-    "requiredScenarioState" : "created",
-    "newScenarioState" : "uploaded",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "b8d2270d-25e5-4579-93d1-a8a42ab87ed6",
-    "name" : "BULK_API_INGEST_S07: created → uploaded",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
-      "method" : "PUT",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "text/csv"
+    {
+      "id": "9e273240-72b0-4030-81a4-d5d2a3c69272",
+      "name": "Bulk API - Ingest Job - Get Successful Results - No Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/empty/successfulResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "\"sf__Id\",\"sf__Created\",Name,Description,NumberOfEmployees\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "contains" : "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
-      } ]
+      "uuid": "9e273240-72b0-4030-81a4-d5d2a3c69272",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 201,
-      "body" : "",
-      "headers" : { }
+    {
+      "id": "f0b49fd7-a6d8-408d-8bfb-b58087eed8e3",
+      "name": "Bulk API - Ingest Job - Get Failed Results - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError/failedResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "f0b49fd7-a6d8-408d-8bfb-b58087eed8e3",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "uuid" : "b8d2270d-25e5-4579-93d1-a8a42ab87ed6",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S07",
-    "requiredScenarioState" : "created",
-    "newScenarioState" : "uploaded",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "dd9f4acf-6093-4d8d-8f63-0c8517e95b76",
-    "name" : "BULK_API_INGEST_S08: closed_1 → created_2",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "be1c9d7f-e49d-47fe-b1a5-3f4056c5cacc",
+      "name": "Bulk API - Query Job - Get Results - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/clientError/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
-    },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "dd9f4acf-6093-4d8d-8f63-0c8517e95b76",
-    "persistent" : true,
-    "priority" : 5,
-    "scenarioName" : "BULK_API_INGEST_S08",
-    "requiredScenarioState" : "closed_1",
-    "newScenarioState" : "created_2",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "706b3f68-0f44-4db7-a6e0-30a786018c8c",
-    "name" : "BULK_API_INGEST_S04: start → created",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+      "response": {
+        "status": 404,
+        "body": "[\n  {\n    \"errorCode\": \"NOT_FOUND\",\n    \"message\": \"The requested resource does not exist\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "be1c9d7f-e49d-47fe-b1a5-3f4056c5cacc",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "706b3f68-0f44-4db7-a6e0-30a786018c8c",
-    "persistent" : true,
-    "priority" : 6,
-    "scenarioName" : "BULK_API_INGEST_S04",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "da24eb43-e5d1-4b5f-a123-12bdeba37223",
-    "name" : "BULK_API_INGEST_S03: start → created",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "58605282-5b7c-47b1-9055-217563cadc29",
+      "name": "BULK_API_INGEST_S09: uploaded_3 → closed_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "58605282-5b7c-47b1-9055-217563cadc29",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "uploaded_3",
+      "newScenarioState": "closed_3",
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "da24eb43-e5d1-4b5f-a123-12bdeba37223",
-    "persistent" : true,
-    "priority" : 6,
-    "scenarioName" : "BULK_API_INGEST_S03",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "acad7ef8-dbac-40f7-b041-19a2618fefa1",
-    "name" : "BULK_API_INGEST_S01: start → created",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "88a2bc5f-174d-4e0b-8601-2e7fdd686bca",
+      "name": "Bulk API - Query Job - Create with queryAll",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query",
+        "method": "POST",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"operation\" : \"queryAll\",\n  \"query\" : \"SELECT Id FROM Account\"\n} ",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lTrkSQAS\",\n  \"operation\": \"queryAll\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:12.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "88a2bc5f-174d-4e0b-8601-2e7fdd686bca",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "acad7ef8-dbac-40f7-b041-19a2618fefa1",
-    "persistent" : true,
-    "priority" : 6,
-    "scenarioName" : "BULK_API_INGEST_S01",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "d2035c53-ea4e-4114-b7b0-58344a4934ac",
-    "name" : "BULK_API_INGEST_S06: start → created",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "1f0f7833-e4fe-4107-bb3a-1ae3df8e4f27",
+      "name": "BULK_API_INGEST_S08: uploaded_2 → closed_2",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "1f0f7833-e4fe-4107-bb3a-1ae3df8e4f27",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "uploaded_2",
+      "newScenarioState": "closed_2",
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
-    },
-    "uuid" : "d2035c53-ea4e-4114-b7b0-58344a4934ac",
-    "persistent" : true,
-    "priority" : 6,
-    "scenarioName" : "BULK_API_INGEST_S06",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created",
-    "postServeActions" : [ ]
-  }, {
-    "id" : "04ad993c-d9cd-48d6-a672-90488911a879",
-    "name" : "BULK_API_INGEST_S07: start → created",
-    "request" : {
-      "urlPathPattern" : "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
-      "method" : "POST",
-      "headers" : {
-        "Content-Type" : {
-          "contains" : "application/json"
+    {
+      "id": "d65e6d0d-feee-46e1-935c-4d8e27ee7471",
+      "name": "Bulk API - Ingest Job - Get Successful Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/successfulResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "\"sf__Id\",\"sf__Created\",Name,Description,NumberOfEmployees\n\"0018Z00002rGc7YQAS\",\"true\",\"TestAccount1\",\"Description of TestAccount1\",\"30\"\n\"0018Z00002rGc7ZQAS\",\"true\",\"TestAccount2\",\"Another description\",\"40\"\n\"0018Z00002rGc7aQAC\",\"true\",\"TestAccount3\",\"Yet another description\",\"50\"\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
         }
       },
-      "bodyPatterns" : [ {
-        "equalToJson" : "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
-        "ignoreArrayOrder" : true,
-        "ignoreExtraElements" : true
-      } ]
+      "uuid": "d65e6d0d-feee-46e1-935c-4d8e27ee7471",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
     },
-    "response" : {
-      "status" : 200,
-      "body" : "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
-      "headers" : {
-        "Content-Type" : "application/json;charset=UTF-8",
-        "Vary" : "Accept-Encoding"
-      }
+    {
+      "id": "ee3fffa1-7226-40e0-b08c-fb47997e4c57",
+      "name": "BULK_API_INGEST_S02: start → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST"
+      },
+      "response": {
+        "status": 400,
+        "body": "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "ee3fffa1-7226-40e0-b08c-fb47997e4c57",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S02",
+      "requiredScenarioState": "start",
+      "newScenarioState": "error",
+      "postServeActions": []
     },
-    "uuid" : "04ad993c-d9cd-48d6-a672-90488911a879",
-    "persistent" : true,
-    "priority" : 6,
-    "scenarioName" : "BULK_API_INGEST_S07",
-    "requiredScenarioState" : "start",
-    "newScenarioState" : "created",
-    "postServeActions" : [ ]
-  } ],
-  "meta" : {
-    "total" : 72
+    {
+      "id": "9a622e9d-d874-4580-a624-5301b8fda401",
+      "name": "Bulk API - Query Job - Get Info",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:25.000+0000\",\n  \"state\": \"JobComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"jobType\": \"V2Query\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\",\n  \"numberRecordsProcessed\": 51,\n  \"retries\": 0,\n  \"totalProcessingTime\": 240\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "9a622e9d-d874-4580-a624-5301b8fda401",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "23ffd8fb-a3fe-40c2-8f2c-9d3bb2266259",
+      "name": "Bulk API - Query Job - Get More Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
+        },
+        "queryParameters": {
+          "locator": {
+            "equalTo": "MjAwMDAw"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"Id\"\n\"005R0000000UyrWIAv\"\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Sforce-Locator": "null",
+          "Sforce-NumberOfRecords": "1",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "23ffd8fb-a3fe-40c2-8f2c-9d3bb2266259",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "d356d0b3-c1c3-4ae6-8a0d-1f63aa59cc8a",
+      "name": "BULK_API_INGEST_S04: uploaded → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "d356d0b3-c1c3-4ae6-8a0d-1f63aa59cc8a",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S04",
+      "requiredScenarioState": "uploaded",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "bdafd75e-69d7-4926-a4c1-1e831882071b",
+      "name": "BULK_API_INGEST_S09: error → created_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "bdafd75e-69d7-4926-a4c1-1e831882071b",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "error",
+      "newScenarioState": "created_3",
+      "postServeActions": []
+    },
+    {
+      "id": "b0f21ebb-e042-4263-9180-c511596e9f38",
+      "name": "BULK_API_INGEST_S09: created_3 → uploaded_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "b0f21ebb-e042-4263-9180-c511596e9f38",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "created_3",
+      "newScenarioState": "uploaded_3",
+      "postServeActions": []
+    },
+    {
+      "id": "e98f657a-f012-4b2c-9168-f7cecc384329",
+      "name": "Bulk API - Query Job - Delete",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 204,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "e98f657a-f012-4b2c-9168-f7cecc384329",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "6225c130-e10e-4a99-8270-20d36982064f",
+      "name": "BULK_API_INGEST_S09: uploaded_1 → closed_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "6225c130-e10e-4a99-8270-20d36982064f",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "uploaded_1",
+      "newScenarioState": "closed_1",
+      "postServeActions": []
+    },
+    {
+      "id": "869db0d5-007e-4ef2-beaf-ae8214e30a4a",
+      "name": "BULK_API_INGEST_S09: start → created_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "869db0d5-007e-4ef2-beaf-ae8214e30a4a",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created_1",
+      "postServeActions": []
+    },
+    {
+      "id": "f79b2cf5-91ee-40e0-a631-4c62eb4e6847",
+      "name": "BULK_API_INGEST_S08: uploaded_1 → closed_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "f79b2cf5-91ee-40e0-a631-4c62eb4e6847",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "uploaded_1",
+      "newScenarioState": "closed_1",
+      "postServeActions": []
+    },
+    {
+      "id": "7a8c5766-f9dc-426b-b937-5411dbdf6997",
+      "name": "Bulk API - Ingest Job - Get Unprocessed Records",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/unprocessedrecords$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "Name,Description,NumberOfEmployees\nTestAccount3,Yet another description,50\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "7a8c5766-f9dc-426b-b937-5411dbdf6997",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "defc74a1-a240-4dff-9148-6302c1fd3cd0",
+      "name": "BULK_API_INGEST_S08: created_1 → uploaded_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "defc74a1-a240-4dff-9148-6302c1fd3cd0",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "created_1",
+      "newScenarioState": "uploaded_1",
+      "postServeActions": []
+    },
+    {
+      "id": "22794ab8-5e71-4f3a-a875-6ed6e1ecbf4f",
+      "name": "BULK_API_INGEST_S07: uploaded → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "22794ab8-5e71-4f3a-a875-6ed6e1ecbf4f",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S07",
+      "requiredScenarioState": "uploaded",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "388afd44-4abf-49dc-a562-a31b16b70184",
+      "name": "Bulk API - Query Job - Abort",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)$",
+        "method": "PATCH",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:25.000+0000\",\n  \"state\": \"Aborted\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "388afd44-4abf-49dc-a562-a31b16b70184",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "7a985e28-f5b1-4086-ba81-6f5b90fe6d19",
+      "name": "BULK_API_INGEST_S08: closed_2 → created_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "7a985e28-f5b1-4086-ba81-6f5b90fe6d19",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "closed_2",
+      "newScenarioState": "created_3",
+      "postServeActions": []
+    },
+    {
+      "id": "8ecf98c9-623b-428c-80c2-cf4536b88441",
+      "name": "Bulk API - Ingest Job - Get Job Info - Server Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/serverError$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "8ecf98c9-623b-428c-80c2-cf4536b88441",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
+    },
+    {
+      "id": "f316924c-8165-4c95-a2a2-0882727c9d9b",
+      "name": "BULK_API_INGEST_S06: created → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "f316924c-8165-4c95-a2a2-0882727c9d9b",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S06",
+      "requiredScenarioState": "created",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "deaabacf-1555-4ded-b8d5-5b4b1518c668",
+      "name": "BULK_API_INGEST_S08: uploaded_3 → closed_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "deaabacf-1555-4ded-b8d5-5b4b1518c668",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "uploaded_3",
+      "newScenarioState": "closed_3",
+      "postServeActions": []
+    },
+    {
+      "id": "5260b855-f175-4d8b-9c8b-90d974a16a6e",
+      "name": "Bulk API - Ingest Job - Abort",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"Aborted\"\n}"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lTqO1QAK\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T14:59:06.000+0000\",\n  \"systemModstamp\": \"2023-01-27T14:59:06.000+0000\",\n  \"state\": \"Aborted\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {}
+      },
+      "uuid": "5260b855-f175-4d8b-9c8b-90d974a16a6e",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "f983ed5c-5895-41a9-8aa2-21189993930c",
+      "name": "Bulk API - Query Job - Get Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query/([^\\/]+)/results",
+        "method": "GET",
+        "headers": {
+          "Accept": {
+            "contains": "text/csv"
+          }
+        },
+        "queryParameters": {
+          "locator": {
+            "absent": true
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"Id\"\n\"0018Z00002eGbDRQA0\"\n\"0018Z00002f1vW4QAI\"\n\"0018Z00002f1vW5QAI\"\n",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Sforce-Locator": "null",
+          "Sforce-NumberOfRecords": "3",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "f983ed5c-5895-41a9-8aa2-21189993930c",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "5a330cc5-5c5b-4c32-9f3a-a1b2080d5226",
+      "name": "BULK_API_INGEST_S08: created_2 → uploaded_2",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "5a330cc5-5c5b-4c32-9f3a-a1b2080d5226",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "created_2",
+      "newScenarioState": "uploaded_2",
+      "postServeActions": []
+    },
+    {
+      "id": "f5e90dc2-d65e-4611-8444-3ee715985210",
+      "name": "BULK_API_INGEST_S09: created_2 → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "f5e90dc2-d65e-4611-8444-3ee715985210",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "created_2",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "9db6ccdb-d1a9-4bf5-b2fd-dd259d298999",
+      "name": "BULK_API_INGEST_S08: created_3 → uploaded_3",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "9db6ccdb-d1a9-4bf5-b2fd-dd259d298999",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "created_3",
+      "newScenarioState": "uploaded_3",
+      "postServeActions": []
+    },
+    {
+      "id": "cd3776f1-d84e-4ec6-9bf7-98cfb5952bae",
+      "name": "Bulk API - Ingest Job - Get Job Info - Client Error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/clientError$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "body": "[\n    {\n        \"errorCode\": \"NOT_FOUND\",\n        \"message\": \"The requested resource does not exist\"\n    }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "cd3776f1-d84e-4ec6-9bf7-98cfb5952bae",
+      "persistent": true,
+      "priority": 4,
+      "postServeActions": []
+    },
+    {
+      "id": "beb6aa2b-2f76-465a-b39c-d63441d23ecd",
+      "name": "BULK_API_INGEST_S08: start → created_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "beb6aa2b-2f76-465a-b39c-d63441d23ecd",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created_1",
+      "postServeActions": []
+    },
+    {
+      "id": "78c8363d-d3cc-4965-9d4c-5148dc0187e0",
+      "name": "BULK_API_INGEST_S04: created → uploaded",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "contains": "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "78c8363d-d3cc-4965-9d4c-5148dc0187e0",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S04",
+      "requiredScenarioState": "created",
+      "newScenarioState": "uploaded",
+      "postServeActions": []
+    },
+    {
+      "id": "c542a96e-d2e2-4819-9536-fe946a22f4a9",
+      "name": "BULK_API_INGEST_S09: created_1 → uploaded_1",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "c542a96e-d2e2-4819-9536-fe946a22f4a9",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "created_1",
+      "newScenarioState": "uploaded_1",
+      "postServeActions": []
+    },
+    {
+      "id": "b0e5dfce-ae4c-453d-9f70-fbf84019e191",
+      "name": "Bulk API - Ingest Job - Delete",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 204,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "b0e5dfce-ae4c-453d-9f70-fbf84019e191",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "df69201b-f707-4c21-a457-519ec6537e82",
+      "name": "Bulk API - Ingest Job - Get Failed Results",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/failedResults$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "\"sf__Id\",\"sf__Error\",Name,Description,NumberOfEmployees\n\"\",\"REQUIRED_FIELD_MISSING:Required fields are missing: [Name]:Name --\",\"\",\"Description of TestAccount1\",\"30\"\n\"\",\"REQUIRED_FIELD_MISSING:Required fields are missing: [Name]:Name --\",\"\",\"Another description\",\"40\"",
+        "headers": {
+          "Content-Type": "text/csv",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "df69201b-f707-4c21-a457-519ec6537e82",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "faf4cbf1-bd9e-4aea-b0e3-f86edc5d627e",
+      "name": "BULK_API_INGEST_S09: closed_1 → created_2",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "faf4cbf1-bd9e-4aea-b0e3-f86edc5d627e",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S09",
+      "requiredScenarioState": "closed_1",
+      "newScenarioState": "created_2",
+      "postServeActions": []
+    },
+    {
+      "id": "4ded7a30-91fb-495a-ba1c-1aa42a3b4b48",
+      "name": "BULK_API_INGEST_S03: created → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": "[\n  {\n    \"errorCode\": \"testErrorCode\",\n    \"message\": \"testErrorMessage\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "4ded7a30-91fb-495a-ba1c-1aa42a3b4b48",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S03",
+      "requiredScenarioState": "created",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "4b4b82f9-9092-418c-aac0-82f2447fc8de",
+      "name": "Bulk API - Query Job - Create",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/query",
+        "method": "POST",
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"operation\" : \"query\",\n  \"query\" : \"SELECT Id FROM Account\"\n} ",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lTqQCQA0\",\n  \"operation\": \"query\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-27T15:10:12.000+0000\",\n  \"systemModstamp\": \"2023-01-27T15:10:12.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "4b4b82f9-9092-418c-aac0-82f2447fc8de",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "5ca28cce-fdd0-425f-a0da-237cf7189cd6",
+      "name": "Bulk API - Ingest Job - Get Job Info",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:47.000+0000\",\n  \"state\": \"JobComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"jobType\": \"V2Ingest\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\",\n  \"numberRecordsProcessed\": 3,\n  \"numberRecordsFailed\": 0,\n  \"retries\": 0,\n  \"totalProcessingTime\": 374,\n  \"apiActiveProcessingTime\": 283,\n  \"apexProcessingTime\": 0\n}",
+        "headers": {
+          "Sforce-Limit-Info": "api-usage=4/15000",
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "5ca28cce-fdd0-425f-a0da-237cf7189cd6",
+      "persistent": true,
+      "priority": 5,
+      "postServeActions": []
+    },
+    {
+      "id": "380946f5-ab79-44bb-ba35-d81f88b64866",
+      "name": "BULK_API_INGEST_S01: uploaded → closed",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)$",
+        "method": "PATCH",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n\t\"state\":\"UploadComplete\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"UploadComplete\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      },
+      "uuid": "380946f5-ab79-44bb-ba35-d81f88b64866",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S01",
+      "requiredScenarioState": "uploaded",
+      "newScenarioState": "closed",
+      "postServeActions": []
+    },
+    {
+      "id": "784499a3-3196-4415-aa0e-b87233cb7399",
+      "name": "BULK_API_INGEST_S05: start → error",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST"
+      },
+      "response": {
+        "status": 500,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "784499a3-3196-4415-aa0e-b87233cb7399",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S05",
+      "requiredScenarioState": "start",
+      "newScenarioState": "error",
+      "postServeActions": []
+    },
+    {
+      "id": "97a3f7ae-51bc-4362-8ca1-90cb3932f58c",
+      "name": "BULK_API_INGEST_S01: created → uploaded",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "contains": "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "97a3f7ae-51bc-4362-8ca1-90cb3932f58c",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S01",
+      "requiredScenarioState": "created",
+      "newScenarioState": "uploaded",
+      "postServeActions": []
+    },
+    {
+      "id": "b8d2270d-25e5-4579-93d1-a8a42ab87ed6",
+      "name": "BULK_API_INGEST_S07: created → uploaded",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest/([^\\/]+)/batches$",
+        "method": "PUT",
+        "headers": {
+          "Content-Type": {
+            "contains": "text/csv"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "contains": "Name,Description,NumberOfEmployees\nTestAccount1,Description of TestAccount1,30\nTestAccount2,Another description,40\nTestAccount3,Yet another description,50"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "body": "",
+        "headers": {}
+      },
+      "uuid": "b8d2270d-25e5-4579-93d1-a8a42ab87ed6",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S07",
+      "requiredScenarioState": "created",
+      "newScenarioState": "uploaded",
+      "postServeActions": []
+    },
+    {
+      "id": "dd9f4acf-6093-4d8d-8f63-0c8517e95b76",
+      "name": "BULK_API_INGEST_S08: closed_1 → created_2",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "dd9f4acf-6093-4d8d-8f63-0c8517e95b76",
+      "persistent": true,
+      "priority": 5,
+      "scenarioName": "BULK_API_INGEST_S08",
+      "requiredScenarioState": "closed_1",
+      "newScenarioState": "created_2",
+      "postServeActions": []
+    },
+    {
+      "id": "706b3f68-0f44-4db7-a6e0-30a786018c8c",
+      "name": "BULK_API_INGEST_S04: start → created",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "706b3f68-0f44-4db7-a6e0-30a786018c8c",
+      "persistent": true,
+      "priority": 6,
+      "scenarioName": "BULK_API_INGEST_S04",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created",
+      "postServeActions": []
+    },
+    {
+      "id": "da24eb43-e5d1-4b5f-a123-12bdeba37223",
+      "name": "BULK_API_INGEST_S03: start → created",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "da24eb43-e5d1-4b5f-a123-12bdeba37223",
+      "persistent": true,
+      "priority": 6,
+      "scenarioName": "BULK_API_INGEST_S03",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created",
+      "postServeActions": []
+    },
+    {
+      "id": "acad7ef8-dbac-40f7-b041-19a2618fefa1",
+      "name": "BULK_API_INGEST_S01: start → created",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "acad7ef8-dbac-40f7-b041-19a2618fefa1",
+      "persistent": true,
+      "priority": 6,
+      "scenarioName": "BULK_API_INGEST_S01",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created",
+      "postServeActions": []
+    },
+    {
+      "id": "d2035c53-ea4e-4114-b7b0-58344a4934ac",
+      "name": "BULK_API_INGEST_S06: start → created",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "d2035c53-ea4e-4114-b7b0-58344a4934ac",
+      "persistent": true,
+      "priority": 6,
+      "scenarioName": "BULK_API_INGEST_S06",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created",
+      "postServeActions": []
+    },
+    {
+      "id": "04ad993c-d9cd-48d6-a672-90488911a879",
+      "name": "BULK_API_INGEST_S07: start → created",
+      "request": {
+        "urlPathPattern": "/services/data/v(\\d{2}\\.0)/jobs/ingest$",
+        "method": "POST",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          {
+            "equalToJson": "{\n  \"object\" : \"Account\",\n  \"operation\" : \"insert\"\n}",
+            "ignoreArrayOrder": true,
+            "ignoreExtraElements": true
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"7508Z00000lSXvxQAG\",\n  \"operation\": \"insert\",\n  \"object\": \"Account\",\n  \"createdById\": \"0058Z000007lKMAQA2\",\n  \"createdDate\": \"2023-01-17T14:20:03.000+0000\",\n  \"systemModstamp\": \"2023-01-17T14:20:03.000+0000\",\n  \"state\": \"Open\",\n  \"concurrencyMode\": \"Parallel\",\n  \"contentType\": \"CSV\",\n  \"apiVersion\": 53,\n  \"contentUrl\": \"services/data/v53.0/jobs/ingest/7508Z00000lSXvxQAG/batches\",\n  \"lineEnding\": \"LF\",\n  \"columnDelimiter\": \"COMMA\"\n}",
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Vary": "Accept-Encoding"
+        }
+      },
+      "uuid": "04ad993c-d9cd-48d6-a672-90488911a879",
+      "persistent": true,
+      "priority": 6,
+      "scenarioName": "BULK_API_INGEST_S07",
+      "requiredScenarioState": "start",
+      "newScenarioState": "created",
+      "postServeActions": []
+    }
+  ],
+  "meta": {
+    "total": 72
   }
 }

@@ -16,11 +16,12 @@ import {
   QueryJobReference,
   QueryJobInfo,
   QueryJobResults,
+  Record as SDKRecord,
 } from "../../src";
 import { expect } from "chai";
 import { match } from "ts-pattern";
 
-const WIREMOCK_URL = "http://127.0.0.1:8000";
+const WIREMOCK_URL = "http://127.0.0.1:8080";
 
 const SIZE_1_MB = 1_000_000;
 
@@ -36,8 +37,6 @@ const testServerError: Pick<BulkApiError, "errorCode" | "message"> = {
 
 let bulkApi: BulkApi;
 
-let dataTable: DataTable;
-
 describe("bulkApi", function () {
   this.timeout(60 * 1000);
 
@@ -49,7 +48,7 @@ describe("bulkApi", function () {
     });
   });
 
-  describe("ingest job", () => {
+  describe("ingest job operations", () => {
     const testIngestJobReference: IngestJobReference = {
       id: "7508Z00000lSXvxQAG",
       type: "ingestJob",
@@ -69,24 +68,6 @@ describe("bulkApi", function () {
       id: "empty",
       type: "ingestJob",
     };
-
-    describe("splitDataTable", () => {
-      it("should not split a data table < 100MB into multiple parts", () => {
-        const dataTable = createDataTableUpToSizeInBytes(
-          bulkApi,
-          100 * SIZE_1_MB - 1
-        );
-        expect(bulkApi.splitDataTable(dataTable)).to.have.length(1);
-      });
-
-      it("should split a data table >= 100MB into multiple parts", () => {
-        const dataTable = createDataTableUpToSizeInBytes(
-          bulkApi,
-          100 * SIZE_1_MB
-        );
-        expect(bulkApi.splitDataTable(dataTable)).to.have.length(2);
-      });
-    });
 
     describe("ingest", () => {
       beforeEach(async () => {
@@ -302,6 +283,13 @@ describe("bulkApi", function () {
         const results = await bulkApi.getSuccessfulResults(
           testIngestJobReference
         );
+        expect(results.columns).to.deep.eq([
+          "sf__Id",
+          "sf__Created",
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results.map(Object.fromEntries)).to.deep.eq([
           {
             sf__Id: "0018Z00002rGc7YQAS",
@@ -328,9 +316,16 @@ describe("bulkApi", function () {
       });
 
       it("should be able to fetch the successful results when the results are empty", async () => {
-        const results = await bulkApi.getFailedResults(
+        const results = await bulkApi.getSuccessfulResults(
           emptyResultsIngestJobReference
         );
+        expect(results.columns).to.deep.eq([
+          "sf__Id",
+          "sf__Created",
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results).to.be.empty;
       });
 
@@ -362,6 +357,13 @@ describe("bulkApi", function () {
     describe("getFailedResults", () => {
       it("should be able to fetch the failed results", async () => {
         const results = await bulkApi.getFailedResults(testIngestJobReference);
+        expect(results.columns).to.deep.eq([
+          "sf__Id",
+          "sf__Error",
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results.map(Object.fromEntries)).to.deep.eq([
           {
             sf__Id: "",
@@ -386,6 +388,13 @@ describe("bulkApi", function () {
         const results = await bulkApi.getFailedResults(
           emptyResultsIngestJobReference
         );
+        expect(results.columns).to.deep.eq([
+          "sf__Id",
+          "sf__Error",
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results).to.be.empty;
       });
 
@@ -419,6 +428,11 @@ describe("bulkApi", function () {
         const results = await bulkApi.getUnprocessedRecords(
           testIngestJobReference
         );
+        expect(results.columns).to.deep.eq([
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results.map(Object.fromEntries)).to.deep.eq([
           {
             Name: "TestAccount3",
@@ -432,6 +446,11 @@ describe("bulkApi", function () {
         const results = await bulkApi.getUnprocessedRecords(
           emptyResultsIngestJobReference
         );
+        expect(results.columns).to.deep.eq([
+          "Name",
+          "Description",
+          "NumberOfEmployees",
+        ]);
         expect(results).to.be.empty;
       });
 
@@ -521,7 +540,7 @@ describe("bulkApi", function () {
     });
   });
 
-  describe("query job", () => {
+  describe("query job operations", () => {
     const testQueryJobReference: QueryJobReference = {
       id: "7508Z00000lTqQCQA0",
       type: "queryJob",
@@ -601,6 +620,7 @@ describe("bulkApi", function () {
         expect(results.done).to.eq(true);
         expect(results.locator).to.be.undefined;
         expect(results.numberOfRecords).to.eq(3);
+        expect(results.dataTable.columns).to.deep.eq(["Id"]);
         expect(results.dataTable.map(Object.fromEntries)).to.deep.eq([
           {
             Id: "0018Z00002eGbDRQA0",
@@ -621,6 +641,7 @@ describe("bulkApi", function () {
         expect(results.done).to.eq(true);
         expect(results.locator).to.be.undefined;
         expect(results.numberOfRecords).to.eq(0);
+        expect(results.dataTable.columns).to.deep.eq(["Id"]);
         expect(results.dataTable).to.be.empty;
       });
 
@@ -662,6 +683,7 @@ describe("bulkApi", function () {
         expect(moreResults.done).to.eq(true);
         expect(moreResults.locator).to.be.undefined;
         expect(moreResults.numberOfRecords).to.eq(1);
+        expect(moreResults.dataTable.columns).to.deep.eq(["Id"]);
         expect(moreResults.dataTable.map(Object.fromEntries)).to.deep.eq([
           {
             Id: "005R0000000UyrWIAv",
@@ -683,6 +705,7 @@ describe("bulkApi", function () {
         expect(moreResults.done).to.eq(true);
         expect(moreResults.locator).to.be.undefined;
         expect(moreResults.numberOfRecords).to.eq(2);
+        expect(moreResults.dataTable.columns).to.deep.eq(["Id"]);
         expect(moreResults.dataTable.map(Object.fromEntries)).to.deep.eq([
           {
             Id: "005R0000000UyrWIAv",
@@ -803,19 +826,217 @@ describe("bulkApi", function () {
       });
     });
   });
+
+  describe("data table operations", () => {
+    describe("addRow", () => {
+      it("should be able add a row of array values", () => {
+        const dataTable = bulkApi
+          .createDataTableBuilder(["one", "two"])
+          .addRow(["1", "2"])
+          .build();
+        expect(dataTable.columns).to.deep.eq(["one", "two"]);
+        expect(dataTable).to.have.length(1);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          one: "1",
+          two: "2",
+        });
+      });
+
+      it("should be able add a row of map values", () => {
+        const dataTable = bulkApi
+          .createDataTableBuilder(["one", "two"])
+          .addRow(
+            new Map<string, string>([
+              ["one", "1"],
+              ["two", "2"],
+              [
+                "three",
+                "this value should be ignored since it's not listed in the columns",
+              ],
+            ])
+          )
+          .build();
+        expect(dataTable.columns).to.deep.eq(["one", "two"]);
+        expect(dataTable).to.have.length(1);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          one: "1",
+          two: "2",
+        });
+      });
+
+      it("should be able add a row of custom values", () => {
+        const record: SDKRecord = {
+          type: "Account",
+          fields: {
+            Name: "account1",
+            Description: "testDescription",
+            NumberOfEmployees: 30,
+          },
+        };
+        const dataTable = bulkApi
+          .createDataTableBuilder(["Name", "Description"])
+          .addRow(record, (record, columnName) => {
+            return columnName in record.fields
+              ? `${record.fields[columnName]}`
+              : bulkApi.formatNullValue();
+          })
+          .build();
+        expect(dataTable.columns).to.deep.eq(["Name", "Description"]);
+        expect(dataTable).to.have.length(1);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          Name: "account1",
+          Description: "testDescription",
+        });
+      });
+    });
+
+    describe("addRows", () => {
+      it("should be able add a row of array values", () => {
+        const dataTable = bulkApi
+          .createDataTableBuilder(["a", "b"])
+          .addRows([
+            ["1", "2"],
+            ["3", "4", "ignored"],
+          ])
+          .build();
+        expect(dataTable.columns).to.deep.eq(["a", "b"]);
+        expect(dataTable).to.have.length(2);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          a: "1",
+          b: "2",
+        });
+        expect(Object.fromEntries(dataTable[1])).to.deep.eq({
+          a: "3",
+          b: "4",
+        });
+      });
+
+      it("should be able add a row of map values", () => {
+        const dataTable = bulkApi
+          .createDataTableBuilder(["a", "b"])
+          .addRows([
+            new Map<string, string>([
+              ["a", "1"],
+              ["b", "2"],
+              ["c", "ignored"],
+            ]),
+            new Map<string, string>([
+              ["a", "3"],
+              ["b", "4"],
+            ]),
+          ])
+          .build();
+        expect(dataTable.columns).to.deep.eq(["a", "b"]);
+        expect(dataTable).to.have.length(2);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          a: "1",
+          b: "2",
+        });
+        expect(Object.fromEntries(dataTable[1])).to.deep.eq({
+          a: "3",
+          b: "4",
+        });
+      });
+
+      it("should be able add a row of custom values", () => {
+        const records: SDKRecord[] = [
+          {
+            type: "Account",
+            fields: {
+              Name: "account1",
+              Description: "testDescription1",
+              NumberOfEmployees: 30,
+            },
+          },
+          {
+            type: "Account",
+            fields: {
+              Name: "account2",
+              Description: "testDescription2",
+              NumberOfEmployees: 40,
+            },
+          },
+        ];
+        const dataTable = bulkApi
+          .createDataTableBuilder(["Name", "Description"])
+          .addRows(records, (record, columnName) => {
+            return columnName in record.fields
+              ? `${record.fields[columnName]}`
+              : bulkApi.formatNullValue();
+          })
+          .build();
+        expect(dataTable.columns).to.deep.eq(["Name", "Description"]);
+        expect(dataTable).to.have.length(2);
+        expect(Object.fromEntries(dataTable[0])).to.deep.eq({
+          Name: "account1",
+          Description: "testDescription1",
+        });
+        expect(Object.fromEntries(dataTable[1])).to.deep.eq({
+          Name: "account2",
+          Description: "testDescription2",
+        });
+      });
+    });
+
+    describe("splitDataTable", () => {
+      it("should not split a data table < 100MB into multiple parts", () => {
+        const dataTable = createDataTableUpToSizeInBytes(
+          bulkApi,
+          100 * SIZE_1_MB - 1
+        );
+        expect(bulkApi.splitDataTable(dataTable)).to.have.length(1);
+      });
+
+      it("should split a data table >= 100MB into multiple parts", () => {
+        const dataTable = createDataTableUpToSizeInBytes(
+          bulkApi,
+          100 * SIZE_1_MB
+        );
+        expect(bulkApi.splitDataTable(dataTable)).to.have.length(2);
+      });
+    });
+
+    describe("formatDate", () => {
+      it('should be able to convert a Date into a valid "date" format', () => {
+        const jan31_2023 = new Date(2023, 0, 31);
+        expect(bulkApi.formatDate(jan31_2023)).to.eq("2023-01-31");
+      });
+
+      it("should raise an error if given an invalid Date", () => {
+        const invalid = new Date(Date.parse("blah"));
+        expect(() => bulkApi.formatDate(invalid)).to.throw("Invalid Date");
+      });
+    });
+
+    describe("formatDateTime", () => {
+      it('should be able to convert a Date into a valid "dateTime" format', () => {
+        const jan31_2023 = new Date(Date.UTC(2023, 0, 31, 12, 30, 59, 1));
+        expect(bulkApi.formatDateTime(jan31_2023)).to.eq(
+          "2023-01-31T12:30:59.001Z"
+        );
+      });
+
+      it("should raise an error if given an invalid Date", () => {
+        const invalid = new Date(Date.parse("blah"));
+        expect(() => bulkApi.formatDateTime(invalid)).to.throw("Invalid Date");
+      });
+    });
+
+    describe("formatNullValue", () => {
+      it("should be able to construct the value used to nullify fields", () => {
+        expect(bulkApi.formatNullValue()).to.eq("#N/A");
+      });
+    });
+  });
 });
 
-function todo() {
-  throw new Error("todo");
-}
-
 function createSmallDataset(bulkApi: BulkApi) {
-  return (dataTable = bulkApi
+  return bulkApi
     .createDataTableBuilder(["Name", "Description", "NumberOfEmployees"])
     .addRow(["TestAccount1", "Description of TestAccount1", "30"])
     .addRow(["TestAccount2", "Another description", "40"])
     .addRow(["TestAccount3", "Yet another description", "50"])
-    .build());
+    .build();
 }
 
 function createLargeDataset(bulkApi: BulkApi) {

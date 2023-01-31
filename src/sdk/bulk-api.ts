@@ -13,7 +13,6 @@ import {
   QueryJobInfo,
   QueryJobReference,
   DataTableFieldValueExtractor,
-  IngestDataTableRow,
   IngestJobOptions,
   IngestJobFailure,
   DataTableBuilder,
@@ -47,11 +46,12 @@ import { stringify } from "csv-stringify/sync";
 import { stringify as stringifyStream } from "csv-stringify";
 import { HttpApi } from "jsforce2/lib/http-api.js";
 import { Connection } from "jsforce2/lib/connection.js";
+import { parse } from "csv-parse/sync";
+import { DateTime } from "luxon";
 
 const SIZE_1_MB = 1_000_000;
 const SIZE_100_MB = 100 * SIZE_1_MB;
-const COLUMN_DELIMITER = ",";
-const csvOptions = { delimiter: COLUMN_DELIMITER };
+const CSV_OPTIONS = { delimiter: "," };
 
 export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
   const connection = createConnection(clientOptions);
@@ -236,31 +236,52 @@ export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
       };
     },
 
-    createDataTableBuilder(columnNames): DataTableBuilder {
-      const columns = [...columnNames];
+    createDataTableBuilder(columns: [string, ...string[]]): DataTableBuilder {
       const rows: Array<Map<string, string>> = [];
 
+      function addArrayRow(row: string[]) {
+        addRowWithExtractor(row, (array, columnName) => {
+          return array[columns.indexOf(columnName)];
+        });
+      }
+
+      function addMapRow(row: Map<string, string>) {
+        addRowWithExtractor(row, (map, columnName) => map.get(columnName));
+      }
+
+      function addRowWithExtractor<T>(
+        row: T,
+        fieldValueExtractor: DataTableFieldValueExtractor<T>
+      ) {
+        const mappedRow = columns.reduce((acc, column) => {
+          const value = fieldValueExtractor(row, column);
+          acc.set(column, value);
+          return acc;
+        }, new Map<string, string>());
+        rows.push(mappedRow);
+      }
+
       return {
-        addRow<T extends IngestDataTableRow>(
+        addRow<T extends string[] | Map<string, string> | unknown>(
           row: T,
           fieldValueExtractor?: DataTableFieldValueExtractor<T>
         ): DataTableBuilder {
           if (Array.isArray(row)) {
-            rows.push(
-              columns.reduce((acc, column, i) => {
-                acc.set(column, `${row[i]}`);
-                return acc;
-              }, new Map<string, string>())
-            );
+            addArrayRow(row);
           } else if (row instanceof Map) {
-            rows.push(row);
+            addMapRow(row);
+          } else {
+            addRowWithExtractor(row, fieldValueExtractor);
           }
           return this;
         },
-        addRows<T extends IngestDataTableRow>(
-          rows: Array<IngestDataTableRow>,
+        addRows<T extends string[] | Map<string, string> | unknown>(
+          rows: Array<T>,
           fieldValueExtractor?: DataTableFieldValueExtractor<T>
         ): DataTableBuilder {
+          rows.forEach((row) => {
+            this.addRow(row, fieldValueExtractor);
+          });
           return this;
         },
         build(): DataTable {
@@ -274,7 +295,7 @@ export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
     splitDataTable(dataTable: DataTable): DataTable[] {
       const columns = dataTable.columns;
       const splitDataTables: DataTable[] = [];
-      const columnsLine = stringify([columns], csvOptions);
+      const columnsLine = stringify([columns], CSV_OPTIONS);
       const columnsSize = Buffer.byteLength(columnsLine);
 
       let currentSize = columnsSize;
@@ -282,7 +303,7 @@ export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
 
       dataTable.forEach((row) => {
         const rowValues = dataTable.columns.map((column) => row.get(column));
-        const rowLine = stringify([rowValues], csvOptions);
+        const rowLine = stringify([rowValues], CSV_OPTIONS);
         const rowSize = Buffer.byteLength(rowLine);
         if (currentSize + rowSize < SIZE_100_MB) {
           currentSize += rowSize;
@@ -297,6 +318,26 @@ export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
       splitDataTables.push(dataTableBuilder.build());
 
       return splitDataTables;
+    },
+
+    formatDate(value: Date): string {
+      const dateTime = DateTime.fromJSDate(value).toUTC();
+      if (dateTime.isValid) {
+        return dateTime.toISODate();
+      }
+      throw new Error(`Invalid Date`);
+    },
+
+    formatDateTime(value: Date): string {
+      const dateTime = DateTime.fromJSDate(value).toUTC();
+      if (dateTime.isValid) {
+        return dateTime.toISO();
+      }
+      throw new Error(`Invalid DateTime`);
+    },
+
+    formatNullValue(): string {
+      return "#N/A";
     },
   };
 
@@ -321,7 +362,7 @@ async function streamDataTableIntoJob(
   dataTable: DataTable
 ) {
   await new Promise<void>((resolve, reject) => {
-    const stringifier = stringifyStream(csvOptions);
+    const stringifier = stringifyStream(CSV_OPTIONS);
     stringifier.on("error", reject);
     job.uploadData(stringifier).then(resolve, reject);
     stringifier.write(dataTable.columns);
@@ -379,15 +420,11 @@ function resultsToDataTable(
     | IngestJobV2FailedResults<Schema>
     | IngestJobV2SuccessfulResults<Schema>
     | IngestJobV2UnprocessedRecords<Schema>
-    | JSForceRecord[]
+    | JSForceRecord[],
+  responseColumns: string[]
 ): DataTable {
-  if (results.length === 0) {
-    return Object.assign([], {
-      columns: [],
-    });
-  }
+  const columns = convertToColumns(responseColumns);
 
-  const columns = Object.keys(results[0]);
   const rows = results.map((result) => {
     return columns.reduce((acc, column) => {
       acc.set(column, result[column]);
@@ -400,6 +437,23 @@ function resultsToDataTable(
   });
 
   return dataTable;
+}
+
+function convertToColumns(columns: string[]): [string, ...string[]] {
+  if (columns.length < 1) {
+    throw new Error("parsed data table has no columns");
+  }
+  const [first, ...rest] = columns;
+  return [first, ...rest];
+}
+
+function parseColumnsFromResponse(response: HttpResponse): string[] {
+  try {
+    const headerLine = response.body.substring(0, response.body.indexOf("\n"));
+    return parse(headerLine, CSV_OPTIONS)[0];
+  } catch (e) {
+    return [];
+  }
 }
 
 async function fetchIngestResults(options: {
@@ -420,6 +474,13 @@ async function fetchIngestResults(options: {
 
   const api = new BulkApiClient(connection);
 
+  // read the columns directly from the response since there is no way to access
+  // them from the parsed records when there are no results...
+  let columns: string[] = [];
+  api.once("response", (res: HttpResponse) => {
+    columns = parseColumnsFromResponse(res);
+  });
+
   const records = await api.request<
     | IngestJobV2FailedResults<Schema>
     | IngestJobV2SuccessfulResults<Schema>
@@ -432,7 +493,7 @@ async function fetchIngestResults(options: {
     },
   });
 
-  return resultsToDataTable(records);
+  return resultsToDataTable(records, columns);
 }
 
 async function fetchQueryResults(options: {
@@ -467,9 +528,12 @@ async function fetchQueryResults(options: {
 
   const api = new BulkApiClient(connection);
 
+  let columns: string[] = [];
   let locator: string | undefined;
   let numberOfRecords = 0;
-  api.on("response", (res: HttpResponse) => {
+  api.once("response", (res: HttpResponse) => {
+    columns = parseColumnsFromResponse(res);
+
     if ("sforce-locator" in res.headers) {
       const headerValue = res.headers["sforce-locator"];
       if (headerValue && headerValue !== "null") {
@@ -498,7 +562,7 @@ async function fetchQueryResults(options: {
     numberOfRecords,
     jobReference,
     done: locator === undefined,
-    dataTable: resultsToDataTable(records),
+    dataTable: resultsToDataTable(records, columns),
   };
 }
 
