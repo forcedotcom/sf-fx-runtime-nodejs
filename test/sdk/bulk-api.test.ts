@@ -20,6 +20,7 @@ import {
 } from "../../src";
 import { expect } from "chai";
 import { match } from "ts-pattern";
+import "whatwg-fetch";
 
 const WIREMOCK_URL = "http://127.0.0.1:8080";
 
