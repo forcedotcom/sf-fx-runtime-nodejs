@@ -1041,7 +1041,7 @@ function createSmallDataset(bulkApi: BulkApi) {
 }
 
 function createLargeDataset(bulkApi: BulkApi) {
-  return createDataTableUpToSizeInBytes(bulkApi, 99 * SIZE_1_MB);
+  return createDataTableUpToSizeInBytes(bulkApi, 100 * SIZE_1_MB);
 }
 
 async function useScenario(name: string) {
