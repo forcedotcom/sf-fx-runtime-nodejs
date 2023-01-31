@@ -41,6 +41,7 @@
         "concurrently": "^7.0.0",
         "eslint": "^7.32.0",
         "eslint-plugin-license-header": "^0.6.0",
+        "isomorphic-fetch": "^3.0.0",
         "mocha": "^10.0.0",
         "prettier": "^2.3.2",
         "sinon": "^14.0.0",
@@ -49,7 +50,6 @@
         "typedoc": "^0.23.7",
         "typedoc-plugin-markdown": "^3.10.4",
         "typescript": "^4.4.2",
-        "whatwg-fetch": "^3.6.2",
         "wiremock": "^2.29.0"
       },
       "optionalDependencies": {
@@ -3579,6 +3579,16 @@
       "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
       "integrity": "sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=",
       "dev": true
+    },
+    "node_modules/isomorphic-fetch": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz",
+      "integrity": "sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==",
+      "dev": true,
+      "dependencies": {
+        "node-fetch": "^2.6.1",
+        "whatwg-fetch": "^3.4.1"
+      }
     },
     "node_modules/isstream": {
       "version": "0.1.2",
@@ -9015,6 +9025,16 @@
       "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
       "integrity": "sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=",
       "dev": true
+    },
+    "isomorphic-fetch": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz",
+      "integrity": "sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==",
+      "dev": true,
+      "requires": {
+        "node-fetch": "^2.6.1",
+        "whatwg-fetch": "^3.4.1"
+      }
     },
     "isstream": {
       "version": "0.1.2",
