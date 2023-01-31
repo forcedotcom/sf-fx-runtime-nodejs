@@ -8,7 +8,7 @@
     "build": "tsc -b",
     "lint": "eslint . --ext .ts --max-warnings 0 --report-unused-disable-directives --format codeframe",
     "lint:fix": "npm run lint -- --fix",
-    "wiremock": "wiremock --port 8080 --bind-address 127.0.0.1 --disable-banner --logged-response-body-size-limit 100000",
+    "wiremock": "wiremock --port 8080 --bind-address 127.0.0.1 --disable-banner --logged-response-body-size-limit 100000 --no-request-journal",
     "mocha": "mocha -f \"large dataset\"",
     "test": "concurrently -k -s first \"npm run wiremock\" \"npm run mocha\"",
     "format": "npm run format:write && npm run format:check",
