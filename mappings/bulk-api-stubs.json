@@ -1681,7 +1681,7 @@
       },
       "uuid": "dd9f4acf-6093-4d8d-8f63-0c8517e95b76",
       "persistent": true,
-      "priority": 5,
+      "priority": 6,
       "scenarioName": "BULK_API_INGEST_S08",
       "requiredScenarioState": "closed_1",
       "newScenarioState": "created_2",
