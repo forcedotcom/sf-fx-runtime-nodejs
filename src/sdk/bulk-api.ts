@@ -185,11 +185,16 @@ export function createBulkApi(clientOptions: CreateConnectionOptions): BulkApi {
         let job: IngestJobV2<Schema, IngestJobOperation>;
         try {
           job = connection.bulk2.createJob(options);
+          console.log("OPEN JOB");
           await job.open();
+          console.log("UPLOAD JOB");
           await streamDataTableIntoJob(job, dataTable);
+          console.log("CLOSE JOB");
           await job.close();
+          console.log("JOB QUEUED!");
           results.push({ id: job.id, type: "ingestJob" });
         } catch (e) {
+          console.error(e);
           if (e instanceof Error) {
             results.push({
               unprocessedRecords: ingestDataTablePayload,
