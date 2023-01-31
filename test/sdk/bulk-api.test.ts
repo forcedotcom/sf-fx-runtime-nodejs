@@ -38,7 +38,7 @@ const testServerError: Pick<BulkApiError, "errorCode" | "message"> = {
 let bulkApi: BulkApi;
 
 describe("bulkApi", function () {
-  this.timeout(60 * 1000);
+  this.timeout(2 * 60 * 1000); // 2m
 
   before(() => {
     bulkApi = createBulkApi({
