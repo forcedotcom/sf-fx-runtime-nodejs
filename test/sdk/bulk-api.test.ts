@@ -188,7 +188,7 @@ describe("bulkApi", function () {
           .otherwise(expectIngestJobFailureWithReference(testServerError));
       });
 
-      xit("ingesting a large dataset", async () => {
+      it("ingesting a large dataset", async () => {
         await useScenario("BULK_API_INGEST_S08");
         const results = await bulkApi.ingest({
           object: "Account",
@@ -207,7 +207,7 @@ describe("bulkApi", function () {
           .otherwise(fail("third result was not a successful job reference"));
       });
 
-      xit("ingesting a large dataset - single failure in a set of jobs", async () => {
+      it("ingesting a large dataset - single failure in a set of jobs", async () => {
         await useScenario("BULK_API_INGEST_S09");
         const results = await bulkApi.ingest({
           object: "Account",
