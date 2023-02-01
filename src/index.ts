@@ -325,107 +325,451 @@ export interface Logger {
   trace(message: string): void;
 }
 
+/**
+ * Provides operations that can be used to create and interact with the
+ * Bulk API 2.0 ingest and query jobs.
+ */
 export interface BulkApi {
+  /**
+   * This operation will set the state of an Ingest or query job to `Aborted`.
+   * An aborted job will not be queued or processed.
+   *
+   * @param jobReference The reference of the job to abort
+   * @see [Bulk API 2.0 Ingest / Close or Abort a Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/close_job.htm)
+   * @see [Bulk API 2.0 Query / Abort a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_abort_job.htm)
+   */
+  abort(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
+
+  /**
+   * Creates a {@link DataTableBuilder} that can be used to construct {@link DataTable} instances.
+   *
+   * @param columns The names of the columns to include in the {@link DataTable}
+   */
+  createDataTableBuilder(columns: [string, ...string[]]): DataTableBuilder;
+
+  /**
+   * Deletes an ingest or query job. The job must have a state of `UploadComplete`,
+   * `JobComplete`, `Aborted`, or `Failed`
+   *
+   * @param jobReference The reference of the job to delete
+   * @see [Bulk API 2.0 Ingest / Delete a Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/delete_job.htm)
+   * @see [Bulk API 2.0 Query / Delete a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_delete_job.htm)
+   */
+  delete(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
+
+  /**
+   * Empty field values are ignored when you update records. To set a field value
+   * to `null` use this formatter which will set the field value to `#N/A`.
+   *
+   * @see [Bulk API 2.0 Ingest / Prepare CSV Files](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/datafiles_prepare_csv.htm)
+   */
+  formatNullValue(): string;
+
+  /**
+   * Produces a formatted `date` field from a JavaScript Date object. Will raise an
+   * error if the provided Date is invalid.
+   *
+   * @param value The Date to convert into the `date` format
+   * @see [Bulk API 2.0 Ingest / Valid Date Format in Records (2.0)](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/valid_date_format_in_records__2_0.htm)
+   */
+  formatDate(value: Date): string;
+
+  /**
+   * Produces a formatted `dateTime` field from a JavaScript Date object. Will raise an
+   * error if the provided Date is invalid.
+   *
+   * @param value The Date to convert into the `dateTime` format
+   * @see [Bulk API 2.0 Ingest / Valid Date Format in Records (2.0)](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/valid_date_format_in_records__2_0.htm)
+   */
+  formatDateTime(value: Date): string;
+
+  /**
+   * Retrieve the list of failed records for a completed ingest job. The returned {@link DataTable} will contain the following:
+   * - `sf__Error`: Error code and message, if applicable.
+   * - `sf__Id`: ID of the record that had an error during processing, if applicable.
+   * - Field data for the row that was provided in the original job data upload request.
+   *
+   * @param jobReference The reference of the job to get the failed results for
+   * @see [Bulk API 2.0 Reference / Get Job Failed Record Results](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/get_job_failed_results.htm)
+   */
+  getFailedResults(jobReference: IngestJobReference): Promise<DataTable>;
+
+  /**
+   * Fetches the current information about an ingest or query job.
+   *
+   * @param jobReference The reference of the job to fetch information about
+   * @see [Bulk API 2.0 Ingest / Get Job Info](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/get_job_info.htm)
+   * @see [Bulk API 2.0 Query / Get Information About a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_get_one_job.htm)
+   */
   getInfo(
     jobReference: IngestJobReference | QueryJobReference
   ): Promise<IngestJobInfo | QueryJobInfo>;
-  getSuccessfulResults(jobReference: IngestJobReference): Promise<DataTable>;
-  getFailedResults(jobReference: IngestJobReference): Promise<DataTable>;
-  getUnprocessedRecords(jobReference: IngestJobReference): Promise<DataTable>;
+
+  /**
+   * Gets the next set of results for a query job.
+   *
+   * @param queryJobResults The current query job result set
+   * @param getQueryJobResultsOptions Optional configuration that can be specified when fetching query results
+   * @see [Bulk API 2.0 Query / Get Results for a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_get_job_results.htm)
+   */
+  getMoreQueryResults(
+    queryJobResults: QueryJobResults,
+    getQueryJobResultsOptions?: GetQueryJobResultsOptions
+  ): Promise<QueryJobResults>;
+
+  /**
+   * Gets the results for a query job.  The job must be in a `JobCompleted` state.
+   *
+   * @param jobReference - The reference of the job to get the results for
+   * @param getQueryJobResultsOptions Optional configuration that can be specified when fetching query results
+   * @see [Bulk API 2.0 Query / Get Results for a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_get_job_results.htm)
+   */
   getQueryResults(
     jobReference: QueryJobReference,
     getQueryJobResultsOptions?: GetQueryJobResultsOptions
   ): Promise<QueryJobResults>;
-  getMoreQueryResults(
-    bulkQueryResult: QueryJobResults,
-    getMoreQueryResultsOptions?: GetQueryJobResultsOptions
-  ): Promise<QueryJobResults>;
-  abort(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
-  delete(jobReference: IngestJobReference | QueryJobReference): Promise<void>;
 
+  /**
+   * Retrieve the list of successfully processed records for a completed ingest job. The returned {@link DataTable} will contain the following:
+   * - `sf__Created`: Indicates if the record was created.
+   * - `sf__Id`: ID of the record that was successfully processed.
+   * - Field data for the row that was provided in the original job data upload request.
+   *
+   * @param jobReference The reference of the job to get the successful results for
+   * @see [Bulk API 2.0 Ingest / Get Job Successful Record Results](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/get_job_successful_results.htm)
+   */
+  getSuccessfulResults(jobReference: IngestJobReference): Promise<DataTable>;
+
+  /**
+   * Retrieve the list of successfully processed records for a completed ingest job. The returned {@link DataTable} will contain all the columns from the uploaded data.
+   *
+   * @param jobReference The reference of the job to get the unprocessed records for
+   * @see [Bulk API 2.0 Ingest / Get Job Unprocessed Record Results](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/get_job_unprocessed_results.htm)
+   */
+  getUnprocessedRecords(jobReference: IngestJobReference): Promise<DataTable>;
+
+  /**
+   * Handles the process of splitting the {@link DataTable} to be ingested into one or more {@link DataTable}
+   * instances that can fit within the request size limit that can be accepted by the Bulk API v2.
+   * Then, for each {@link DataTable} produced during the split, a new ingest job will be created, the data will be uploaded,
+   * and the job will be closed and queued for processing.
+   *
+   * The returned value will be a list of one or more ingest job references or a failure result
+   * containing the error that occurred, the unprocessed records, and the created job reference (if applicable).
+   *
+   * @param ingestJobOptions These are options that can be supplied when creating an ingest job.
+   * @see [Bulk API 2.0 Ingest / Prepare CSV Files](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/datafiles_prepare_csv.htm)
+   * @see [Bulk API 2.0 Ingest / Create a Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/create_job.htm)
+   * @see [Bulk API 2.0 Ingest / Upload Job Data](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/upload_job_data.htm)
+   * @see [Bulk API 2.0 Ingest / Close or Abort a Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/close_job.htm)
+   */
   ingest(
-    options: IngestJobOptions
+    ingestJobOptions: IngestJobOptions
   ): Promise<Array<IngestJobReference | IngestJobFailure>>;
 
+  /**
+   * Creates a new query job for processing.
+   *
+   * @param options These are options that can be supplied when creating a query job.
+   * @see [Bulk API 2.0 Query / Create a Query Job](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/query_create_job.htm)
+   */
   query(options: QueryJobOptions): Promise<QueryJobReference>;
 
-  createDataTableBuilder(columnNames: [string, ...string[]]): DataTableBuilder;
-
+  /**
+   * Splits a {@link DataTable} into one or more {@link DataTable} instances that are guaranteed
+   * to fit within the upload size limitation of an ingest job.
+   *
+   * @param dataTable The {@link DataTable} to split
+   * @see [Bulk API 2.0 Ingest / Upload Job Data / Usage Notes](https://developer.salesforce.com/docs/atlas.en-us.234.0.api_asynch.meta/api_asynch/upload_job_data.htm)
+   */
   splitDataTable(dataTable: DataTable): DataTable[];
-
-  formatNullValue(): string;
-  formatDate(value: Date): string;
-  formatDateTime(value: Date): string;
 }
 
-export type QueryJobOptions = {
-  soql: string;
-  operation?: QueryOperation;
-};
-
-export type IngestJobOptions = {
+/**
+ * These are options that can be supplied when creating an ingest job using the
+ * {@link BulkApi.ingest} method.
+ */
+export interface IngestJobOptions {
+  /**
+   * The data table to be ingested
+   */
   dataTable: DataTable;
-  object: string;
-  operation: IngestJobOperation;
-  externalIdFieldName?: string;
-  assignmentRuleId?: string;
-};
 
-export interface QueryJobReference {
-  id: string;
-  type: "queryJob";
+  /**
+   * The object type for the data being processed. Use only a single object type per job.
+   */
+  object: string;
+
+  /**
+   * The processing operation for the job
+   */
+  operation: IngestJobOperation;
+
+  /**
+   * The external ID field in the object being updated. Only needed for upsert
+   * operations. Field values must also exist in CSV job data.
+   */
+  externalIdFieldName?: string;
+
+  /**
+   * The ID of an assignment rule to run for a Case or a Lead. The assignment rule
+   * can be active or inactive. The ID can be retrieved by using the Lightning
+   * Platform SOAP API or the Lightning Platform REST API to query the AssignmentRule object.
+   */
+  assignmentRuleId?: string;
 }
 
+/**
+ * These are options that can be supplied when creating a query job using the
+ * {@link BulkApi.query} method.
+ */
+export interface QueryJobOptions {
+  /**
+   * The SOQL query to execute
+   */
+  soql: string;
+
+  /**
+   * Indicates if this query job should be processed as a `query` or a `queryAll`
+   * operation. If not provided, the default value `query` will be used.
+   */
+  operation?: QueryJobOperation;
+}
+
+/**
+ * A reference to an ingest job
+ */
 export interface IngestJobReference {
+  /**
+   * The id of the ingest job
+   */
   id: string;
+
+  /**
+   * The type for this reference
+   */
   type: "ingestJob";
 }
 
+/**
+ * A reference to a query job
+ */
+export interface QueryJobReference {
+  /**
+   * The id of the query job
+   */
+  id: string;
+
+  /**
+   * The type for this reference
+   */
+  type: "queryJob";
+}
+
+/**
+ * There are options that can be supplied when retrieving the results for a query job using the
+ * {@link BulkApi.getQueryResults} and {@link BulkApi.getMoreQueryResults} methods of {@link BulkApi}.
+ */
 export interface GetQueryJobResultsOptions {
+  /**
+   * The maximum number of records to retrieve per set of results for the query. The request
+   * is still subject to the size limits.
+   *
+   * If you are working with a very large number of query results, you may experience a timeout before receiving all the data
+   * from Salesforce. To prevent a timeout, specify the maximum number of records your client is expecting to receive in the
+   * `maxRecords` parameter. This splits the results into smaller sets with this value as the maximum size.
+   *
+   * If you don’t provide a value for this parameter, the server uses a default value based on the service.
+   */
   maxRecords: number;
 }
 
 interface JobInfo {
+  /**
+   * The number of milliseconds taken to process triggers and other processes
+   * related to the job data. This doesn't include the time used for processing
+   * asynchronous and batch Apex operations. If there are no triggers, the value is 0.
+   */
   apexProcessingTime?: number;
+
+  /**
+   * The number of milliseconds taken to actively process the job and includes
+   * apexProcessingTime, but doesn't include the time the job waited in the queue
+   * to be processed or the time required for serialization and deserialization.
+   */
   apiActiveProcessingTime?: number;
+
+  /**
+   * The API version that the job was created in.
+   */
   apiVersion: number;
-  assignmentRuleId?: string;
+
+  /**
+   * The column delimiter used for CSV job data.
+   */
   columnDelimiter: "COMMA";
+
+  /**
+   * How the request was processed.
+   */
   concurrencyMode: "Parallel";
+
+  /**
+   * The format of the data being processed. Only CSV is supported.
+   */
   contentType: "CSV";
+
+  /**
+   * The URL to use for Upload job Data requests for this job. Only valid if the job is in Open state.
+   */
   contentUrl?: string;
+
+  /**
+   * The ID of the user who created the job.
+   */
   createdById: string;
+
+  /**
+   * The date and time in the UTC time zone when the job was created.
+   */
   createdDate: string;
-  externalIdFieldName?: string;
+
+  /**
+   * Unique ID for this job.
+   */
   id: string;
+
+  /**
+   * The job’s type.
+   */
   jobType: "V2Ingest" | "V2Query";
+
+  /**
+   * The line ending used for CSV job data.
+   */
   lineEnding: "LF";
-  numberRecordsFailed?: number;
-  numberRecordsProcessed?: number;
+
+  /**
+   * The object type for the data being processed.
+   */
   object: string;
-  operation: IngestJobOperation | QueryOperation;
-  retries?: number;
-  state: IngestJobState | QueryJobState;
-  systemModstamp: string;
-  totalProcessingTime?: number;
-}
 
-export interface IngestJobInfo extends JobInfo {
-  jobType: "V2Ingest";
-  operation: IngestJobOperation;
-  state: IngestJobState;
+  /**
+   * The processing operation for the job.
+   */
+  operation: IngestJobOperation | QueryOperation;
+
+  /**
+   * The number of times that Salesforce attempted to save the results of an
+   * operation. The repeated attempts are due to a problem, such as a lock contention.
+   */
+  retries?: number;
+
+  /**
+   * The current state of processing for the job.
+   */
+  state: IngestJobState | QueryJobState;
+
+  /**
+   * Date and time in the UTC time zone when the job finished.
+   */
+  systemModstamp: string;
+
+  /**
+   * The number of milliseconds taken to process the job.
+   */
+  totalProcessingTime?: number;
+
+  /**
+   * The ID of an assignment rule to run for a Case or a Lead.
+   */
   assignmentRuleId?: string;
+
+  /**
+   * The name of the external ID field for an upsert.
+   */
   externalIdFieldName?: string;
+
+  /**
+   * The number of records that were not processed successfully in this job.
+   */
   numberRecordsFailed?: number;
+
+  /**
+   * The number of records already processed.
+   */
   numberRecordsProcessed?: number;
 }
 
+/**
+ * Ingest job information returned when calling {@link BulkApi.getInfo | BulkApi.getInfo} with an {@link IngestJobReference | ingest job reference}
+ */
+export interface IngestJobInfo extends JobInfo {
+  /**
+   * The job’s type.
+   */
+  jobType: "V2Ingest";
+
+  /**
+   * The processing operation for the job.
+   */
+  operation: IngestJobOperation;
+
+  /**
+   * The current state of processing for the job.
+   */
+  state: IngestJobState;
+
+  /**
+   * The ID of an assignment rule to run for a Case or a Lead.
+   */
+  assignmentRuleId?: string;
+
+  /**
+   * The name of the external ID field for an upsert.
+   */
+  externalIdFieldName?: string;
+
+  /**
+   * The number of records that were not processed successfully in this job.
+   */
+  numberRecordsFailed?: number;
+
+  /**
+   * The number of records already processed.
+   */
+  numberRecordsProcessed?: number;
+}
+
+/**
+ * Query job information returned when calling {@link BulkApi.getInfo | BulkApi.getInfo} with a {@link QueryJobReference | query job reference}
+ */
 export interface QueryJobInfo extends JobInfo {
+  /**
+   * The job’s type.
+   */
   jobType: "V2Query";
+
+  /**
+   * The processing operation for the job.
+   */
   operation: QueryJobOperation;
+
+  /**
+   * The current state of processing for the job.
+   */
   state: QueryJobState;
 }
 
+/**
+ * The state of processing for an ingest job. Values include:
+ * - `Open`: The job has been created, and job data can be uploaded to the job.
+ * - `UploadComplete`: All data for a job has been uploaded, and the job is ready to be queued and processed. No new data can be added to this job. You can’t edit or save a closed job.
+ * - `InProgress`: The job is being processed by Salesforce. This includes automatic optimized chunking of job data and processing of job operations.
+ * - `Aborted`: The job has been aborted. You can abort a job if you created it or if you have the “Manage Data Integrations” permission.
+ * - `JobComplete`: The job was processed by Salesforce.
+ * - `Failed`: Some records in the job failed. Job data that was successfully processed isn’t rolled back.
+ */
 export type IngestJobState =
   | "Open"
   | "UploadComplete"
@@ -434,6 +778,14 @@ export type IngestJobState =
   | "JobComplete"
   | "Failed";
 
+/**
+ * The state of processing for an query job. Values include:
+ * - `UploadComplete`: All data for a job has been uploaded, and the job is ready to be queued and processed. No new data can be added to this job. You can’t edit or save a closed job.
+ * - `InProgress`: The job is being processed by Salesforce. This includes automatic optimized chunking of job data and processing of job operations.
+ * - `Aborted`: The job has been aborted. You can abort a job if you created it or if you have the “Manage Data Integrations” permission.
+ * - `JobComplete`: The job was processed by Salesforce.
+ * - `Failed`: Some records in the job failed. Job data that was successfully processed isn’t rolled back.
+ */
 export type QueryJobState =
   | "UploadComplete"
   | "InProgress"
@@ -441,6 +793,9 @@ export type QueryJobState =
   | "JobComplete"
   | "Failed";
 
+/**
+ * The processing operation for an ingest job.
+ */
 export type IngestJobOperation =
   | "insert"
   | "delete"
@@ -448,42 +803,150 @@ export type IngestJobOperation =
   | "update"
   | "upsert";
 
+/**
+ * The processing operation for a query job. Possible values are:
+ * - `query`: Returns data that has not been deleted or archived. For more information, see [query()](https://developer.salesforce.com/docs/atlas.en-us.234.0.api.meta/api/sforce_api_calls_query.htm) in the SOAP API Developer Guide.
+ * - `queryAll`: Returns records that have been deleted because of a merge or delete, and returns information about archived Task and Event records. For more information, see [queryAll()](https://developer.salesforce.com/docs/atlas.en-us.234.0.api.meta/api/sforce_api_calls_queryall.htm) in the SOAP API Developer Guide.
+ */
 export type QueryJobOperation = "query" | "queryAll";
 
+/**
+ * A paged result set that contains the results of a query job. The results of a query job
+ * can be retrieved using the {@link BulkApi.getQueryResults} and {@link BulkApi.getMoreQueryResults}
+ * methods of {@link BulkApi}.
+ */
 export interface QueryJobResults {
-  dataTable: DataTable;
-  done: boolean;
-  locator?: string;
-  numberOfRecords: number;
-  jobReference: QueryJobReference;
+  /**
+   * A data table containing a set of one or more query results.
+   */
+  readonly dataTable: DataTable;
+
+  /**
+   * This flag indicates if this is the final set of query results.
+   */
+  readonly done: boolean;
+
+  /**
+   * A string that identifies a specific set of query results. Providing a value for this parameter returns only that set of results.
+   */
+  readonly locator?: string;
+
+  /**
+   * The number of records in this set.
+   */
+  readonly numberOfRecords: number;
+
+  /**
+   * The reference of the query job this result set belongs to.
+   */
+  readonly jobReference: QueryJobReference;
 }
 
-export class DataTable extends Array<Map<string, string>> {
+/**
+ * Represents a CSV-like data table consisting of columns and rows. All the values
+ * contained must be represented as strings.
+ */
+export interface DataTable extends Array<Map<string, string>> {
+  /**
+   * A list of one or more column names contained in this data table.
+   */
   columns: [string, ...string[]];
 }
 
+/**
+ * A transformation function that can be provided when calling {@link DataTableBuilder.addRow} or
+ * {@link DataTableBuilder.addRows} on a {@link DataTableBuilder} instance. It will
+ * receive the value of an individual row and the name of the column to extract. This function
+ * will be called for each column that is included in the data table.
+ *
+ * @typeParam T - the type of the object to extract row data from
+ */
 export type DataTableFieldValueExtractor<T> = (
   data: T,
   columnName: string
 ) => string;
 
+/**
+ * A builder object that helps with creating {@link DataTable} instances.
+ */
 export interface DataTableBuilder {
+  /**
+   * Adds a row of data to the {@link DataTable} being constructed. This can be a
+   * list of string values in the same order as the specified columns or a map of
+   * column names to values. Values that do not match up to the specified columns
+   * will be ignored.
+   *
+   * @param row The row of data to add
+   */
   addRow(row: string[] | Map<string, string>): DataTableBuilder;
-  addRow<T>(row: T, fieldValueExtractor: DataTableFieldValueExtractor<T>);
+
+  /**
+   * Adds a row of data to the {@link DataTable} being constructed. A {@link DataTableFieldValueExtractor}
+   * is used to convert the arbitrary value into the required row format.
+   *
+   * @typeParam T - the type of the object to extract row data from
+   * @param value The object to extract row data from
+   * @param fieldValueExtractor A function that reads field values from the provided object. It will be called for each column that is included in the {@link DataTable} being constructed.
+   */
+  addRow<T>(value: T, fieldValueExtractor: DataTableFieldValueExtractor<T>);
+
+  /**
+   * Adds multiple rows of data to the {@link DataTable} being constructed. This can be a
+   * list of string values in the same order as the specified columns or a map of
+   * column names to values. Values that do not match up to the specified columns
+   * will be ignored.
+   *
+   * @param rows The list of rows of data to add
+   */
   addRows(rows: Array<string[] | Map<string, string>>): DataTableBuilder;
+
+  /**
+   * Adds multiple rows of data to the {@link DataTable} being constructed. A {@link DataTableFieldValueExtractor}
+   * is used to convert the arbitrary values into the required row format.
+   *
+   * @typeParam T - the type of the object to extract row data from
+   * @param values The list of objects to extract row data from
+   * @param fieldValueExtractor A function that reads field values from each provided object in the list of values. It will be called for each column that is included in the {@link DataTable} being constructed.
+   */
   addRows<T>(
-    rows: Array<T>,
+    values: Array<T>,
     fieldValueExtractor: DataTableFieldValueExtractor<T>
   ): DataTableBuilder;
+
+  /**
+   * Creates a {@link DataTable} instance from the columns and rows provided to the builder.
+   */
   build(): DataTable;
 }
 
-export type IngestJobFailure = {
+/**
+ * Represent a failure result from calling {@link BulkApi.ingest BulkApi.ingest}.
+ */
+export interface IngestJobFailure {
+  /**
+   * The error that occurred while attempting to construct the ingest job.
+   */
   error: BulkApiError;
-  unprocessedRecords: DataTable;
-  jobReference?: IngestJobReference;
-};
 
-export type BulkApiError = Error & {
+  /**
+   * The data that would have been uploaded to the ingest job had the operation succeeded.
+   */
+  unprocessedRecords: DataTable;
+
+  /**
+   * A reference to the ingest job created. If the failure occurs when attempting to open
+   * an ingest job there will be no reference. If the failure occurs when uploading or closing
+   * the ingest job then a job reference will be present.
+   */
+  jobReference?: IngestJobReference;
+}
+
+/**
+ * Represents an error thrown from a Bulk API 2.0 operation.
+ */
+export interface BulkApiError extends Error {
+  /**
+   * An error code indicating the type of error that occurred.
+   */
   errorCode: string;
-};
+}
