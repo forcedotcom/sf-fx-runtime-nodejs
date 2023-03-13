@@ -1,14 +1,56 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+# Using Python here since the GNU and BSD versions of the 'base64' command have differing
+# output wrapping behaviour/arguments, which makes writing something portable a pain.
+function base64_encode() {
+  python3 -c "import base64, sys; print(base64.b64encode(sys.stdin.buffer.read()).decode('ascii'))"
+}
+
+invocation_id="00DJS0000000123ABC-$(openssl rand -hex 16)"
+
+sfcontext=$(base64_encode <<'EOF'
+{
+  "apiVersion": "56.0",
+  "payloadVersion": "0.1",
+  "userContext": {
+    "onBehalfOfUserId": null,
+    "orgDomainUrl": "https://example-domain-url.my.salesforce.com",
+    "orgId": "00DJS0000000123ABC",
+    "salesforceBaseUrl": "https://example-base-url.my.salesforce-sites.com",
+    "salesforceInstance": "swe1",
+    "userId": "005JS000000H123",
+    "username": "user@example.tld"
+  }
+}
+EOF
+)
+
+sffncontext=$(base64_encode <<EOF
+{
+  "accessToken": "EXAMPLE-TOKEN",
+  "apexFQN": "ExampleClass:example_function():7",
+  "deadline": "2023-01-19T10:11:12.468085Z",
+  "functionName": "ExampleProject.examplefunction",
+  "invokingNamespace": "",
+  "requestId": "${invocation_id}",
+  "resource": "https://examplefunction-cod-mni.crag-123abc.evergreen.space"
+}
+EOF
+)
+
 curl "${1:?Provide function runtime url as the first argument to this script!}" \
-	-v \
-	-d "${2:?Provide the payload as the second argument to this script!}" \
-	-H "Content-Type: application/json" \
-	-H "ce-specversion: 1.0" \
-	-H "ce-id: 00Dxx0000006IYJEA2-4Y4W3Lw_LkoskcHdEaZze--MyFunction-$(openssl rand -hex 12)" \
-	-H "ce-source: urn:event:from:salesforce/xx/228.0/00Dxx0000006IYJ/apex/MyFunctionApex:test():7" \
-	-H "ce-type: com.salesforce.function.invoke.sync" \
-	-H "ce-time: 2020-09-03T20:56:28.297915Z" \
-	-H "ce-sfcontext: eyJhcGlWZXJzaW9uIjoiNTAuMCIsInBheWxvYWRWZXJzaW9uIjoiMC4xIiwidXNlckNvbnRleHQiOnsib3JnSWQiOiIwMER4eDAwMDAwMDZJWUoiLCJ1c2VySWQiOiIwMDV4eDAwMDAwMVg4VXoiLCJvbkJlaGFsZk9mVXNlcklkIjpudWxsLCJ1c2VybmFtZSI6InRlc3QtenFpc25mNnl0bHF2QGV4YW1wbGUuY29tIiwic2FsZXNmb3JjZUJhc2VVcmwiOiJodHRwOi8vcGlzdGFjaGlvLXZpcmdvLTEwNjMtZGV2LWVkLmxvY2FsaG9zdC5pbnRlcm5hbC5zYWxlc2ZvcmNlLmNvbTo2MTA5Iiwib3JnRG9tYWluVXJsIjoiaHR0cDovL3Bpc3RhY2hpby12aXJnby0xMDYzLWRldi1lZC5sb2NhbGhvc3QuaW50ZXJuYWwuc2FsZXNmb3JjZS5jb206NjEwOSJ9fQ==" \
-	-H "ce-sffncontext: eyJhY2Nlc3NUb2tlbiI6IjAwRHh4MDAwMDAwNklZSiFBUUVBUU5SYWM1YTFoUmhoZjAySFJlZ3c0c1NadktoOW9ZLm9oZFFfYV9LNHg1ZHdBZEdlZ1dlbVhWNnBOVVZLaFpfdVkyOUZ4SUVGTE9adTBHZjlvZk1HVzBIRkxacDgiLCJmdW5jdGlvbkludm9jYXRpb25JZCI6bnVsbCwiZnVuY3Rpb25OYW1lIjoiTXlGdW5jdGlvbiIsImFwZXhDbGFzc0lkIjpudWxsLCJhcGV4Q2xhc3NGUU4iOm51bGwsInJlcXVlc3RJZCI6IjAwRHh4MDAwMDAwNklZSkVBMi00WTRXM0x3X0xrb3NrY0hkRWFaemUtLU15RnVuY3Rpb24tMjAyMC0wOS0wM1QyMDo1NjoyNy42MDg0NDRaIiwicmVzb3VyY2UiOiJodHRwOi8vZGhhZ2Jlcmctd3NsMTo4MDgwIn0=" \
-	-H "Authorization: C2C eyJ2ZXIiOiIxLjAiLCJraWQiOiJDT1JFLjAwRHh4MDAwMDAwNklZSi4xNTk5MTU5NjQwMzUwIiwidHlwIjoiand0IiwiY2x2IjoiSjIuMS4xIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJwbGF0Zm9ybS1mdW5jdGlvbnMiLCJhdXQiOiJTRVJWSUNFIiwibmJmIjoxNTk5MTY2NTU4LCJjdHgiOiJzZmRjLnBsYXRmb3JtLWZ1bmN0aW9ucyIsImlzcyI6ImNvcmUvZGhhZ2Jlcmctd3NsMS8wMER4eDAwMDAwMDZJWUpFQTIiLCJzdHkiOiJUZW5hbnQiLCJpc3QiOjEsImV4cCI6MTU5OTE2NjY3OCwiaWF0IjoxNTk5MTY2NTg4LCJqdGkiOiJDMkMtMTA3NTg2OTg1NTMxNTMyOTkzMjE3OTEyMzQwNTIzMjgzOTEifQ.jZZ4ksYlq0vKtBf0yEfpJVL2yYh3QHOwp0KCk-QxzDyF_7VARB-N74Cqpj2JWhVP4TcBLGXYuldB-Sk6P5HlGQ"
+  -i \
+  --connect-timeout 3 \
+  -d "${2:?Provide the payload as the second argument to this script!}" \
+  -H "content-type: application/json" \
+  -H "ce-id: ${invocation_id}" \
+  -H "ce-source: urn:event:from:salesforce/JS/56.0/00DJS0000000123ABC/apex/ExampleClass:example_function():7" \
+  -H "ce-specversion: 1.0" \
+  -H "ce-time: 2023-01-19T10:09:12.476684Z" \
+  -H "ce-type: com.salesforce.function.invoke.sync" \
+  -H "ce-sfcontext: ${sfcontext}" \
+  -H "ce-sffncontext: ${sffncontext}" \
+  -H "x-request-id: ${invocation_id}" \
+  # -H "x-health-check: true" \
