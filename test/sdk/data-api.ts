@@ -12,8 +12,7 @@ import fs from "fs";
 import { Record } from "../../src";
 
 const uri = "http://127.0.0.1:8080";
-const token =
-  "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS";
+const token = "EXAMPLE-TOKEN";
 const dataApiv51 = new DataApiImpl(uri, "51.0", token);
 const dataApiv55 = new DataApiImpl(uri, "55.0", token);
 const dataApiInvalidToken = new DataApiImpl(uri, "51.0", "badToken");
@@ -750,11 +749,7 @@ describe("DataApi Class", async () => {
 
   describe("queries with subqueries for relationships", () => {
     it("should allow relationship subqueries to be navigated", async () => {
-      const dataApi = new DataApiImpl(
-        uri,
-        "53.0",
-        "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
-      );
+      const dataApi = new DataApiImpl(uri, "53.0", "EXAMPLE-TOKEN");
       const results = await dataApi.query(
         "SELECT Account.Name, (SELECT Contact.FirstName, Contact.LastName FROM Account.Contacts) FROM Account LIMIT 5"
       );
@@ -845,11 +840,7 @@ describe("DataApi Class", async () => {
     });
 
     it("should return null if the requested relationship is not in the result set", async () => {
-      const dataApi = new DataApiImpl(
-        uri,
-        "53.0",
-        "00DB0000000UIn2!AQMAQKXBvR03lDdfMiD6Pdpo_wiMs6LGp6dVkrwOuqiiTEmwdPb8MvSZwdPLe009qHlwjxIVa4gY.JSAd0mfgRRz22vS"
-      );
+      const dataApi = new DataApiImpl(uri, "53.0", "EXAMPLE-TOKEN");
       const results = await dataApi.query(
         "SELECT Account.Name, (SELECT Contact.FirstName, Contact.LastName FROM Account.Contacts) FROM Account LIMIT 5"
       );
