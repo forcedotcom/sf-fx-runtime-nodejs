@@ -31,14 +31,14 @@ export function parseArgs(params: Array<string>): any {
             alias: "p",
             type: "number",
             description: "The port the webserver should listen on.",
-            default: 8080,
+            default: getIntFromEnv("PORT") || 8080,
           })
           .option("debug-port", {
             alias: "d",
             type: "number",
             description:
               "The port to attach a debugger/inspector to. Will override --workers to 1.",
-            default: null,
+            default: getIntFromEnv("DEBUG_PORT"),
           })
           .option("host", {
             alias: "h",
@@ -65,6 +65,18 @@ export function parseArgs(params: Array<string>): any {
     .strictCommands()
     .demandCommand(1)
     .parse();
+}
+
+function getIntFromEnv(envKey: string): number | undefined {
+  if (envKey in process.env) {
+    try {
+      return parseInt(process.env[envKey]);
+    } catch {
+      return undefined;
+    }
+  } else {
+    return undefined;
+  }
 }
 
 export default async function (
