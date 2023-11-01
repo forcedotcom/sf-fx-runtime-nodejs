@@ -36,7 +36,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
   private readonly apiVersion: string;
   private readonly _subrequests: [
     ReferenceId,
-    CompositeSubRequest<RecordModificationResult>
+    CompositeSubRequest<RecordModificationResult>,
   ][] = [];
   private referenceIdCounter = 0;
 
@@ -67,7 +67,7 @@ export class UnitOfWorkImpl implements UnitOfWork {
 
   get subrequests(): [
     ReferenceId,
-    CompositeSubRequest<RecordModificationResult>
+    CompositeSubRequest<RecordModificationResult>,
   ][] {
     return this._subrequests;
   }
