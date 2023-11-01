@@ -468,14 +468,26 @@
       "integrity": "sha512-6D7DvE6nFxpLyyTnrOIbbAeCJw2r/EpinFAcMh6gU0gA/CGfSbwV/8uR3uHLYL2zCyCZLH8jJ4dZ3BzCMqc+Eg=="
     },
     "node_modules/@salesforce/ts-sinon": {
-      "version": "1.4.2",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.2.tgz",
-      "integrity": "sha512-yoNaHdw+5IYUs8Jg/c30AuPG5jhWGR/zdy0G2XmLSzVhf/8duNTbnSl3AWYplCvU/Cz3CFIs1XnjePG0Resxmw==",
+      "version": "1.4.19",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.19.tgz",
+      "integrity": "sha512-vopxKrI6QD0OCtPlge1eGGHFWLkoDee7KaB/dpGeRwioeNfCVJ8ikELN0hv0zq9Ys6gUYWYcdpxzTP1upslCJA==",
       "dev": true,
       "dependencies": {
-        "@salesforce/ts-types": "^1.7.1",
+        "@salesforce/ts-types": "^2.0.9",
         "sinon": "^5.1.1",
-        "tslib": "^2.2.0"
+        "tslib": "^2.6.1"
+      }
+    },
+    "node_modules/@salesforce/ts-sinon/node_modules/@salesforce/ts-types": {
+      "version": "2.0.9",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-2.0.9.tgz",
+      "integrity": "sha512-boUD9jw5vQpTCPCCmK/NFTWjSuuW+lsaxOynkyNXLW+zxOc4GDjhtKc4j0vWZJQvolpafbyS8ZLFHZJvs12gYA==",
+      "dev": true,
+      "dependencies": {
+        "tslib": "^2.6.2"
+      },
+      "engines": {
+        "node": ">=16.0.0"
       }
     },
     "node_modules/@salesforce/ts-sinon/node_modules/@sinonjs/formatio": {
@@ -5831,9 +5843,9 @@
       }
     },
     "node_modules/tslib": {
-      "version": "2.4.1",
-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz",
-      "integrity": "sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA=="
+      "version": "2.6.2",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz",
+      "integrity": "sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q=="
     },
     "node_modules/tsutils": {
       "version": "3.21.0",
@@ -6684,16 +6696,25 @@
       "integrity": "sha512-6D7DvE6nFxpLyyTnrOIbbAeCJw2r/EpinFAcMh6gU0gA/CGfSbwV/8uR3uHLYL2zCyCZLH8jJ4dZ3BzCMqc+Eg=="
     },
     "@salesforce/ts-sinon": {
-      "version": "1.4.2",
-      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.2.tgz",
-      "integrity": "sha512-yoNaHdw+5IYUs8Jg/c30AuPG5jhWGR/zdy0G2XmLSzVhf/8duNTbnSl3AWYplCvU/Cz3CFIs1XnjePG0Resxmw==",
+      "version": "1.4.19",
+      "resolved": "https://registry.npmjs.org/@salesforce/ts-sinon/-/ts-sinon-1.4.19.tgz",
+      "integrity": "sha512-vopxKrI6QD0OCtPlge1eGGHFWLkoDee7KaB/dpGeRwioeNfCVJ8ikELN0hv0zq9Ys6gUYWYcdpxzTP1upslCJA==",
       "dev": true,
       "requires": {
-        "@salesforce/ts-types": "^1.7.1",
+        "@salesforce/ts-types": "^2.0.9",
         "sinon": "^5.1.1",
-        "tslib": "^2.2.0"
+        "tslib": "^2.6.1"
       },
       "dependencies": {
+        "@salesforce/ts-types": {
+          "version": "2.0.9",
+          "resolved": "https://registry.npmjs.org/@salesforce/ts-types/-/ts-types-2.0.9.tgz",
+          "integrity": "sha512-boUD9jw5vQpTCPCCmK/NFTWjSuuW+lsaxOynkyNXLW+zxOc4GDjhtKc4j0vWZJQvolpafbyS8ZLFHZJvs12gYA==",
+          "dev": true,
+          "requires": {
+            "tslib": "^2.6.2"
+          }
+        },
         "@sinonjs/formatio": {
           "version": "2.0.0",
           "resolved": "https://registry.npmjs.org/@sinonjs/formatio/-/formatio-2.0.0.tgz",
@@ -10739,9 +10760,9 @@
       "integrity": "sha512-8DF80uA7JPu6m8ouHxGkyBpPTIGQnsgIUgLDqcRaD7EEhVowjG72KqCX334gsa1P+AmzeTVdd/xEzVFCAuPCtg=="
     },
     "tslib": {
-      "version": "2.4.1",
-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz",
-      "integrity": "sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA=="
+      "version": "2.6.2",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz",
+      "integrity": "sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q=="
     },
     "tsutils": {
       "version": "3.21.0",
