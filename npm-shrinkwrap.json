@@ -11,7 +11,7 @@
       "dependencies": {
         "@iarna/toml": "^2.2.5",
         "@salesforce/core": "^4.3.11",
-        "cloudevents": "^6.0.2",
+        "cloudevents": "^8.0.0",
         "fastify": "^4.0.2",
         "jsforce2": "npm:jsforce@^2.0.0-beta.8",
         "semver": "^7.3.5",
@@ -1385,6 +1385,14 @@
         "node": ">=6.0.0"
       }
     },
+    "node_modules/bignumber.js": {
+      "version": "9.1.2",
+      "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.2.tgz",
+      "integrity": "sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==",
+      "engines": {
+        "node": "*"
+      }
+    },
     "node_modules/binary-extensions": {
       "version": "2.2.0",
       "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz",
@@ -1606,14 +1614,19 @@
       }
     },
     "node_modules/cloudevents": {
-      "version": "6.0.2",
-      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-6.0.2.tgz",
-      "integrity": "sha512-mn/4EZnAbhfb/TghubK2jPnxYM15JRjf8LnWJtXidiVKi5ZCkd+p9jyBZbL57w7nRm6oFAzJhjxRLsXd/DNaBQ==",
+      "version": "8.0.0",
+      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-8.0.0.tgz",
+      "integrity": "sha512-G1Z/r8QMFAsP+F1PuZSHzx1ocPy4vrdQMTHD3orjDaM5kccmPU6nMmpVrF07b53aaxcrLbORUmRepY/DgvdhVw==",
       "dependencies": {
         "ajv": "^8.11.0",
         "ajv-formats": "^2.1.1",
+        "json-bigint": "^1.0.0",
+        "process": "^0.11.10",
         "util": "^0.12.4",
         "uuid": "^8.3.2"
+      },
+      "engines": {
+        "node": ">=16 <=20"
       }
     },
     "node_modules/cloudevents/node_modules/ajv": {
@@ -3441,6 +3454,14 @@
       "version": "12.20.21",
       "resolved": "https://registry.npmjs.org/@types/node/-/node-12.20.21.tgz",
       "integrity": "sha512-Qk7rOvV2A4vNgXNS88vEvbJE1NDFPCQ8AU+pNElrU2bA4yrRDef3fg3SUe+xkwyin3Bpg/Xh5JkNWTlsOcS2tA=="
+    },
+    "node_modules/json-bigint": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz",
+      "integrity": "sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==",
+      "dependencies": {
+        "bignumber.js": "^9.0.0"
+      }
     },
     "node_modules/json-buffer": {
       "version": "3.0.1",
@@ -6695,6 +6716,11 @@
       "resolved": "https://registry.npmjs.org/base64url/-/base64url-3.0.1.tgz",
       "integrity": "sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A=="
     },
+    "bignumber.js": {
+      "version": "9.1.2",
+      "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.2.tgz",
+      "integrity": "sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug=="
+    },
     "binary-extensions": {
       "version": "2.2.0",
       "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz",
@@ -6869,12 +6895,14 @@
       }
     },
     "cloudevents": {
-      "version": "6.0.2",
-      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-6.0.2.tgz",
-      "integrity": "sha512-mn/4EZnAbhfb/TghubK2jPnxYM15JRjf8LnWJtXidiVKi5ZCkd+p9jyBZbL57w7nRm6oFAzJhjxRLsXd/DNaBQ==",
+      "version": "8.0.0",
+      "resolved": "https://registry.npmjs.org/cloudevents/-/cloudevents-8.0.0.tgz",
+      "integrity": "sha512-G1Z/r8QMFAsP+F1PuZSHzx1ocPy4vrdQMTHD3orjDaM5kccmPU6nMmpVrF07b53aaxcrLbORUmRepY/DgvdhVw==",
       "requires": {
         "ajv": "^8.11.0",
         "ajv-formats": "^2.1.1",
+        "json-bigint": "^1.0.0",
+        "process": "^0.11.10",
         "util": "^0.12.4",
         "uuid": "^8.3.2"
       },
@@ -8224,6 +8252,14 @@
           "resolved": "https://registry.npmjs.org/@types/node/-/node-12.20.21.tgz",
           "integrity": "sha512-Qk7rOvV2A4vNgXNS88vEvbJE1NDFPCQ8AU+pNElrU2bA4yrRDef3fg3SUe+xkwyin3Bpg/Xh5JkNWTlsOcS2tA=="
         }
+      }
+    },
+    "json-bigint": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz",
+      "integrity": "sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==",
+      "requires": {
+        "bignumber.js": "^9.0.0"
       }
     },
     "json-buffer": {
