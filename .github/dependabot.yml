@@ -4,6 +4,17 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
     ignore:
       # updating this dependency has caused issues in the past, we should only touch this if there is an update for security purposes
       - dependency-name: "cloudevents"
