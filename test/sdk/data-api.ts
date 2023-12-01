@@ -274,7 +274,7 @@ describe("DataApi Class", async () => {
         expect(done).equal(false);
         expect(totalSize).equal(10000);
         expect(records.length).equal(2000);
-        expect(nextRecordsUrl).contains(
+        expect(nextRecordsUrl).equal(
           "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
         );
       });
@@ -327,20 +327,9 @@ describe("DataApi Class", async () => {
           await dataApiv51.query("SELECT Name FROM VeggieVendor__c");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          if (
-            process.version.startsWith("v14.") &&
-            e.constructor.name === "TypeError"
-          ) {
-            // Node 14 gives a different error here
-            expect(e.message).to.contain(
-              "Cannot read property 'length' of undefined"
-            );
-            expect(e.stack).to.contain("at Query._execute");
-          } else {
-            expect(e.message).to.includes(
-              "Could not parse API response as JSON: "
-            );
-          }
+          expect(e.message).to.includes(
+            "Could not parse API response as JSON: "
+          );
         }
       });
     });
@@ -351,20 +340,9 @@ describe("DataApi Class", async () => {
           await dataApiv51.query("SELECT Title FROM ContentVersion");
           expect.fail("Promise should have been rejected!");
         } catch (e) {
-          if (
-            process.version.startsWith("v14.") &&
-            e.constructor.name === "TypeError"
-          ) {
-            // Node 14 gives a different error here
-            expect(e.message).to.contain(
-              "Cannot read property 'length' of undefined"
-            );
-            expect(e.stack).to.contain("at Query._execute");
-          } else {
-            expect(e.message).to.includes(
-              "Could not read API response `records`:"
-            );
-          }
+          expect(e.message).to.includes(
+            "Could not read API response `records`:"
+          );
         }
       });
     });
@@ -417,7 +395,7 @@ describe("DataApi Class", async () => {
         expect(result.done).equal(false);
         expect(result.totalSize).equal(10000);
         expect(result.records.length).equal(2000);
-        expect(result.nextRecordsUrl).contains(
+        expect(result.nextRecordsUrl).equal(
           "/services/data/v51.0/query/01gB000003OCxSPIA1-2000"
         );
 
@@ -425,7 +403,7 @@ describe("DataApi Class", async () => {
         expect(result2.done).equal(false);
         expect(result2.totalSize).equal(result.totalSize);
         expect(result2.records.length).equal(2000);
-        expect(result2.nextRecordsUrl).contains(
+        expect(result2.nextRecordsUrl).equal(
           "/services/data/v51.0/query/01gB000003OCxSPIA1-4000"
         );
       });

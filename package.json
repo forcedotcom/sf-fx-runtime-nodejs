@@ -36,7 +36,7 @@
     "@salesforce/core": "^2.37.1",
     "cloudevents": "^6.0.2",
     "fastify": "^4.0.2",
-    "jsforce2": "npm:jsforce@^2.0.0-beta.8",
+    "jsforce2": "npm:jsforce@2.0.0-beta.8",
     "semver": "^7.3.5",
     "throng": "^5.0.0",
     "whatwg-mimetype": "^3.0.0",
