@@ -22,8 +22,7 @@ updates:
       - dependency-name: "jsforce2"
       # due to the version of jsforce used, typescript complains loudly if the node types are bumped
       - dependency-name: "@types/node"
-      # we're already at the highest version we can migrate to without requiring major changes to the logger
-      # see https://github.com/forcedotcom/sfdx-core/blob/main/MIGRATING_V4-V5.md
+      # we're already at the highest version of the following that we can migrate to without introducing breaking changes to node 14 in the runtime
       - dependency-name: "@salesforce/core"
   - package-ecosystem: "github-actions"
     directory: "/"
