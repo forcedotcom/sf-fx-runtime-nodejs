@@ -1,0 +1,35 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-INFLIGHT-6095116:
+    - '@salesforce/core@2.37.1 > *':
+        reason: Only the logger is used by the runtime
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+  SNYK-JS-JSONWEBTOKEN-3180022:
+    - '@salesforce/core@2.37.1 > *':
+        reason: Only the logger is used by the runtime
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+  SNYK-JS-JSONWEBTOKEN-3180024:
+    - '@salesforce/core@2.37.1 > *':
+        reason: Only the logger is used by the runtime
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+  SNYK-JS-JSONWEBTOKEN-3180026:
+    - '@salesforce/core@2.37.1 > *':
+        reason: Only the logger is used by the runtime
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+  SNYK-JS-MINIMIST-2429795:
+    - '@salesforce/core@2.37.1 > *':
+        reason: Only the logger is used by the runtime
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+  SNYK-JS-TOUGHCOOKIE-5672873:
+    - '*':
+        reason: Not exploitable
+        expires: 2026-01-01T00:00:00.000Z
+        created: 2023-12-01T16:53:22.842Z
+patch: {}
