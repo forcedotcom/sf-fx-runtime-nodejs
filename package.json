@@ -39,7 +39,7 @@
     "jsforce2": "npm:jsforce@2.0.0-beta.8",
     "semver": "^7.3.5",
     "throng": "^5.0.0",
-    "whatwg-mimetype": "^3.0.0",
+    "whatwg-mimetype": "^4.0.0",
     "yargs": "^17.1.1"
   },
   "devDependencies": {
