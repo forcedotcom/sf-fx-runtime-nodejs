@@ -1,1 +1,7 @@
+# Default to requesting reviews from the Languages team.
 * @forcedotcom/languages
+
+# However, request review from specific owners instead for files that are
+# updated by Dependabot, to reduce team review request noise.
+package.json @colincasey
+npm-shrinkwrap.json @colincasey
