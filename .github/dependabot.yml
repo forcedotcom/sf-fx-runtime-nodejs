@@ -24,6 +24,18 @@ updates:
       - dependency-name: "@types/node"
       # we're already at the highest version of the following that we can migrate to without introducing breaking changes to node 14 in the runtime
       - dependency-name: "@salesforce/core"
+      # whatwg-mimetype 4.0.0 sets the minimum supported node version to 18 but we support all the way back to node 14 in the runtime
+      - dependency-name: "whatwg-mimetype"
+      # eslint and related plugins won't run on node 14 for these versions
+      # - eslint: >8.x
+      # - plugins:
+      #   - @typescript-eslint/eslint-plugin: >5.x
+      #   - @typescript-eslint/parser: >5.x
+      - dependency-name: "eslint"
+      - dependency-name: "@typescript-eslint/eslint-plugin"
+      - dependency-name: "@typescript-eslint/parser"
+      # chai hits a parsing issue on node 14 in versions >4.x
+      - dependency-name: "chai"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
