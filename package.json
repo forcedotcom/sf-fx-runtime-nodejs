@@ -60,7 +60,7 @@
     "eslint-plugin-license-header": "^0.6.1",
     "mocha": "^10.4.0",
     "prettier": "^3.2.5",
-    "sinon": "^17.0.1",
+    "sinon": "^18.0.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.25.13",
     "typedoc-plugin-markdown": "^4.0.1",
