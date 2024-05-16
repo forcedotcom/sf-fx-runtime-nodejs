@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.14.5] - 2024-05-15
 - Dependency updates ([#534](https://github.com/forcedotcom/sf-fx-runtime-nodejs/pull/534))
 
 ## [0.14.4] - 2023-12-01
